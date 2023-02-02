@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.System.NewAutoEngine;
+import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
 
 /**
@@ -24,22 +26,30 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     xbox = new XboxController(0);
     Intake.init();
+    DriveBase.init();
+    NewAutoEngine.init();
   }
 
   @Override
   public void robotPeriodic() {}
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    NewAutoEngine.start();
+  }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    NewAutoEngine.loop();
+  }
 
   @Override
   public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    DriveBase.teloop();
+  }
 
   @Override
   public void disabledInit() {}
