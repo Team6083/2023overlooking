@@ -5,7 +5,7 @@ public class Arm {
     public static final double gearing = 512;
     public static void init() {}
     public static void teleop() {} 
-    public static double positionToDistanceMeter(double position){
+    public static double positionToDegreeMeter(double position){
             double sensorRate = position/encoderPulse;
             double wheelRate = sensorRate/gearing;
             double positionMeter=wheelRate*360; 
