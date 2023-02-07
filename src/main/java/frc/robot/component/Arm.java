@@ -21,10 +21,11 @@ public class Arm {
     public static void teleop() {
         //get degree position
         double a = positionToDegreeMeter(armencoder.getPosition());
-        //
+        //rotate arm
         armmotor.set(Robot.xbox.getLeftTriggerAxis());
         armmotor.set(-Robot.xbox.getRightTriggerAxis());
     } 
+    //position calculation
     public static double positionToDegreeMeter(double position){
             double sensorRate = position/encoderPulse;
             double armRate = sensorRate/gearing;
