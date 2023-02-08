@@ -15,7 +15,7 @@ import frc.robot.component.DriveBase;
 public class NewAutoEngine {
     
     static int currentStep = 0;
-    static int trajectoryAmount;
+    static int trajectoryAmount = 12;
     static String[] trajJSON = {};
     private static final String DoNothing = "DoNothing";
     private static final String BlueLeft = "BlueLeft";
@@ -84,4 +84,204 @@ public class NewAutoEngine {
         }
     }
 
+    public static void BlueLeft(){
+        switch(currentStep){
+            case 0:
+                    currentStep++;
+                    DriveBase.resetEncoderOff();
+                    timer.reset();
+                    timer.start();
+                    DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    break;
+            case 1: 
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                        currentStep++;
+                        timer.reset();
+                        timer.start();
+                        DriveBase.resetEncoderOn();
+                        DriveBase.resetEncoderOff();
+                        DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    
+                    }
+                    break;
+            case 2:
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    break;
+                    
+        }
+    }
+
+    public static void BlueMiddle(){
+        switch(currentStep){
+            case 0:
+                    currentStep++;
+                    DriveBase.resetEncoderOff();
+                    timer.reset();
+                    timer.start();
+                    DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    break;
+            case 1: 
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                        currentStep++;
+                        timer.reset();
+                        timer.start();
+                        DriveBase.resetEncoderOn();
+                        DriveBase.resetEncoderOff();
+                        DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    
+                    }
+                    break;
+            case 2:
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    break;
+                    
+        }
+    }
+
+    public static void BlueRight(){
+        switch(currentStep){
+            case 0:
+                    currentStep++;
+                    DriveBase.resetEncoderOff();
+                    timer.reset();
+                    timer.start();
+                    DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    break;
+            case 1: 
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                        currentStep++;
+                        timer.reset();
+                        timer.start();
+                        DriveBase.resetEncoderOn();
+                        DriveBase.resetEncoderOff();
+                        DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    
+                    }
+                    break;
+            case 2:
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    break;
+                    
+        }
+    }
+    public static void RedLeft(){
+        switch(currentStep){
+            case 0:
+                    currentStep++;
+                    DriveBase.resetEncoderOff();
+                    timer.reset();
+                    timer.start();
+                    DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    break;
+            case 1: 
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                        currentStep++;
+                        timer.reset();
+                        timer.start();
+                        DriveBase.resetEncoderOn();
+                        DriveBase.resetEncoderOff();
+                        DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    
+                    }
+                    break;
+            case 2:
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    break;
+                    
+        }
+    }
+    public static void RedMiddle(){
+        switch(currentStep){
+            case 0:
+                    currentStep++;
+                    DriveBase.resetEncoderOff();
+                    timer.reset();
+                    timer.start();
+                    DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    break;
+            case 1: 
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                        currentStep++;
+                        timer.reset();
+                        timer.start();
+                        DriveBase.resetEncoderOn();
+                        DriveBase.resetEncoderOff();
+                        DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    
+                    }
+                    break;
+            case 2:
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    break;
+                    
+        }
+    }
+    public static void RedRight(){
+        switch(currentStep){
+            case 0:
+                    currentStep++;
+                    DriveBase.resetEncoderOff();
+                    timer.reset();
+                    timer.start();
+                    DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    break;
+            case 1: 
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                        currentStep++;
+                        timer.reset();
+                        timer.start();
+                        DriveBase.resetEncoderOn();
+                        DriveBase.resetEncoderOff();
+                        DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                    ,trajectory[0].getInitialPose());
+                    
+                    }
+                    break;
+            case 2:
+                    DriveBase.runTraj(trajectory[0], timer.get());
+                    break;
+                    
+        }
+    }
 }
