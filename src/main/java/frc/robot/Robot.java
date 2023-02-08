@@ -44,12 +44,15 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    Intake.init();
+  }
 
   @Override
   public void teleopPeriodic() {
+    Intake.teleop();
     DriveBase.teloop();
-    Intake.init();
+   
   }
 
   @Override
