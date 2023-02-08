@@ -18,6 +18,12 @@ public class NewAutoEngine {
     static int trajectoryAmount;
     static String[] trajJSON = {};
     private static final String DoNothing = "DoNothing";
+    private static final String BlueLeft = "BlueLeft";
+    private static final String BlueMiddle = "BlueMiddle";
+    private static final String BlueRight = "BlueRight";
+    private static final String RedLeft = "RedLeft";
+    private static final String RedMiddle = "RedMiddle";
+    private static final String RedRight = "RedRight";
     static Trajectory[] trajectory = new Trajectory[trajectoryAmount];
 
     public static Timer timer = new Timer();
@@ -56,6 +62,12 @@ public class NewAutoEngine {
     }
     protected static void putChooser(){
         chooser.setDefaultOption("DoNothing", DoNothing);
+        chooser.setDefaultOption("BlueLeft", BlueLeft);
+        chooser.setDefaultOption("BlueMiddle", BlueMiddle);
+        chooser.setDefaultOption("BlueRight", BlueRight);
+        chooser.setDefaultOption("RedLeft", RedLeft);
+        chooser.setDefaultOption("RedMiddle", RedMiddle);
+        chooser.setDefaultOption("RedRight", RedRight);
         SmartDashboard.putData(chooser);
     }
     public static void loop(){
@@ -67,6 +79,8 @@ public class NewAutoEngine {
             case DoNothing:
                 DriveBase.directControl(0, 0);
                 break;
+            case RedLeft:
+                
         }
     }
 
