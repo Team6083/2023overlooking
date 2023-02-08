@@ -24,6 +24,12 @@ public class NewAutoEngine {
     private static final String RedLeft = "RedLeft";
     private static final String RedMiddle = "RedMiddle";
     private static final String RedRight = "RedRight";
+    private static final int[] blueLeft = {0,1};
+    private static final int[] blueMiddle = {2,3};
+    private static final int[] blueRight = {4,5};
+    private static final int[] redLeft = {6,7};
+    private static final int[] redMiddle = {8,9};
+    private static final int[] redRight = {10,11};
     static Trajectory[] trajectory = new Trajectory[trajectoryAmount];
 
     public static Timer timer = new Timer();
@@ -107,28 +113,28 @@ public class NewAutoEngine {
                     DriveBase.resetEncoderOff();
                     timer.reset();
                     timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    DriveBase.odometry.resetPosition(trajectory[blueLeft[0]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[0].getInitialPose());
+                    ,trajectory[blueLeft[0]].getInitialPose());
                     break;
             case 1: 
-                    DriveBase.runTraj(trajectory[0], timer.get());
+                    DriveBase.runTraj(trajectory[blueLeft[0]], timer.get());
                     if(trajectory[0].getTotalTimeSeconds()>timer.get()){
                         currentStep++;
                         timer.reset();
                         timer.start();
                         DriveBase.resetEncoderOn();
                         DriveBase.resetEncoderOff();
-                        DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                        DriveBase.odometry.resetPosition(trajectory[blueLeft[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[0].getInitialPose());
+                    ,trajectory[blueLeft[1]].getInitialPose());
                     
                     }
                     break;
             case 2:
-                    DriveBase.runTraj(trajectory[0], timer.get());
+                    DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
                     break;
                     
         }
@@ -141,23 +147,23 @@ public class NewAutoEngine {
                     DriveBase.resetEncoderOff();
                     timer.reset();
                     timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                    DriveBase.odometry.resetPosition(trajectory[blueMiddle[0]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[0].getInitialPose());
+                    ,trajectory[blueMiddle[0]].getInitialPose());
                     break;
             case 1: 
-                    DriveBase.runTraj(trajectory[0], timer.get());
+                    DriveBase.runTraj(trajectory[blueMiddle[0]], timer.get());
                     if(trajectory[0].getTotalTimeSeconds()>timer.get()){
                         currentStep++;
                         timer.reset();
                         timer.start();
                         DriveBase.resetEncoderOn();
                         DriveBase.resetEncoderOff();
-                        DriveBase.odometry.resetPosition(trajectory[1].getInitialPose().getRotation()
+                        DriveBase.odometry.resetPosition(trajectory[blueMiddle[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[0].getInitialPose());
+                    ,trajectory[blueMiddle[1]].getInitialPose());
                     
                     }
                     break;
