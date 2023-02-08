@@ -223,28 +223,28 @@ public class NewAutoEngine {
                     DriveBase.resetEncoderOff();
                     timer.reset();
                     timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[redMiddle[0]].getInitialPose().getRotation()
+                    DriveBase.odometry.resetPosition(trajectory[redLeft[0]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[redMiddle[0]].getInitialPose());
+                    ,trajectory[redLeft[0]].getInitialPose());
                     break;
             case 1: 
-                    DriveBase.runTraj(trajectory[redMiddle[0]], timer.get());
+                    DriveBase.runTraj(trajectory[redLeft[0]], timer.get());
                     if(trajectory[0].getTotalTimeSeconds()>timer.get()){
                         currentStep++;
                         timer.reset();
                         timer.start();
                         DriveBase.resetEncoderOn();
                         DriveBase.resetEncoderOff();
-                        DriveBase.odometry.resetPosition(trajectory[redMiddle[1]].getInitialPose().getRotation()
+                        DriveBase.odometry.resetPosition(trajectory[redLeft[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[redMiddle[1]].getInitialPose());
+                    ,trajectory[redLeft[1]].getInitialPose());
                     
                     }
                     break;
             case 2:
-                    DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
+                    DriveBase.runTraj(trajectory[redLeft[1]], timer.get());
                     break;
                     
         }
