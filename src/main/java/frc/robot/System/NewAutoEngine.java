@@ -79,8 +79,24 @@ public class NewAutoEngine {
             case DoNothing:
                 DriveBase.directControl(0, 0);
                 break;
+            case BlueLeft:
+                BlueLeft();
+                break;
+            case BlueMiddle:
+                BlueMiddle();
+                break;
+            case BlueRight:
+                BlueRight();
+                break;
             case RedLeft:
-                
+                RedLeft();
+                break;
+            case RedMiddle:
+                RedMiddle();
+                break;
+            case RedRight:
+                RedRight();
+                break;
         }
     }
 
