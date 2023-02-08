@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.component.Arm;
 import frc.robot.component.DriveBase;
+import frc.robot.component.Intake;
 
 public class NewAutoEngine {
     
@@ -109,6 +111,13 @@ public class NewAutoEngine {
     public static void BlueLeft(){
         switch(currentStep){
             case 0:
+                    if(Arm.accessDegree()>31.5){
+                        Arm.setArm(0);
+                        Intake.solOn();
+                    }else{
+                        Arm.setArm(0.85);
+                    }
+            case 1:
                     currentStep++;
                     DriveBase.resetEncoderOff();
                     timer.reset();
@@ -118,7 +127,7 @@ public class NewAutoEngine {
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
                     ,trajectory[blueLeft[0]].getInitialPose());
                     break;
-            case 1: 
+            case 2: 
                     DriveBase.runTraj(trajectory[blueLeft[0]], timer.get());
                     if(trajectory[0].getTotalTimeSeconds()>timer.get()){
                         currentStep++;
@@ -133,7 +142,7 @@ public class NewAutoEngine {
                     
                     }
                     break;
-            case 2:
+            case 3:
                     DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
                     break;
                     

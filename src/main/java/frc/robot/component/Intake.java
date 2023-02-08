@@ -8,11 +8,13 @@ import frc.robot.Robot;
 
 public class Intake {
     private static Compressor com ;
-    private static DoubleSolenoid sol;
+    private static DoubleSolenoid sol1;
+    private static DoubleSolenoid sol2;
     private static boolean sol_Forward = true;
     public static void init() {
     com = new Compressor(null);
-    sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+    sol1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+    sol2 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
     }
     public static void teleop() {
     if(Robot.xbox.getYButton()){
@@ -25,12 +27,22 @@ public class Intake {
     }
     if (Robot.xbox.getBButton()) {
         if (sol_Forward== false) {
-            sol.set(Value.kForward);
+            sol1.set(Value.kForward);
         } else {
-            sol.set(Value.kReverse);
+            sol1.set(Value.kReverse);
         }
     } else {
-        sol.set(Value.kOff);
+        sol1.set(Value.kOff);
     }
+    }
+
+    public static void solOn(){
+        sol1.set(Value.kForward);
+        sol2.set(Value.kForward);
+    }
+
+    public static void solOff(){
+        sol1.set(Value.kOff);
+        sol2.set(Value.kOff);
     }
 }

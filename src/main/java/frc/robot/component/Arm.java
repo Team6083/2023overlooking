@@ -46,4 +46,14 @@ public class Arm {
         double positionMeter = armRate * 360;
         return positionMeter;
     }
+
+    public static double setArm(double speed){
+        armmotor.set(speed);
+        return 0;
+    }
+
+    public  static double accessDegree() {
+        double Degree = positionToDegreeMeter(armencoder.getPosition());
+        return Degree;
+    }
 }
