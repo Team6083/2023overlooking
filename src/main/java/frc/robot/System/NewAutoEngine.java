@@ -124,7 +124,7 @@ public class NewAutoEngine {
                 break;
             case 1: 
                 DriveBase.runTraj(trajectory[blueLeft[0]], timer.get());
-                if(trajectory[0].getTotalTimeSeconds()<timer.get()){
+                if(trajectory[blueLeft[0]].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
                 }
                 break;
@@ -166,6 +166,8 @@ public class NewAutoEngine {
                 DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
                 if(trajectory[blueLeft[1]].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
+                    DriveBase.leftmotor.setInverted(true);
+                    DriveBase.rightmotor.setInverted(false);
                 }
                 break;
             case 5:
@@ -189,7 +191,7 @@ public class NewAutoEngine {
                 break;
             case 1: 
                 DriveBase.runTraj(trajectory[blueMiddle[0]], timer.get());
-                if(trajectory[0].getTotalTimeSeconds()<timer.get()){
+                if(trajectory[blueMiddle[0]].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
                 }
                 break;
@@ -227,6 +229,10 @@ public class NewAutoEngine {
                 break;
             case 4:
                 DriveBase.runTraj(trajectory[blueMiddle[1]], timer.get());
+                if(timer.get()>trajectory[blueMiddle[1]].getTotalTimeSeconds()){
+                    DriveBase.leftmotor.setInverted(true);
+                    DriveBase.rightmotor.setInverted(false);
+                }
                 break;
             default:
         }
@@ -245,7 +251,7 @@ public class NewAutoEngine {
                 break;
             case 1: 
                 DriveBase.runTraj(trajectory[blueRight[0]], timer.get());
-                if(trajectory[0].getTotalTimeSeconds()<timer.get()){
+                if(trajectory[blueRight[0]].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
                 }
                 break;
@@ -273,8 +279,8 @@ public class NewAutoEngine {
                     timer.start();
                     DriveBase.resetEncoderOn();
                     DriveBase.resetEncoderOff();
-                    DriveBase.leftMotor1.setInverted(true);
-                    DriveBase.rightMotor1.setInverted(false);
+                    DriveBase.leftmotor.setInverted(false);
+                    DriveBase.rightmotor.setInverted(true);
                     DriveBase.odometry.resetPosition(trajectory[blueRight[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
@@ -283,10 +289,13 @@ public class NewAutoEngine {
                     Arm.autoArm(0.8);
                     Arm.autoVic(0.9);
                 }
+                break;
             case 4:
-                DriveBase.runTraj(trajectory[blueRight[0]], timer.get());
-                if(trajectory[blueLeft[1]].getTotalTimeSeconds()<timer.get()){
+                DriveBase.runTraj(trajectory[blueRight[1]], timer.get());
+                if(trajectory[blueRight[1]].getTotalTimeSeconds()<timer.get()){
                 currentStep++;
+                DriveBase.leftmotor.setInverted(true);
+                DriveBase.rightmotor.setInverted(false);
                 }
                 break;
             case 5:
@@ -310,7 +319,7 @@ public class NewAutoEngine {
                 break;
             case 1: 
                 DriveBase.runTraj(trajectory[redLeft[0]], timer.get());
-                if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                if(trajectory[redLeft[0]].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
                 }
                 break;
@@ -347,6 +356,8 @@ public class NewAutoEngine {
                 DriveBase.runTraj(trajectory[redLeft[1]], timer.get());
                 if(trajectory[redLeft[1]].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
+                    DriveBase.leftmotor.setInverted(true);
+                    DriveBase.rightmotor.setInverted(false);
                 }             
                 break;
             case 5:
@@ -369,7 +380,7 @@ public class NewAutoEngine {
                 break;
             case 1: 
                 DriveBase.runTraj(trajectory[redMiddle[0]], timer.get());
-                if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                if(trajectory[redMiddle[0]].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
                 }
                 break;
@@ -393,6 +404,10 @@ public class NewAutoEngine {
                 ,trajectory[redMiddle[1]].getInitialPose());
             case 4:
                 DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
+                if(timer.get()>trajectory[redMiddle[1]].getTotalTimeSeconds()){
+                    DriveBase.leftmotor.setInverted(true);
+                    DriveBase.rightmotor.setInverted(false);
+                }
                 break;
             default:
         }
@@ -411,7 +426,7 @@ public class NewAutoEngine {
                 break;
             case 1: 
                 DriveBase.runTraj(trajectory[redRight[0]], timer.get());
-                if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                if(trajectory[redRight[0]].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
                 }
                 break;
@@ -451,6 +466,8 @@ public class NewAutoEngine {
                 DriveBase.runTraj(trajectory[redRight[1]], timer.get());
                 if(trajectory[redRight[1]].getTotalTimeSeconds()< timer.get()){
                     currentStep++;
+                    DriveBase.leftmotor.setInverted(true);
+                    DriveBase.rightmotor.setInverted(false);
                 }
                 break;
             case 5:  
