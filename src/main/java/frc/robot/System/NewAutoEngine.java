@@ -106,238 +106,357 @@ public class NewAutoEngine {
             case RedRight:
                 RedRight();
                 break;
+            default:
         }
     }
 
     public static void BlueLeft(){
         switch(currentStep){
             case 0:
+                currentStep++;
+                DriveBase.resetEncoderOff();
+                timer.reset();
+                timer.start();
+                DriveBase.odometry.resetPosition(trajectory[blueLeft[0]].getInitialPose().getRotation()
+                , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                ,trajectory[blueLeft[0]].getInitialPose());
+                break;
+            case 1: 
+                DriveBase.runTraj(trajectory[blueLeft[0]], timer.get());
+                if(trajectory[0].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
-                    DriveBase.resetEncoderOff();
+                }
+                break;
+            case 2:
+                if(Arm.autoAccessDegree()>31.5){
+                    Arm.autoArm(0);
+                    if(k){
+                        Arm.autoVic(0);
+                        Intake.solOn();
+                        currentStep++;
+                    } else {
+                        Arm.autoVic(-0.9);
+                    }
+                } else {
+                    Arm.autoArm(0.85);
+                }
+                break;
+            case 3:
+                if(k){
+                    Arm.autoArm(0);
+                    Arm.autoVic(0);
+                    currentStep++;
                     timer.reset();
                     timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[blueLeft[0]].getInitialPose().getRotation()
-                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
-                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[blueLeft[0]].getInitialPose());
-                    break;
-            case 1: 
-                    DriveBase.runTraj(trajectory[blueLeft[0]], timer.get());
-                    if(trajectory[0].getTotalTimeSeconds()<timer.get()){
-                        currentStep++;
-                    }
-                    break;
-            case 2:
-                    if(Arm.autoAccessDegree()>31.5){
-                        Arm.autoArm(0);
-                        if(k){//encoder position of the 
-                            Arm.autoVic(0);
-                            Intake.solOn();
-                            currentStep++;
-                        }else{
-                            Arm.autoVic(-0.9);
-                        }
-                    }else{
-                        Arm.autoArm(0.85);
-                    }
-                    break;
-            case 3:
-                    if(k){//k = degree
-                        Arm.autoArm(0);
-                        Arm.autoVic(0);
-                        currentStep++;
-                        timer.reset();
-                        timer.start();
-                        DriveBase.resetEncoderOn();
-                        DriveBase.resetEncoderOff();
-                        DriveBase.leftMotor1.setInverted(true);
-                        DriveBase.rightMotor1.setInverted(false);
-                        DriveBase.odometry.resetPosition(trajectory[blueLeft[1]].getInitialPose().getRotation()
+                    DriveBase.resetEncoderOn();
+                    DriveBase.resetEncoderOff();
+                    DriveBase.leftMotor1.setInverted(true);
+                    DriveBase.rightMotor1.setInverted(false);
+                    DriveBase.odometry.resetPosition(trajectory[blueLeft[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
                     ,trajectory[blueLeft[1]].getInitialPose());
-                    }else{
-                        Arm.autoArm(0.8);
-                        Arm.autoVic(0.9);
-                    }
-                    break;
+                } else {
+                    Arm.autoArm(0.8);
+                    Arm.autoVic(0.9);
+                }
+                break;
             case 4:
-                    DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
-                    if(trajectory[blueLeft[1]].getTotalTimeSeconds()<timer.get()){
-                        currentStep++;
-                    }
-                    break;
+                DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
+                if(trajectory[blueLeft[1]].getTotalTimeSeconds()<timer.get()){
+                    currentStep++;
+                }
+                break;
             case 5:
-                    Intake.solOff();
-                    break;
-                    
+                Intake.solOff();
+                break;
+            default:        
         }
     }
 
     public static void BlueMiddle(){
         switch(currentStep){
             case 0:
-                    currentStep++;
-                    DriveBase.resetEncoderOff();
-                    timer.reset();
-                    timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[blueMiddle[0]].getInitialPose().getRotation()
-                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
-                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[blueMiddle[0]].getInitialPose());
-                    break;
+                currentStep++;
+                DriveBase.resetEncoderOff();
+                timer.reset();
+                timer.start();
+                DriveBase.odometry.resetPosition(trajectory[blueMiddle[0]].getInitialPose().getRotation()
+                , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                ,trajectory[blueMiddle[0]].getInitialPose());
+                break;
             case 1: 
-                    DriveBase.runTraj(trajectory[blueMiddle[0]], timer.get());
-                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
-                        currentStep++;
-                        timer.reset();
-                        timer.start();
-                        DriveBase.resetEncoderOn();
-                        DriveBase.resetEncoderOff();
-                        DriveBase.odometry.resetPosition(trajectory[blueMiddle[1]].getInitialPose().getRotation()
-                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
-                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[blueMiddle[1]].getInitialPose());
-                    
-                    }
-                    break;
+                DriveBase.runTraj(trajectory[blueMiddle[0]], timer.get());
+                if(trajectory[0].getTotalTimeSeconds()<timer.get()){
+                    currentStep++;
+                }
+                break;
             case 2:
-                    DriveBase.runTraj(trajectory[blueMiddle[1]], timer.get());
-                    break;
-                    
+                if(Arm.autoAccessDegree()>31.5){
+                    Arm.autoArm(0);
+                    if(k){
+                        Arm.autoVic(0);
+                        Intake.solOn();
+                        currentStep++;
+                    } else {
+                        Arm.autoArm(0.85);
+                    }
+                }
+                break;
+            case 3:
+                if(k){
+                Arm.autoArm(0);
+                Arm.autoVic(0);
+                currentStep++;
+                timer.reset();
+                timer.start();
+                DriveBase.resetEncoderOn();
+                DriveBase.resetEncoderOff();
+                DriveBase.leftMotor1.setInverted(true);
+                DriveBase.rightMotor1.setInverted(false);
+                DriveBase.odometry.resetPosition(trajectory[blueMiddle[1]].getInitialPose().getRotation()
+                , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                ,trajectory[blueMiddle[1]].getInitialPose());
+                } else {
+                    Arm.autoArm(0.8);
+                    Arm.autoVic(0.9);
+                }
+                break;
+            case 4:
+                DriveBase.runTraj(trajectory[blueMiddle[1]], timer.get());
+                break;
+            default:
         }
     }
-
     public static void BlueRight(){
         switch(currentStep){
             case 0:
+                currentStep++;
+                DriveBase.resetEncoderOff();
+                timer.reset();
+                timer.start();
+                DriveBase.odometry.resetPosition(trajectory[blueRight[0]].getInitialPose().getRotation()
+                , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                ,trajectory[blueRight[0]].getInitialPose());
+                break;
+            case 1: 
+                DriveBase.runTraj(trajectory[blueRight[0]], timer.get());
+                if(trajectory[0].getTotalTimeSeconds()<timer.get()){
                     currentStep++;
-                    DriveBase.resetEncoderOff();
+                }
+                break;
+            case 2:
+                if(Arm.autoAccessDegree()>31.5){
+                    Arm.autoArm(0);
+                    if(k){
+                        Arm.autoVic(0);
+                        Intake.solOn();
+                        currentStep++;
+                    } else {
+                        Arm.autoVic(-0.9);
+                    }
+                } else {
+                    Arm.autoArm(0.85);
+                }
+                    
+                    break;
+            case 3:
+                if(k){
+                    Arm.autoArm(0);
+                    Arm.autoVic(0);
+                    currentStep++;
                     timer.reset();
                     timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[blueRight[0]].getInitialPose().getRotation()
+                    DriveBase.resetEncoderOn();
+                    DriveBase.resetEncoderOff();
+                    DriveBase.leftMotor1.setInverted(true);
+                    DriveBase.rightMotor1.setInverted(false);
+                    DriveBase.odometry.resetPosition(trajectory[blueRight[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[blueRight[0]].getInitialPose());
-                    break;
-            case 1: 
-                    DriveBase.runTraj(trajectory[blueRight[0]], timer.get());
-                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
-                        currentStep++;
-                        timer.reset();
-                        timer.start();
-                        DriveBase.resetEncoderOn();
-                        DriveBase.resetEncoderOff();
-                        DriveBase.odometry.resetPosition(trajectory[blueRight[1]].getInitialPose().getRotation()
-                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
-                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[blueRight[1]].getInitialPose());
-                    
-                    }
-                    break;
-            case 2:
-                    DriveBase.runTraj(trajectory[blueRight[0]], timer.get());
-                    break;
-                    
+                    ,trajectory[blueRight[1]].getInitialPose()); 
+                } else {
+                    Arm.autoArm(0.8);
+                    Arm.autoVic(0.9);
+                }
+            case 4:
+                DriveBase.runTraj(trajectory[blueRight[0]], timer.get());
+                if(trajectory[blueLeft[1]].getTotalTimeSeconds()<timer.get()){
+                currentStep++;
+                }
+                break;
+            case 5:
+                Intake.solOff();
+                break;
+            default:
         }
     }
+
     public static void RedLeft(){
         switch(currentStep){
             case 0:
+                currentStep++;
+                DriveBase.resetEncoderOff();
+                timer.reset();
+                timer.start();
+                DriveBase.odometry.resetPosition(trajectory[redLeft[0]].getInitialPose().getRotation()
+                , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                ,trajectory[redLeft[0]].getInitialPose());
+                break;
+            case 1: 
+                DriveBase.runTraj(trajectory[redLeft[0]], timer.get());
+                if(trajectory[0].getTotalTimeSeconds()>timer.get()){
                     currentStep++;
-                    DriveBase.resetEncoderOff();
+                }
+                break;
+            case 2:
+                if(Arm.autoAccessDegree()>31.5){
+                    Arm.autoArm(0);
+                    if(k){
+                        Arm.autoVic(0);
+                        Intake.solOn();
+                        currentStep++;
+                    } else {
+                        Arm.autoVic(-0.9);
+                    }
+                } else {
+                    Arm.autoArm(0.85);
+                }
+                break;
+            case 3:
+                if(k){
                     timer.reset();
                     timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[redLeft[0]].getInitialPose().getRotation()
-                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
-                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[redLeft[0]].getInitialPose());
-                    break;
-            case 1: 
-                    DriveBase.runTraj(trajectory[redLeft[0]], timer.get());
-                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
-                        currentStep++;
-                        timer.reset();
-                        timer.start();
-                        DriveBase.resetEncoderOn();
-                        DriveBase.resetEncoderOff();
-                        DriveBase.odometry.resetPosition(trajectory[redLeft[1]].getInitialPose().getRotation()
+                    DriveBase.resetEncoderOn();
+                    DriveBase.resetEncoderOff();
+                    DriveBase.odometry.resetPosition(trajectory[redLeft[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
                     ,trajectory[redLeft[1]].getInitialPose());
-                    
-                    }
-                    break;
-            case 2:
-                    DriveBase.runTraj(trajectory[redLeft[1]], timer.get());
-                    break;
-                    
+                } else {
+                    Arm.autoArm(0.8);
+                    Arm.autoVic(0.9);
+                }
+                break;
+            case 4:  
+                DriveBase.runTraj(trajectory[redLeft[1]], timer.get());
+                if(trajectory[redLeft[1]].getTotalTimeSeconds()<timer.get()){
+                    currentStep++;
+                }             
+                break;
+            case 5:
+                Intake.solOff();
+                break;
+            default:        
         }
     }
     public static void RedMiddle(){
         switch(currentStep){
             case 0:
-                    currentStep++;
-                    DriveBase.resetEncoderOff();
-                    timer.reset();
-                    timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[redMiddle[0]].getInitialPose().getRotation()
-                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
-                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[redMiddle[0]].getInitialPose());
-                    break;
+                currentStep++;
+                DriveBase.resetEncoderOff();
+                timer.reset();
+                timer.start();
+                DriveBase.odometry.resetPosition(trajectory[redMiddle[0]].getInitialPose().getRotation()
+                , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                ,trajectory[redMiddle[0]].getInitialPose());
+                break;
             case 1: 
-                    DriveBase.runTraj(trajectory[redMiddle[0]], timer.get());
-                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
-                        currentStep++;
-                        timer.reset();
-                        timer.start();
-                        DriveBase.resetEncoderOn();
-                        DriveBase.resetEncoderOff();
-                        DriveBase.odometry.resetPosition(trajectory[redMiddle[1]].getInitialPose().getRotation()
-                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
-                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[redMiddle[1]].getInitialPose());
-                    
-                    }
-                    break;
+                DriveBase.runTraj(trajectory[redMiddle[0]], timer.get());
+                if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                    currentStep++;
+                }
+                break;
             case 2:
-                    DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
-                    break;
-                    
+                if(Arm.autoAccessDegree()>31.5){
+                    Arm.autoVic(0);
+                    Intake.solOff();
+                    currentStep++;
+                } else {
+                    Arm.autoArm(0.85);
+                }
+                break;
+            case 3:
+                timer.reset();
+                timer.start();
+                DriveBase.resetEncoderOn();
+                DriveBase.resetEncoderOff();
+                DriveBase.odometry.resetPosition(trajectory[redMiddle[1]].getInitialPose().getRotation()
+                , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                ,trajectory[redMiddle[1]].getInitialPose());
+            case 4:
+                DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
+                break;
+            default:
         }
     }
     public static void RedRight(){
         switch(currentStep){
             case 0:
+                currentStep++;
+                DriveBase.resetEncoderOff();
+                timer.reset();
+                timer.start();
+                DriveBase.odometry.resetPosition(trajectory[redRight[0]].getInitialPose().getRotation()
+                , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
+                , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
+                ,trajectory[redRight[0]].getInitialPose());
+                break;
+            case 1: 
+                DriveBase.runTraj(trajectory[redRight[0]], timer.get());
+                if(trajectory[0].getTotalTimeSeconds()>timer.get()){
                     currentStep++;
-                    DriveBase.resetEncoderOff();
+                }
+                break;
+            case 2:
+                if(Arm.autoAccessDegree()>31.5){
+                    Arm.autoArm(0);
+                    if(k){
+                        Arm.autoVic(0);
+                        Intake.solOn();
+                        currentStep++;
+                    } else {
+                        Arm.autoVic(-0.9);
+                    }
+                } else {
+                    Arm.autoArm(0.85);
+                }
+                break;
+            case 3:
+                if(k){
+                    Arm.autoArm(0);
+                    Arm.autoVic(0);
+                    currentStep++;
                     timer.reset();
                     timer.start();
-                    DriveBase.odometry.resetPosition(trajectory[redRight[0]].getInitialPose().getRotation()
-                    , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
-                    , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
-                    ,trajectory[redRight[0]].getInitialPose());
-                    break;
-            case 1: 
-                    DriveBase.runTraj(trajectory[redRight[0]], timer.get());
-                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
-                        currentStep++;
-                        timer.reset();
-                        timer.start();
-                        DriveBase.resetEncoderOn();
-                        DriveBase.resetEncoderOff();
-                        DriveBase.odometry.resetPosition(trajectory[redRight[1]].getInitialPose().getRotation()
+                    DriveBase.resetEncoderOn();
+                    DriveBase.resetEncoderOff();
+                    DriveBase.odometry.resetPosition(trajectory[redRight[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
                     ,trajectory[redRight[1]].getInitialPose());
-                    
-                    }
-                    break;
-            case 2:
-                    DriveBase.runTraj(trajectory[redRight[1]], timer.get());
-                    break;
-                    
+                } else {
+                    Arm.autoArm(0.8);
+                    Arm.autoVic(0.9);
+                }
+                break;
+            case 4:
+                DriveBase.runTraj(trajectory[redRight[1]], timer.get());
+                if(trajectory[redRight[1]].getTotalTimeSeconds()< timer.get()){
+                    currentStep++;
+                }
+                break;
+            case 5:  
+                Intake.solOff();
+                break;
+            default:
         }
     }
 }
