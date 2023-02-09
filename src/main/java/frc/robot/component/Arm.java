@@ -1,7 +1,5 @@
 package frc.robot.component;
 
-import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -13,14 +11,16 @@ public class Arm {
     private static final double encoderPulse = 4096;
     private static final double gearing = 198;
     // rotate arm
-    private static CANSparkMax ArmMotor;
+    private static CANSparkMax ArmMotor1;
+    private static CANSparkMax ArmMotor2;
     private static RelativeEncoder ArmEncoder;
     private static int karm = 0;
     //take up and pay off device
     private static WPI_VictorSPX vic;
     private static final int vic1 =2 ;
+
     public static void init() {
-        ArmMotor = new CANSparkMax(karm, MotorType.kBrushless);
+        ArmMotor1 = new CANSparkMax(karm, MotorType.kBrushless);
         vic = new WPI_VictorSPX(vic1);
     }
 
@@ -28,8 +28,10 @@ public class Arm {
         // get degree position
         double a = positionToDegreeMeter(ArmEncoder.getPosition());
         // rotate arm
-        ArmMotor.set(Robot.xbox.getLeftTriggerAxis());
-        ArmMotor.set(-Robot.xbox.getRightTriggerAxis());
+        ArmMotor1.set(Robot.xbox.getLeftTriggerAxis());
+        ArmMotor2.set(-Robot.xbox.getLeftTriggerAxis());
+        ArmMotor1.set(-Robot.xbox.getRightTriggerAxis());
+        ArmMotor2.set(Robot.xbox.getRightTriggerAxis());
         //take up and pay off device
         if (Robot.xbox.getPOV() == 0) {
             vic.set(0.5);
@@ -49,12 +51,12 @@ public class Arm {
         return positionMeter;
     }
 
-    public static double setArm(double speed){
-        ArmMotor.set(speed);
+    public static double autoArm(double speed){
+        ArmMotor1.set(speed);
         return 0;
     }
 
-    public  static double accessDegree() {
+    public  static double autoAccessDegree() {
         double Degree = positionToDegreeMeter(ArmEncoder.getPosition());
         return Degree;
     }
