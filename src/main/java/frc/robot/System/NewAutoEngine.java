@@ -130,7 +130,7 @@ public class NewAutoEngine {
             case 2:
                     if(Arm.autoAccessDegree()>31.5){
                         Arm.autoArm(0);
-                        if(k){
+                        if(k){//encoder position of the 
                             Arm.autoVic(0);
                             Intake.solOn();
                             currentStep++;
@@ -142,7 +142,7 @@ public class NewAutoEngine {
                     }
                     break;
             case 3:
-                    if(k){
+                    if(k){//k = degree
                         Arm.autoArm(0);
                         Arm.autoVic(0);
                         currentStep++;
