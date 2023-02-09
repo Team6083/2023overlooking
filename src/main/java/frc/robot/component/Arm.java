@@ -1,7 +1,5 @@
 package frc.robot.component;
 
-import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -12,23 +10,29 @@ import frc.robot.Robot;
 public class Arm {
     private static final double encoderPulse = 4096;
     private static final double gearing = 198;
-    private static final int vic1 =2 ;
-    private static CANSparkMax armmotor;//
-    private static RelativeEncoder armencoder;
+    // rotate arm
+    private static CANSparkMax ArmMotor1;
+    private static CANSparkMax ArmMotor2;
+    private static RelativeEncoder ArmEncoder;
     private static int karm = 0;
+    //take up and pay off device
     private static WPI_VictorSPX vic;
+    private static final int vic1 =2 ;
 
     public static void init() {
-        armmotor = new CANSparkMax(karm, MotorType.kBrushless);
+        ArmMotor1 = new CANSparkMax(karm, MotorType.kBrushless);
         vic = new WPI_VictorSPX(vic1);
     }
 
     public static void teleop() {
         // get degree position
-        double a = positionToDegreeMeter(armencoder.getPosition());
+        double a = positionToDegreeMeter(ArmEncoder.getPosition());
         // rotate arm
-        armmotor.set(Robot.xbox.getLeftTriggerAxis());
-        armmotor.set(-Robot.xbox.getRightTriggerAxis());
+        ArmMotor1.set(Robot.xbox.getLeftTriggerAxis());
+        ArmMotor2.set(-Robot.xbox.getLeftTriggerAxis());
+        ArmMotor1.set(-Robot.xbox.getRightTriggerAxis());
+        ArmMotor2.set(Robot.xbox.getRightTriggerAxis());
+        //take up and pay off device
         if (Robot.xbox.getPOV() == 0) {
             vic.set(0.5);
         }else if(Robot.xbox.getPOV()==180){
@@ -47,13 +51,13 @@ public class Arm {
         return positionMeter;
     }
 
-    public static double setArm(double speed){
-        armmotor.set(speed);
+    public static double autoArm(double speed){
+        ArmMotor1.set(speed);
         return 0;
     }
 
-    public  static double accessDegree() {
-        double Degree = positionToDegreeMeter(armencoder.getPosition());
+    public  static double autoAccessDegree() {
+        double Degree = positionToDegreeMeter(ArmEncoder.getPosition());
         return Degree;
     }
     public static double setVic(double speed){
