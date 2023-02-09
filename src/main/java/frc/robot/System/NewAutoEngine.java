@@ -128,23 +128,23 @@ public class NewAutoEngine {
                     }
                     break;
             case 2:
-                    if(Arm.accessDegree()>31.5){
-                        Arm.setArm(0);
+                    if(Arm.autoAccessDegree()>31.5){
+                        Arm.autoArm(0);
                         if(k){
-                            Arm.setVic(0);
+                            Arm.autoVic(0);
                             Intake.solOn();
                             currentStep++;
                         }else{
-                            Arm.setVic(-0.9);
+                            Arm.autoVic(-0.9);
                         }
                     }else{
-                        Arm.setArm(0.85);
+                        Arm.autoArm(0.85);
                     }
                     break;
             case 3:
                     if(k){
-                        Arm.setArm(0);
-                        Arm.setVic(0);
+                        Arm.autoArm(0);
+                        Arm.autoVic(0);
                         currentStep++;
                         timer.reset();
                         timer.start();
@@ -157,8 +157,8 @@ public class NewAutoEngine {
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
                     ,trajectory[blueLeft[1]].getInitialPose());
                     }else{
-                        Arm.setArm(0.8);
-                        Arm.setVic(0.9);
+                        Arm.autoArm(0.8);
+                        Arm.autoVic(0.9);
                     }
                     break;
             case 4:
