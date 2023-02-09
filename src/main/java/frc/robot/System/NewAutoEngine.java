@@ -37,6 +37,7 @@ public class NewAutoEngine {
     public static Timer timer = new Timer();
     public static SendableChooser<String> chooser;
     public static String autoSeclected;
+    private static boolean k = true;
 
     public static void init() {
         chooser = new SendableChooser<String>();
@@ -111,13 +112,6 @@ public class NewAutoEngine {
     public static void BlueLeft(){
         switch(currentStep){
             case 0:
-                    if(Arm.accessDegree()>31.5){
-                        Arm.setArm(0);
-                        Intake.solOn();
-                    }else{
-                        Arm.setArm(0.85);
-                    }
-            case 1:
                     currentStep++;
                     DriveBase.resetEncoderOff();
                     timer.reset();
@@ -127,23 +121,54 @@ public class NewAutoEngine {
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
                     ,trajectory[blueLeft[0]].getInitialPose());
                     break;
-            case 2: 
+            case 1: 
                     DriveBase.runTraj(trajectory[blueLeft[0]], timer.get());
-                    if(trajectory[0].getTotalTimeSeconds()>timer.get()){
+                    if(trajectory[0].getTotalTimeSeconds()<timer.get()){
+                        currentStep++;
+                    }
+                    break;
+            case 2:
+                    if(Arm.accessDegree()>31.5){
+                        Arm.setArm(0);
+                        if(k){
+                            Arm.setVic(0);
+                            Intake.solOn();
+                            currentStep++;
+                        }else{
+                            Arm.setVic(-0.9);
+                        }
+                    }else{
+                        Arm.setArm(0.85);
+                    }
+                    break;
+            case 3:
+                    if(k){
+                        Arm.setArm(0);
+                        Arm.setVic(0);
                         currentStep++;
                         timer.reset();
                         timer.start();
                         DriveBase.resetEncoderOn();
                         DriveBase.resetEncoderOff();
+                        DriveBase.leftMotor1.setInverted(true);
+                        DriveBase.rightMotor1.setInverted(false);
                         DriveBase.odometry.resetPosition(trajectory[blueLeft[1]].getInitialPose().getRotation()
                     , DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition())
                     , DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition())
                     ,trajectory[blueLeft[1]].getInitialPose());
-                    
+                    }else{
+                        Arm.setArm(0.8);
+                        Arm.setVic(0.9);
                     }
                     break;
-            case 3:
+            case 4:
                     DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
+                    if(trajectory[blueLeft[1]].getTotalTimeSeconds()<timer.get()){
+                        currentStep++;
+                    }
+                    break;
+            case 5:
+                    Intake.solOff();
                     break;
                     
         }

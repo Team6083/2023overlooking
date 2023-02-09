@@ -56,4 +56,8 @@ public class Arm {
         double Degree = positionToDegreeMeter(armencoder.getPosition());
         return Degree;
     }
+    public static double setVic(double speed){
+        vic.set(speed);
+        return 0;
+    }
 }
