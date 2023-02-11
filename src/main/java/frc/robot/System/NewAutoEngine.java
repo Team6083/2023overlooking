@@ -33,19 +33,18 @@ public class NewAutoEngine {
         "/home/lvuser/deploy/output/output/RR-1.wpilib.json", "/home/lvuser/deploy/output/output/RR-2.wpilib.json"
     };
 
-    static Trajectory[] trajectory = new Trajectory[trajectoryAmount];
-
-    public static Timer timer = new Timer();
-    public static SendableChooser<String> chooser;
-    public static String autoSeclected;
-    private static final String DoNothing = "DoNothing";
-    private static final String BlueLeft = "BlueLeft";
-    private static final String BlueMiddle = "BlueMiddle";
-    private static final String BlueRight = "BlueRight";
-    private static final String RedLeft = "RedLeft";
-    private static final String RedMiddle = "RedMiddle";
-    private static final String RedRight = "RedRight";
-    private static boolean k = true;
+ static Trajectory[] trajectory = new Trajectory[trajectoryAmount];
+public static Timer timer = new Timer();
+public static SendableChooser<String> chooser;
+public static String autoSeclected;
+private static final String DoNothing = "DoNothing";
+private static final String BlueLeft = "BlueLeft";
+private static final String BlueMiddle = "BlueMiddle";
+private static final String BlueRight = "BlueRight";
+private static final String RedLeft = "RedLeft";
+private static final String RedMiddle = "RedMiddle";
+private static final String RedRight = "RedRight";
+private static boolean k = true;
 
     public static void init() {
         chooser = new SendableChooser<String>();
