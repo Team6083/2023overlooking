@@ -251,10 +251,10 @@ private static boolean k = true;
                 break;
             case 4:
                 DriveBase.runTraj(trajectory[blueMiddle[1]], timer.get());
-                if(timer.get()>trajectory[blueMiddle[1]].getTotalTimeSeconds()){
-                    DriveBase.leftmotor.setInverted(true);
-                    DriveBase.rightmotor.setInverted(false);
-                }
+                // if(timer.get()>trajectory[blueMiddle[1]].getTotalTimeSeconds()){
+                //       DriveBase.leftmotor.setInverted(true);
+                //       DriveBase.rightmotor.setInverted(false);
+                // }
                 break;
             default:
         }
@@ -451,10 +451,10 @@ private static boolean k = true;
                 }
             case 4:
                 DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
-                if(timer.get()>trajectory[redMiddle[1]].getTotalTimeSeconds()){
-                    DriveBase.leftmotor.setInverted(true);
-                    DriveBase.rightmotor.setInverted(false);
-                }
+                // if(timer.get()>trajectory[redMiddle[1]].getTotalTimeSeconds()){
+                //      DriveBase.leftmotor.setInverted(true);
+                //      DriveBase.rightmotor.setInverted(false);
+                // }
                 break;
             default:
         }
