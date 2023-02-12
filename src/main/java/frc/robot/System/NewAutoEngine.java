@@ -268,7 +268,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 31.5) {
+                if (Arm.autoAccessDegree() < 35.5) {
                     Arm.autoArm(0);
                     if (k) {
                         Arm.autoLine(0);
@@ -333,7 +333,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 31.5) {
+                if (Arm.autoAccessDegree() < 35.5) {
                     Arm.autoArm(0);
                     if (k) {
                         Arm.autoLine(0);
@@ -393,7 +393,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 31.5) {
+                if (Arm.autoAccessDegree() < 35.5) {
                     Arm.autoLine(0);
                     Intake.solOff();
                     currentStep++;
@@ -443,7 +443,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 31.5) {
+                if (Arm.autoAccessDegree() < 35.5) {
                     Arm.autoArm(0);
                     if (k) {
                         Arm.autoLine(0);
