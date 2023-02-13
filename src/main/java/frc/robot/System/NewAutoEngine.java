@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.component.Arm;
 import frc.robot.component.DriveBase;
-import frc.robot.component.Intake;
 
 public class NewAutoEngine {
 
@@ -44,7 +43,6 @@ public class NewAutoEngine {
     private static final String RedLeft = "RedLeft";
     private static final String RedMiddle = "RedMiddle";
     private static final String RedRight = "RedRight";
-    private static boolean k = true;
 
     public static void init() {
         chooser = new SendableChooser<String>();
@@ -54,8 +52,7 @@ public class NewAutoEngine {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajJSON[i]);
                 trajectory[i] = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
             } catch (IOException ex) {
-                DriverStation.reportError("unable to open trajectory" + trajJSON[i] + "\n" + ex.getMessage(),
-                        ex.getStackTrace());
+                DriverStation.reportError("unable to open trajectory" + trajJSON[i] + "\n" + ex.getMessage(),ex.getStackTrace());
             }
 
             var pose = trajectory[i].getInitialPose();
@@ -140,21 +137,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoArm(0);
-                    if (k) {//number of round
-                        Arm.autoLine(0);
-                        Intake.solOn();
-                        currentStep++;
-                    } else {
-                        Arm.autoLine(-0.9);
-                    }
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
-                if (k) {//degree of getting the stuff
+                //turn around the arm
                     Arm.autoArm(0);
                     Arm.autoLine(0);
                     timer.reset();
@@ -168,11 +154,6 @@ public class NewAutoEngine {
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                             trajectory[blueLeft[1]].getInitialPose());
                     currentStep++;
-                } else {
-                    Arm.autoArm(0.8);// calulate second
-                    Arm.autoLine(0.9);
-                }
-                break;
             case 4:
                 DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
                 if (timer.get()>trajectory[blueLeft[1]].getTotalTimeSeconds()) {
@@ -204,21 +185,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoArm(0);
-                    if (k) {//number of round
-                        Arm.autoLine(0);
-                        Intake.solOn();
-                        currentStep++;
-                    } else {
-                        Arm.autoLine(-0.9);
-                    }
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
-                if (k) {//degree of getting the stuff
+                //turn around the arm
                     Arm.autoArm(0);
                     Arm.autoLine(0);
                     timer.reset();
@@ -232,11 +202,6 @@ public class NewAutoEngine {
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                             trajectory[blueMiddle[1]].getInitialPose());
                     currentStep++;
-                } else {
-                    Arm.autoArm(0.8);
-                    Arm.autoLine(0.9);
-                }
-                break;
             case 4:
                 DriveBase.runTraj(trajectory[blueMiddle[1]], timer.get());
                 if(timer.get()>trajectory[blueMiddle[1]].getTotalTimeSeconds()){
@@ -268,21 +233,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoArm(0);
-                    if (k) {
-                        Arm.autoLine(0);
-                        Intake.solOn();
-                        currentStep++;
-                    } else {
-                        Arm.autoLine(-0.9);
-                    }
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
-                if (k) {
+                //turn around the arm
                     Arm.autoArm(0);
                     Arm.autoLine(0);
                     timer.reset();
@@ -296,15 +250,9 @@ public class NewAutoEngine {
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                             trajectory[blueRight[1]].getInitialPose());
                     currentStep++;
-                } else {
-                    Arm.autoArm(0.8);
-                    Arm.autoLine(0.9);
-                }
-                break;
             case 4:
                 DriveBase.runTraj(trajectory[blueRight[1]], timer.get());
                 if (timer.get()>trajectory[blueRight[1]].getTotalTimeSeconds()) {
-                    
                     currentStep++;
                 }
                 break;
@@ -333,21 +281,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoArm(0);
-                    if (k) {
-                        Arm.autoLine(0);
-                        Intake.solOn();
-                        currentStep++;
-                    } else {
-                        Arm.autoLine(-0.9);
-                    }
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
-                if (k) {
+                //turn around the arm
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -356,16 +293,10 @@ public class NewAutoEngine {
                             DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                             trajectory[redLeft[1]].getInitialPose());
-                } else {
-                    Arm.autoArm(0.8);
-                    Arm.autoLine(0.9);
-                }
-                break;
             case 4:
                 DriveBase.runTraj(trajectory[redLeft[1]], timer.get());
                 if (timer.get()>trajectory[redLeft[1]].getTotalTimeSeconds()) {
-                   
-                    currentStep++;
+                   currentStep++;
                 }
                 break;
             default:
@@ -393,16 +324,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoLine(0);
-                    Intake.solOff();
-                    currentStep++;
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
-                if (k) {
+                //turn around the arm
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -411,7 +336,6 @@ public class NewAutoEngine {
                             DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                             trajectory[redMiddle[1]].getInitialPose());
-                }
             case 4:
                 DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
                 if(timer.get()>trajectory[redMiddle[1]].getTotalTimeSeconds()){
@@ -443,23 +367,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoArm(0);
-                    if (k) {
-                        Arm.autoLine(0);
-                        Intake.solOn();
-                        currentStep++;
-                    } else {
-                        Arm.autoLine(-0.9);
-                    }
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
-                if (k) {
-                    Arm.autoArm(0);
-                    Arm.autoLine(0);
+                //turn around the arm
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -468,22 +379,16 @@ public class NewAutoEngine {
                             DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                             trajectory[redRight[1]].getInitialPose());
-                    currentStep++;
-                } else {
-                    Arm.autoArm(0.8);
-                    Arm.autoLine(0.9);
-                }
                 break;
             case 4:
                 DriveBase.runTraj(trajectory[redRight[1]], timer.get());
                 if (timer.get()>trajectory[redRight[1]].getTotalTimeSeconds() ) {
                     currentStep++;
-                    
                 }
                 break;
             default:
                 DriveBase.leftmotor.setInverted(true);
-                DriveBase.rightmotor.setInverted(false);
+                DriveBase.rightmotor.setInverted(false);//need to test
         }
     }
 }

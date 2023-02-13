@@ -128,7 +128,7 @@ public class DriveBase {
     // For some strange function, highly point to some special operate
     public static void directControl(double left, double right){
         drive.tankDrive(left, right);// The "directControl" is an easy way to control drivebase, we usually use it
-                                    // when  there is a GyroWalker or EncoderWalker. To use directControl, we need
+                                     // when  there is a GyroWalker or EncoderWalker. To use directControl, we need
                                      // two numbers which are used to control both sides. For instance, the
                                      // EncoderWalker will output two numbers in order to control the motor of the right
                                      // and left.
