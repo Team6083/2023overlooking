@@ -137,21 +137,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoArm(0);
-                    if (k) {//number of round
-                        Arm.autoLine(0);
-                        Intake.solOn();
-                        currentStep++;
-                    } else {
-                        Arm.autoLine(-0.9);
-                    }
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
-                if (k) {//degree of getting the stuff
+                //turn around the arm
                     Arm.autoArm(0);
                     Arm.autoLine(0);
                     timer.reset();
@@ -196,23 +185,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoArm(0);
-                    if (k) {//number of round
-                        Arm.autoLine(0);
-                        Intake.solOn();
-                        currentStep++;
-                    } else {
-                        Arm.autoLine(-0.9);
-                    }
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
                 //turn around the arm
-                    Arm.autoArm(0);
-                    Arm.autoLine(0);
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -255,23 +231,10 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                if (Arm.autoAccessDegree() < 35.5) {
-                    Arm.autoArm(0);
-                    if (k) {
-                        Arm.autoLine(0);
-                        Intake.solOn();
-                        currentStep++;
-                    } else {
-                        Arm.autoLine(-0.9);
-                    }
-                } else {
-                    Arm.autoArm(-0.85);
-                }
+                //put cone
                 break;
             case 3:
                 //turn around the arm
-                    Arm.autoArm(0);
-                    Arm.autoLine(0);
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
