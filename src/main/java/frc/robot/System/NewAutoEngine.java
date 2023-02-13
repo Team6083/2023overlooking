@@ -137,10 +137,21 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                //put cone
+                if (Arm.autoAccessDegree() < 35.5) {
+                    Arm.autoArm(0);
+                    if (k) {//number of round
+                        Arm.autoLine(0);
+                        Intake.solOn();
+                        currentStep++;
+                    } else {
+                        Arm.autoLine(-0.9);
+                    }
+                } else {
+                    Arm.autoArm(-0.85);
+                }
                 break;
             case 3:
-                //turn around the arm
+                if (k) {//degree of getting the stuff
                     Arm.autoArm(0);
                     Arm.autoLine(0);
                     timer.reset();
@@ -185,7 +196,18 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                //put cone
+                if (Arm.autoAccessDegree() < 35.5) {
+                    Arm.autoArm(0);
+                    if (k) {//number of round
+                        Arm.autoLine(0);
+                        Intake.solOn();
+                        currentStep++;
+                    } else {
+                        Arm.autoLine(-0.9);
+                    }
+                } else {
+                    Arm.autoArm(-0.85);
+                }
                 break;
             case 3:
                 //turn around the arm
@@ -233,7 +255,18 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                //put cone
+                if (Arm.autoAccessDegree() < 35.5) {
+                    Arm.autoArm(0);
+                    if (k) {
+                        Arm.autoLine(0);
+                        Intake.solOn();
+                        currentStep++;
+                    } else {
+                        Arm.autoLine(-0.9);
+                    }
+                } else {
+                    Arm.autoArm(-0.85);
+                }
                 break;
             case 3:
                 //turn around the arm
@@ -289,6 +322,8 @@ public class NewAutoEngine {
                     timer.start();
                     DriveBase.resetEncoderOn();
                     DriveBase.resetEncoderOff();
+                    DriveBase.leftmotor.setInverted(false);
+                    DriveBase.rightmotor.setInverted(true);
                     DriveBase.odometry.resetPosition(trajectory[redLeft[1]].getInitialPose().getRotation(),
                             DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -332,6 +367,8 @@ public class NewAutoEngine {
                     timer.start();
                     DriveBase.resetEncoderOn();
                     DriveBase.resetEncoderOff();
+                    DriveBase.leftmotor.setInverted(false);
+                    DriveBase.rightmotor.setInverted(true);
                     DriveBase.odometry.resetPosition(trajectory[redMiddle[1]].getInitialPose().getRotation(),
                             DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -375,6 +412,8 @@ public class NewAutoEngine {
                     timer.start();
                     DriveBase.resetEncoderOn();
                     DriveBase.resetEncoderOff();
+                    DriveBase.leftmotor.setInverted(false);
+                    DriveBase.rightmotor.setInverted(true);
                     DriveBase.odometry.resetPosition(trajectory[redRight[1]].getInitialPose().getRotation(),
                             DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),

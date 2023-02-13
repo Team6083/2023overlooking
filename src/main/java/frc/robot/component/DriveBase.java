@@ -81,6 +81,7 @@ public class DriveBase {
         rightmotor = new MotorControllerGroup(rightMotor1, rightMotor2);
         //leftMotor1.setSensorPhase(true); // Reverse the encoder
         leftmotor.setInverted(true);
+        rightmotor.setInverted(false);
         drive = new DifferentialDrive(leftmotor, rightmotor);// Define which motor we need to
                                                              // use in drivebasse
 
