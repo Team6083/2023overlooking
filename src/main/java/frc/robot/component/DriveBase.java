@@ -100,7 +100,7 @@ public class DriveBase {
     }
 
     // Here comes some function to control robot normal drivebase
-    public static void teloop(){
+    public static void teleop(){
         
         double leftV = -Robot.xbox.getLeftY()*0.9;
         double rightV = Robot.xbox.getRightY()*0.9;
