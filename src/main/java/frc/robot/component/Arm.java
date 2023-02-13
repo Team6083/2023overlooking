@@ -42,37 +42,42 @@ public class Arm {
         ArmMotor2.set(-Robot.xbox.getLeftTriggerAxis());
         ArmMotor1.set(-Robot.xbox.getRightTriggerAxis());
         ArmMotor2.set(Robot.xbox.getRightTriggerAxis());
+
         //take up and pay off device
         if (Robot.xbox.getPOV() == 0) {
             line.set(0.5);
-        }else if(Robot.xbox.getPOV() == 180) {
+        } else if (Robot.xbox.getPOV() == 180) {
             line.set(-0.5);
-        }else{
+        } else {
             line.set(0);
         }
+
         // get the angular position
         double angle = positionToDegreeMeter(ArmEncoder.getPosition());
+
         // get length position
         double length = positionTolengthMeter(lineEncoder.get());
+
         if(Robot.xbox.getAButton()){
-        if(angle>35){
-            ArmMotor1.set(-0.5);
-            ArmMotor2.set(0.5);
-        }else if(angle<35){
-            ArmMotor1.set(0.5);
-            ArmMotor2.set(-0.5);
-        }else if(angle==35){
-            ArmMotor1.set(0);
-            ArmMotor2.set(0);
+            if(angle>35){
+                ArmMotor1.set(-0.5);
+                ArmMotor2.set(0.5);
+            } else if (angle<35){
+                ArmMotor1.set(0.5);
+                ArmMotor2.set(-0.5);
+            } else if (angle==35){
+                ArmMotor1.set(0);
+                ArmMotor2.set(0);
+            }
+
+            if (length>186){
+                line.set(-0.5);
+            } else if (length<186){
+                line.set(0.5);
+            } else if (length==186){
+                line.set(0);
+            }
         }
-        if(length>186){
-            line.set(-0.5);
-        }else if(length<186){
-            line.set(0.5);
-        }else if(length==186){
-            line.set(0);
-        }
-    }
     }
 
     // do the number of turns calculate(to a particular angle)
@@ -82,6 +87,7 @@ public class Arm {
         double DegreeMeter = armRate * 360;
         return DegreeMeter;
     }
+
     // do the number of turns calculate(to a particular length)
     public static double positionTolengthMeter(double position) {
         double sensorRate = position / lineencoderPulse;
@@ -95,10 +101,11 @@ public class Arm {
         return 0;
     }
 
-    public  static double autoAccessDegree() {
+    public static double autoAccessDegree() {
         double Degree = positionToDegreeMeter(ArmEncoder.getPosition());
         return Degree;
     }
+
     public static double autoLine(double speed){
         line.set(speed);
         return 0;
