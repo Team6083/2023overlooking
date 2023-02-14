@@ -3,9 +3,7 @@ package frc.robot.component;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-//import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Robot;
@@ -27,7 +25,6 @@ public class Arm {
     private static Double kI = 0.0;
     private static Double kD = 0.0;
     private static PIDController ArmPID = new PIDController(kP, kI, kD);
-    // private static SparkMaxAlternateEncoder.Type kAltEncType = SparkMaxAlternateEncoder.Type.kQuadrature;
 
     public static void init() {
         ArmMotor1 = new CANSparkMax(karm1, MotorType.kBrushless);
