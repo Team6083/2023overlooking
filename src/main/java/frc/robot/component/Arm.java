@@ -11,34 +11,31 @@ import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Robot;
 
 public class Arm {
-    private static final double ArmencoderPulse = 4096;
+    private static final double ArmencoderPulse = 4096;// do the number of turns calculate
     private static final double Armgearing = 198;
     private static final double lineencoderPulse = 8192;
     private static final double linegearing = 64;
-
-    // rotate arm
-    private static CANSparkMax ArmMotor1;
+    private static CANSparkMax ArmMotor1;// rotate arm
     private static CANSparkMax ArmMotor2;
-    private static final int karm = 0;
+    private static WPI_VictorSPX line;//take up and pay off device
+    private static final int karm1 = 0;
+    private static final int karm2 = 0;
+    private static final int kline =2 ;
     private static RelativeEncoder ArmEncoder;
+    private static Encoder lineEncoder;
     private static Double kP = 0.0;
     private static Double kI = 0.0;
     private static Double kD = 0.0;
     private static PIDController ArmPID = new PIDController(kP, kI, kD);
     // private static SparkMaxAlternateEncoder.Type kAltEncType = SparkMaxAlternateEncoder.Type.kQuadrature;
-    
-    //take up and pay off device
-    private static WPI_VictorSPX line;
-    private static final int kline =2 ;
-    private static Encoder lineEncoder;
 
     public static void init() {
-        ArmMotor1 = new CANSparkMax(karm, MotorType.kBrushless);
-        ArmMotor2 = new CANSparkMax(karm, MotorType.kBrushless);
-        ArmEncoder= ArmMotor1.getEncoder();
-        //ArmEncoder= ArmMotor1.getAlternateEncoder(kAltEncType, kCPR);
+        ArmMotor1 = new CANSparkMax(karm1, MotorType.kBrushless);
+        ArmMotor2 = new CANSparkMax(karm2, MotorType.kBrushless);
         line = new WPI_VictorSPX(kline);
+        ArmEncoder= ArmMotor1.getEncoder();
         lineEncoder = new Encoder(0, 1);
+        //ArmEncoder= ArmMotor1.getAlternateEncoder(kAltEncType, kCPR);
     }
 
     public static void teleop() {
@@ -57,11 +54,8 @@ public class Arm {
             line.set(0);
         }
 
-        // get the angular position
-        double angle = positionToDegreeMeter(ArmEncoder.getPosition());
-
-        // get length position
-        double length = positionTolengthMeter(lineEncoder.get());
+        double angle = positionToDegreeMeter(ArmEncoder.getPosition());// get the angular position
+        double length = positionTolengthMeter(lineEncoder.get()); // get length position
 
         if(Robot.xbox.getAButton()){
             if(angle>35){
@@ -70,7 +64,7 @@ public class Arm {
             } else if (angle<35){
                 ArmMotor1.set(0.5);
                 ArmMotor2.set(-0.5);
-            } else if (angle==35){
+            } else {
                 ArmMotor1.set(0);
                 ArmMotor2.set(0);
             }
@@ -79,7 +73,7 @@ public class Arm {
                 line.set(-0.5);
             } else if (length<186){
                 line.set(0.5);
-            } else if (length==186){
+            } else {
                 line.set(0);
             }
         }
