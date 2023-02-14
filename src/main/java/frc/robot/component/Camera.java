@@ -5,8 +5,8 @@ import edu.wpi.first.cscore.UsbCamera;
 
 public class Camera {
     private static UsbCamera camera;
-    private static void init(){
-        camera = CameraServer.startAutomaticCapture();
+    public static void init(){
+        camera = CameraServer.startAutomaticCapture(0);
         camera.setFPS(24);
     }
 
