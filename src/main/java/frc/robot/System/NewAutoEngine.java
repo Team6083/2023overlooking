@@ -49,6 +49,7 @@ public class NewAutoEngine {
         putChooser();
         for (int i = 0; i < trajectoryAmount; i++) {
             try {
+            //Importing PathWeaver JSON
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajJSON[i]);
                 trajectory[i] = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
             } catch (IOException ex) {
@@ -131,16 +132,17 @@ public class NewAutoEngine {
                 currentStep++;
                 break;
             case 1:
+                // Run the first path of blueLeft
                 DriveBase.runTraj(trajectory[blueLeft[0]], timer.get());
                 if (timer.get()>trajectory[blueLeft[0]].getTotalTimeSeconds()) {
                     currentStep++;
                 }
                 break;
             case 2:
-                //put cone
+                // Put cone
                 break;
             case 3:
-                //turn around the arm
+                // Turn around the arm
                     Arm.autoArm(0);
                     Arm.autoLine(0);
                     timer.reset();
@@ -155,6 +157,7 @@ public class NewAutoEngine {
                             trajectory[blueLeft[1]].getInitialPose());
                     currentStep++;
             case 4:
+                // Run the second path of blueLeft
                 DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
                 if (timer.get()>trajectory[blueLeft[1]].getTotalTimeSeconds()) {
                     currentStep++;
@@ -179,16 +182,17 @@ public class NewAutoEngine {
                 currentStep++;
                 break;
             case 1:
+                // Run the first path of blueMiddle
                 DriveBase.runTraj(trajectory[blueMiddle[0]], timer.get());
                 if (timer.get()>trajectory[blueMiddle[0]].getTotalTimeSeconds() ) {
                     currentStep++;
                 }
                 break;
             case 2:
-                //put cone
+                // Put cone
                 break;
             case 3:
-                //turn around the arm
+                // Turn around the arm
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -201,6 +205,7 @@ public class NewAutoEngine {
                             trajectory[blueMiddle[1]].getInitialPose());
                     currentStep++;
             case 4:
+                // Run the second path of blueMiddle
                 DriveBase.runTraj(trajectory[blueMiddle[1]], timer.get());
                 if(timer.get()>trajectory[blueMiddle[1]].getTotalTimeSeconds()){
                     currentStep++;
@@ -225,16 +230,17 @@ public class NewAutoEngine {
                 currentStep++;
                 break;
             case 1:
+                // Run the first path of blueRight
                 DriveBase.runTraj(trajectory[blueRight[0]], timer.get());
                 if (timer.get()>trajectory[blueRight[0]].getTotalTimeSeconds() ) {
                     currentStep++;
                 }
                 break;
             case 2:
-                //put cone
+                // Put cone
                 break;
             case 3:
-                //turn around the arm
+                // Turn around the arm
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -247,6 +253,7 @@ public class NewAutoEngine {
                             trajectory[blueRight[1]].getInitialPose());
                     currentStep++;
             case 4:
+                // Run the second path of blueRight
                 DriveBase.runTraj(trajectory[blueRight[1]], timer.get());
                 if (timer.get()>trajectory[blueRight[1]].getTotalTimeSeconds()) {
                     currentStep++;
@@ -271,16 +278,17 @@ public class NewAutoEngine {
                 currentStep++;
                 break;
             case 1:
+                // Run the first path of redLeft
                 DriveBase.runTraj(trajectory[redLeft[0]], timer.get());
                 if (timer.get()>trajectory[redLeft[0]].getTotalTimeSeconds()) {
                     currentStep++;
                 }
                 break;
             case 2:
-                //put cone
+                // Put cone
                 break;
             case 3:
-                //turn around the arm
+                // Turn around the arm
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -292,6 +300,7 @@ public class NewAutoEngine {
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                             trajectory[redLeft[1]].getInitialPose());
             case 4:
+                // Run the second path of redLeft
                 DriveBase.runTraj(trajectory[redLeft[1]], timer.get());
                 if (timer.get()>trajectory[redLeft[1]].getTotalTimeSeconds()) {
                    currentStep++;
@@ -316,16 +325,17 @@ public class NewAutoEngine {
                 currentStep++;
                 break;
             case 1:
+                // Run the first path of redMiddle
                 DriveBase.runTraj(trajectory[redMiddle[0]], timer.get());
                 if ( timer.get()>trajectory[redMiddle[0]].getTotalTimeSeconds()) {
                     currentStep++;
                 }
                 break;
             case 2:
-                //put cone
+                // Put cone
                 break;
             case 3:
-                //turn around the arm
+                // Turn around the arm
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -337,6 +347,7 @@ public class NewAutoEngine {
                             DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                             trajectory[redMiddle[1]].getInitialPose());
             case 4:
+                // Run the second path of redMiddle
                 DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
                 if(timer.get()>trajectory[redMiddle[1]].getTotalTimeSeconds()){
                     currentStep++;
@@ -361,16 +372,17 @@ public class NewAutoEngine {
                 currentStep++;
                 break;
             case 1:
+                // Run the first path of redRight
                 DriveBase.runTraj(trajectory[redRight[0]], timer.get());
                 if (timer.get()>trajectory[redRight[0]].getTotalTimeSeconds()) {
                     currentStep++;
                 }
                 break;
             case 2:
-                //put cone
+                // Put cone
                 break;
             case 3:
-                //turn around the arm
+                // Turn around the arm
                     timer.reset();
                     timer.start();
                     DriveBase.resetEncoderOn();
@@ -383,6 +395,7 @@ public class NewAutoEngine {
                             trajectory[redRight[1]].getInitialPose());
                 break;
             case 4:
+                // Run the second path of redRight
                 DriveBase.runTraj(trajectory[redRight[1]], timer.get());
                 if (timer.get()>trajectory[redRight[1]].getTotalTimeSeconds() ) {
                     currentStep++;
