@@ -21,7 +21,7 @@ import frc.robot.Robot;
 import frc.robot.System.NewAutoEngine;
 
 public class DriveBase {
-    
+
     // Port
     private static final int Lm1 = 1;// MotorController ID
     private static final int Lm2 = 2;
@@ -33,19 +33,19 @@ public class DriveBase {
     public static WPI_TalonSRX leftMotor2;
     public static WPI_TalonSRX rightMotor1;
     public static WPI_TalonSRX rightMotor2;
-   
+
     public static MotorControllerGroup leftmotor;
     public static MotorControllerGroup rightmotor;
     public static DifferentialDrive drive;// Use to simplify drivebase program
 
     // Sensor
-    public static AHRS gyro; 
+    public static AHRS gyro;
 
     // For dashboard
     public static DifferentialDriveOdometry odometry;
 
     protected static RamseteController ramseteController = new RamseteController();
-    protected static DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.63);
+    protected static DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.53);
 
     protected static Field2d field = new Field2d();
     protected static Field2d trajField = new Field2d();
@@ -57,7 +57,7 @@ public class DriveBase {
 
     // Feedforward Controller
     protected static SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.7, 0.1);
-    
+
     public static PIDController leftPID = new PIDController(kP, kI, kD);
     public static PIDController rightPID = new PIDController(kP, kI, kD);
 
@@ -70,7 +70,6 @@ public class DriveBase {
         leftMotor2 = new WPI_TalonSRX(Lm2);
         rightMotor1 = new WPI_TalonSRX(Rm1);
         rightMotor2 = new WPI_TalonSRX(Rm2);
-       
 
         leftmotor = new MotorControllerGroup(leftMotor1, leftMotor2);
         rightmotor = new MotorControllerGroup(rightMotor1, rightMotor2);
@@ -84,39 +83,37 @@ public class DriveBase {
 
         // Define gyro ID
         gyro = new AHRS(SPI.Port.kMXP);
-        
+
         // Put path and status on field from PathWeaver on SmartDashboard
-        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0), positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()), positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
-        SmartDashboard.putData("field",field);
-        SmartDashboard.putData("trajField",trajField);
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0),
+                positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()),
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
+        SmartDashboard.putData("field", field);
+        SmartDashboard.putData("trajField", trajField);
     }
 
     // Normal drivebase
-    public static void teleop(){
-        
-        double leftV = -Robot.xbox.getLeftY()*0.9;
-        double rightV = Robot.xbox.getRightY()*0.9;
-    
+    public static void teleop() {
 
-        if(Robot.xbox.getRightBumperPressed()||Robot.xbox.getRightBumperPressed()){
+        double leftV = -Robot.xbox.getLeftY() * 0.9;
+        double rightV = Robot.xbox.getRightY() * 0.9;
+
+        if (Robot.xbox.getRightBumperPressed() || Robot.xbox.getRightBumperPressed()) {
             leftV = 0.95;
             rightV = 0.95;
         }
 
         drive.tankDrive(leftV, rightV);
-      
 
         putDashboard();
     }
 
-
-    public static void directControl(double left, double right){
+    public static void directControl(double left, double right) {
         drive.tankDrive(left, right);
     }
-    
 
     // Used to run Trajectory(path)
-    public static void runTraj(Trajectory trajectory, double timeInsec){
+    public static void runTraj(Trajectory trajectory, double timeInsec) {
 
         // Set the goal of the robot in that second
         Trajectory.State goal = trajectory.sample(timeInsec);
@@ -134,10 +131,14 @@ public class DriveBase {
         leftPID.setSetpoint(left);
         rightPID.setSetpoint(right);
 
-        // To make the number of the encoder become the motor's volt 
-        double leftVolt = leftPID.calculate(positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()/NewAutoEngine.timer.get()), left) + feedforward.calculate(left);
-        double rightVolt = rightPID.calculate(positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()/NewAutoEngine.timer.get()), left) + feedforward.calculate(right);
-    
+        // To make the number of the encoder become the motor's volt
+        double leftVolt = leftPID.calculate(
+                positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), left)
+                + feedforward.calculate(left);
+        double rightVolt = rightPID.calculate(
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), left)
+                + feedforward.calculate(right);
+
         leftmotor.setVoltage(leftVolt);
         rightmotor.setVoltage(rightVolt);
         drive.feed();
@@ -148,22 +149,23 @@ public class DriveBase {
         SmartDashboard.putNumber("right", right);
         SmartDashboard.putNumber("left_error", leftPID.getPositionError());
         SmartDashboard.putNumber("right_error", rightPID.getPositionError());
-        SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());// The distance between the target and the position
+        SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());// The distance between the
+                                                                                         // target and the position
         SmartDashboard.putNumber("errorPosY", currentPose.minus(goal.poseMeters).getY());
     }
 
     // Input the position of the encoder then calculate the distance(meter)
-    public static double positionToDistanceMeter(double position){
-        double sensorRate = position/encoderPulse;
-        double wheelRate = sensorRate/gearing;
-        double positionMeter = 2*Math.PI*Units.inchesToMeters(6)*wheelRate; 
+    public static double positionToDistanceMeter(double position) {
+        double sensorRate = position / encoderPulse;
+        double wheelRate = sensorRate / gearing;
+        double positionMeter = 2 * Math.PI * Units.inchesToMeters(6) * wheelRate;
         return positionMeter;
     }
 
-    public static void updateODO(){
+    public static void updateODO() {
         var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
-        odometry.update(gyroAngle, positionToDistanceMeter(leftMotor1.getSelectedSensorPosition())
-                                 , positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
+        odometry.update(gyroAngle, positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()),
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
         field.setRobotPose(odometry.getPoseMeters());
 
         SmartDashboard.putNumber("x", odometry.getPoseMeters().getX());
@@ -178,37 +180,37 @@ public class DriveBase {
         rightPID.setPID(kP, kI, kD);
         drive.feed();
     }
-    
+
     // To set the position and rotation of the robot
-    public static void setODOPose(Pose2d pose){
-        odometry.resetPosition(pose.getRotation(), positionToDistanceMeter(leftMotor1.getSelectedSensorPosition())
-                                                 , positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()), pose);
-        field.setRobotPose(odometry.getPoseMeters()); 
+    public static void setODOPose(Pose2d pose) {
+        odometry.resetPosition(pose.getRotation(), positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()),
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()), pose);
+        field.setRobotPose(odometry.getPoseMeters());
     }
 
-    //  Put the data on the dashboard
-    public static void putDashboard(){
+    // Put the data on the dashboard
+    public static void putDashboard() {
         SmartDashboard.putNumber("leftEncoder", leftMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("rightEncoder", rightMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("gyro", gyro.getAngle());
     }
 
     // Here comes some mode to set up or update
-    public static void resetEncoderOn(){
+    public static void resetEncoderOn() {
         leftMotor1.configClearPositionOnQuadIdx(true, 10);
         rightMotor1.configClearPositionOnQuadIdx(true, 10);
     }
 
-    public static void resetEncoderOff(){
+    public static void resetEncoderOff() {
         leftMotor1.configClearPositionOnQuadIdx(false, 10);
         rightMotor1.configClearPositionOnQuadIdx(false, 10);
     }
 
-    public static void resetGyro(){
+    public static void resetGyro() {
         gyro.reset();
     }
 
-    public static void resetPID(){
+    public static void resetPID() {
         leftPID.reset();
         rightPID.reset();
     }
