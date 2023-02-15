@@ -41,11 +41,12 @@ public class DriveBase {
     // Sensor
     public static AHRS gyro;
 
-    // For dashboard
     public static DifferentialDriveOdometry odometry;
-
-    protected static RamseteController ramseteController = new RamseteController();
     protected static DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.53);
+    protected static RamseteController ramseteController = new RamseteController();
+
+    // Feedforward Controller
+    protected static SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.7, 0.1);
 
     protected static Field2d field = new Field2d();
     protected static Field2d trajField = new Field2d();
@@ -54,9 +55,6 @@ public class DriveBase {
     private static double kP = 0.13;
     private static double kI = 0;
     private static double kD = 0;
-
-    // Feedforward Controller
-    protected static SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.7, 0.1);
 
     public static PIDController leftPID = new PIDController(kP, kI, kD);
     public static PIDController rightPID = new PIDController(kP, kI, kD);
@@ -88,6 +86,7 @@ public class DriveBase {
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0),
                 positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()),
                 positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
+
         SmartDashboard.putData("field", field);
         SmartDashboard.putData("trajField", trajField);
     }
@@ -155,12 +154,6 @@ public class DriveBase {
     }
 
     // Input the position of the encoder then calculate the distance(meter)
-    public static double positionToDistanceMeter(double position) {
-        double sensorRate = position / encoderPulse;
-        double wheelRate = sensorRate / gearing;
-        double positionMeter = 2 * Math.PI * Units.inchesToMeters(6) * wheelRate;
-        return positionMeter;
-    }
 
     public static void updateODO() {
         var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
@@ -193,6 +186,13 @@ public class DriveBase {
         SmartDashboard.putNumber("leftEncoder", leftMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("rightEncoder", rightMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("gyro", gyro.getAngle());
+    }
+
+    public static double positionToDistanceMeter(double position) {
+        double sensorRate = position / encoderPulse;
+        double wheelRate = sensorRate / gearing;
+        double positionMeter = 2 * Math.PI * Units.inchesToMeters(6) * wheelRate;
+        return positionMeter;
     }
 
     // Here comes some mode to set up or update

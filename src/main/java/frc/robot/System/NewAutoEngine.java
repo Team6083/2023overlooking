@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.component.Arm;
 import frc.robot.component.DriveBase;
 
 public class NewAutoEngine {
@@ -33,10 +32,6 @@ public class NewAutoEngine {
     };
 
     static Trajectory[] trajectory = new Trajectory[trajectoryAmount];
-    public static Timer timer = new Timer();
-    public static SendableChooser<String> chooser;
-    public static SendableChooser<String> chooserTimer;
-    public static String autoSeclected;
     private static final String DoNothing = "DoNothing";
     private static final String BlueLeft = "BlueLeft";
     private static final String BlueMiddle = "BlueMiddle";
@@ -49,11 +44,20 @@ public class NewAutoEngine {
     private static final String LeftRightTimer = "LeftRightTimer";
     private static final String MiddleTimer = "MiddleTimer";
 
+    public static Timer timer = new Timer();
+
+    public static SendableChooser<String> chooser;
+    public static SendableChooser<String> chooserTimer;
+    public static String autoSeclected;
+
     public static void init() {
+
         chooser = new SendableChooser<String>();
         chooserTimer = new SendableChooser<String>();
+
         putChooser();
         putChooserTimer();
+
         for (int i = 0; i < trajectoryAmount; i++) {
             try {
                 // Importing PathWeaver JSON
@@ -74,6 +78,7 @@ public class NewAutoEngine {
         currentStep = 0;
 
         autoSeclected = chooser.getSelected();
+
         DriveBase.resetEncoderOn();
         DriveBase.resetGyro();
         DriveBase.resetPID();
@@ -86,10 +91,13 @@ public class NewAutoEngine {
     }
 
     public static void loop() {
+
         DriveBase.updateODO();
         DriveBase.putDashboard();
+
         SmartDashboard.putNumber("AutoTimer", timer.get());
         SmartDashboard.putNumber("CurrentStep", currentStep);
+
         switch (autoSeclected) {
             case DoNothing:
                 DriveBase.directControl(0, 0);

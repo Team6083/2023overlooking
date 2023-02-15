@@ -12,10 +12,10 @@ public class Light {
     private static final Color purple = new Color(255, 0, 255);
     private static final Color yellow = new Color(255, 255, 0);
     private static final int ledPort = 0; // to be confirmed
-    private static final int ledLength = 10; //to be confirmed
+    private static final int ledLength = 10; // to be confirmed
 
     public static void init() {
-        led = new AddressableLED(ledPort); 
+        led = new AddressableLED(ledPort);
         ledBuffer = new AddressableLEDBuffer(ledLength); // length
         led.setLength(ledBuffer.getLength());
         led.start();
