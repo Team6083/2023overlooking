@@ -394,3 +394,16 @@ public class NewAutoEngine {
         }
     }
 }
+
+//class of path setting
+class pathSet{
+    int path1;
+    int path2;
+    String pathName;
+    pathSet(int path1 ,int path2 ,String pathName){
+        this.path1 = path1;
+        this.path2 = path2;
+        this.pathName = pathName; //use in the switch
+    }
+
+}
