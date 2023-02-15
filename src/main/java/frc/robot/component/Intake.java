@@ -22,9 +22,11 @@ public class Intake {
         } else if (Robot.xbox.getAButton()) {
             com.disable();
         }
+
         if (Robot.xbox.getBButtonPressed()) {
             sol_Forward = !sol_Forward;
         }
+        
         if (Robot.xbox.getBButton()) {
             if (sol_Forward == false) {
                 sol1.set(Value.kForward);
