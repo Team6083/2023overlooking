@@ -407,6 +407,22 @@ public class NewAutoEngine {
                 DriveBase.rightmotor.setInverted(false);// need to test
         }
     }
+    // autonomous written with timer
+    public static void BlueLeftTimer(){
+        double leftV = 0.5;
+        double rightV = 0.5;
+        timer.reset();
+        timer.start();
+        if(timer.get()<=1.5){
+            DriveBase.directControl(leftV, rightV);
+        }else if (timer.get()>1.5 && timer.get()<=6){
+            // arm and intake
+        }else if(timer.get()>6 && timer.get()<=10.5){
+            //arm
+        }else if(timer.get()>10.5 && timer.get()<15){
+            DriveBase.directControl(-leftV, -rightV);
+        }
+    }
 }
 
 // class of path setting
