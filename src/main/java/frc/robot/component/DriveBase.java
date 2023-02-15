@@ -29,19 +29,17 @@ public class DriveBase {
     private static final int Rm2 = 4;
 
     // Basis divebase
-    public static WPI_TalonSRX leftMotor1;// Define motor
+    public static WPI_TalonSRX leftMotor1;
     public static WPI_TalonSRX leftMotor2;
     public static WPI_TalonSRX rightMotor1;
     public static WPI_TalonSRX rightMotor2;
    
     public static MotorControllerGroup leftmotor;
     public static MotorControllerGroup rightmotor;
-    public static DifferentialDrive drive;// Use to simplified drivebase program
+    public static DifferentialDrive drive;// Use to simplify drivebase program
 
     // Sensor
-    // Gyro: need install Library
-    public static AHRS gyro; // To detect the current angle, and design which angle we want to match, then 
-                             // calculate to match the goal
+    public static AHRS gyro; 
 
     // For dashboard
     public static DifferentialDriveOdometry odometry;
@@ -60,18 +58,15 @@ public class DriveBase {
     // Feedforward Controller
     protected static SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.7, 0.1);
     
-    // PIDController
     public static PIDController leftPID = new PIDController(kP, kI, kD);
     public static PIDController rightPID = new PIDController(kP, kI, kD);
 
-    // Set the pulse of the encoder
     public static final double encoderPulse = 4096;
 
-    // Set the gearing 
     public static final double gearing = 10.71;
 
     public static void init() {
-        leftMotor1 = new WPI_TalonSRX(Lm1);// Add ID into MotorControler
+        leftMotor1 = new WPI_TalonSRX(Lm1);
         leftMotor2 = new WPI_TalonSRX(Lm2);
         rightMotor1 = new WPI_TalonSRX(Rm1);
         rightMotor2 = new WPI_TalonSRX(Rm2);
@@ -79,27 +74,24 @@ public class DriveBase {
 
         leftmotor = new MotorControllerGroup(leftMotor1, leftMotor2);
         rightmotor = new MotorControllerGroup(rightMotor1, rightMotor2);
-        //leftMotor1.setSensorPhase(true); // Reverse the encoder
         leftmotor.setInverted(true);
         rightmotor.setInverted(false);
-        drive = new DifferentialDrive(leftmotor, rightmotor);// Define which motor we need to
-                                                             // use in drivebasse
+        drive = new DifferentialDrive(leftmotor, rightmotor);
 
         // Reset encoder
         leftMotor1.configClearPositionOnQuadIdx(true, 10);
         rightMotor1.configClearPositionOnQuadIdx(true, 10);
 
         // Define gyro ID
-        gyro = new AHRS(SPI.Port.kMXP);// Gyro needs to add a class to fit into our library, which means that it 
-                                       // needs an extra function to keep it working and Override it
+        gyro = new AHRS(SPI.Port.kMXP);
         
-        // For smartDashboard to take number and path which call back from pathWeaver
-        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0), positionToDistanceMeter(leftMotor1.getSelectedSensorPosition())                                                                         , positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
+        // Put path and status on field from PathWeaver on SmartDashboard
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0), positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()), positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
         SmartDashboard.putData("field",field);
         SmartDashboard.putData("trajField",trajField);
     }
 
-    // Here comes some function to control robot normal drivebase
+    // Normal drivebase
     public static void teleop(){
         
         double leftV = -Robot.xbox.getLeftY()*0.9;
@@ -107,8 +99,8 @@ public class DriveBase {
     
 
         if(Robot.xbox.getRightBumperPressed()||Robot.xbox.getRightBumperPressed()){
-            leftV = leftV*1.05;
-            rightV = rightV*1.05;
+            leftV = 0.95;
+            rightV = 0.95;
         }
 
         drive.tankDrive(leftV, rightV);
@@ -116,29 +108,14 @@ public class DriveBase {
 
         putDashboard();
     }
-    // This is for Limelight Visiontracking
-    public static void track(double speed, double rotation, boolean input){
-        drive.arcadeDrive(speed, rotation,input);// The "arcadeDrive" allow the System to control a particular motor to
-                                                 // change its speed, and rotation(which relate to circulation or to moving
-                                                 // like a circle). This will be used in Limelight tracking, cause that
-                                                 // Limelight will return two numbers which are calculated by
-                                                 // PIDcontoller and one of them is used to control speed while the
-                                                 // other is used to control rotation
-    }
 
-    // For some strange function, highly point to some special operate
+
     public static void directControl(double left, double right){
-        drive.tankDrive(left, right);// The "directControl" is an easy way to control drivebase, we usually use it
-                                     // when  there is a GyroWalker or EncoderWalker. To use directControl, we need
-                                     // two numbers which are used to control both sides. For instance, the
-                                     // EncoderWalker will output two numbers in order to control the motor of the right
-                                     // and left.
-        // also, we can use it to control just only one side, it will be correct if the
-        // number is legal.
+        drive.tankDrive(left, right);
     }
     
 
-    // Use to run Trajectory(path)
+    // Used to run Trajectory(path)
     public static void runTraj(Trajectory trajectory, double timeInsec){
 
         // Set the goal of the robot in that second
@@ -165,11 +142,11 @@ public class DriveBase {
         rightmotor.setVoltage(rightVolt);
         drive.feed();
 
-        SmartDashboard.putNumber("leftVolt", leftVolt);// Motor's volt
+        SmartDashboard.putNumber("leftVolt", leftVolt);
         SmartDashboard.putNumber("rightVolt", rightVolt);
-        SmartDashboard.putNumber("left", left);// The wheel speed
+        SmartDashboard.putNumber("left", left);
         SmartDashboard.putNumber("right", right);
-        SmartDashboard.putNumber("left_error", leftPID.getPositionError());// The error of the PID
+        SmartDashboard.putNumber("left_error", leftPID.getPositionError());
         SmartDashboard.putNumber("right_error", rightPID.getPositionError());
         SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());// The distance between the target and the position
         SmartDashboard.putNumber("errorPosY", currentPose.minus(goal.poseMeters).getY());
@@ -189,11 +166,8 @@ public class DriveBase {
                                  , positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
         field.setRobotPose(odometry.getPoseMeters());
 
-        //get the robot's X
         SmartDashboard.putNumber("x", odometry.getPoseMeters().getX());
-        //get the robot's Y
         SmartDashboard.putNumber("y", odometry.getPoseMeters().getY());
-        //get the robot's rotation
         SmartDashboard.putNumber("heading", odometry.getPoseMeters().getRotation().getDegrees());
 
         kP = SmartDashboard.getNumber("kP", kP);
