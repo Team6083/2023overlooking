@@ -51,9 +51,9 @@ public class DriveBase {
     protected static Field2d trajField = new Field2d();
 
     // For PID
-    public static double kP = 0.13;
-    public static double kI = 0;
-    public static double kD = 0;
+    private static double kP = 0.13;
+    private static double kI = 0;
+    private static double kD = 0;
 
     // Feedforward Controller
     protected static SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.7, 0.1);
@@ -61,9 +61,9 @@ public class DriveBase {
     public static PIDController leftPID = new PIDController(kP, kI, kD);
     public static PIDController rightPID = new PIDController(kP, kI, kD);
 
-    public static final double encoderPulse = 4096;
+    private static final double encoderPulse = 4096;
 
-    public static final double gearing = 10.71;
+    private static final double gearing = 10.71;
 
     public static void init() {
         leftMotor1 = new WPI_TalonSRX(Lm1);
@@ -98,7 +98,7 @@ public class DriveBase {
         double leftV = -Robot.xbox.getLeftY() * 0.9;
         double rightV = Robot.xbox.getRightY() * 0.9;
 
-        if (Robot.xbox.getRightBumperPressed() || Robot.xbox.getRightBumperPressed()) {
+        if (Robot.xbox.getLeftBumper() || Robot.xbox.getRightBumper()) {
             leftV = 0.95;
             rightV = 0.95;
         }
@@ -136,7 +136,7 @@ public class DriveBase {
                 positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), left)
                 + feedforward.calculate(left);
         double rightVolt = rightPID.calculate(
-                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), left)
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), right)
                 + feedforward.calculate(right);
 
         leftmotor.setVoltage(leftVolt);
@@ -172,7 +172,7 @@ public class DriveBase {
         SmartDashboard.putNumber("y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("heading", odometry.getPoseMeters().getRotation().getDegrees());
 
-        kP = SmartDashboard.getNumber("kP", kP);
+        kP = SmartDashboard.getNumber("kP", kP);// problem
         kI = SmartDashboard.getNumber("kI", kI);
         kD = SmartDashboard.getNumber("kD", kD);
 

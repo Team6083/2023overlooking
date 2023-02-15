@@ -35,6 +35,7 @@ public class NewAutoEngine {
     static Trajectory[] trajectory = new Trajectory[trajectoryAmount];
     public static Timer timer = new Timer();
     public static SendableChooser<String> chooser;
+    public static SendableChooser<String> chooserTimer;
     public static String autoSeclected;
     private static final String DoNothing = "DoNothing";
     private static final String BlueLeft = "BlueLeft";
@@ -44,9 +45,15 @@ public class NewAutoEngine {
     private static final String RedMiddle = "RedMiddle";
     private static final String RedRight = "RedRight";
 
+    // the string of the timer
+    private static final String LeftRightTimer = "LeftRightTimer";
+    private static final String MiddleTimer = "MiddleTimer";
+
     public static void init() {
         chooser = new SendableChooser<String>();
+        chooserTimer = new SendableChooser<String>();
         putChooser();
+        putChooserTimer();
         for (int i = 0; i < trajectoryAmount; i++) {
             try {
                 // Importing PathWeaver JSON
@@ -105,19 +112,32 @@ public class NewAutoEngine {
             case RedRight:
                 RedRight();
                 break;
+            case LeftRightTimer:
+                LeftRightTimer();
+                break;
+            case MiddleTimer:
+                MiddleTimer();
+                break;
             default:
         }
     }
 
     protected static void putChooser() {
         chooser.setDefaultOption("DoNothing", DoNothing);
-        chooser.setDefaultOption("BlueLeft", BlueLeft);
-        chooser.setDefaultOption("BlueMiddle", BlueMiddle);
-        chooser.setDefaultOption("BlueRight", BlueRight);
-        chooser.setDefaultOption("RedLeft", RedLeft);
-        chooser.setDefaultOption("RedMiddle", RedMiddle);
-        chooser.setDefaultOption("RedRight", RedRight);
+        chooser.addOption("BlueLeft", BlueLeft);
+        chooser.addOption("BlueMiddle", BlueMiddle);
+        chooser.addOption("BlueRight", BlueRight);
+        chooser.addOption("RedLeft", RedLeft);
+        chooser.addOption("RedMiddle", RedMiddle);
+        chooser.addOption("RedRight", RedRight);
         SmartDashboard.putData(chooser);
+    }
+
+    protected static void putChooserTimer() {
+        chooserTimer.setDefaultOption("DoNothing", DoNothing);
+        chooserTimer.addOption("LeftRightTimer", LeftRightTimer);
+        chooserTimer.addOption("MiddleTimer", MiddleTimer);
+        SmartDashboard.putData(chooserTimer);
     }
 
     public static void BlueLeft() {
@@ -141,11 +161,10 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                currentStep++;
                 break;
             case 3:
                 // Turn around the arm
-                Arm.autoArm(0);
-                Arm.autoLine(0);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoderOn();
@@ -191,6 +210,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                currentStep++;
                 break;
             case 3:
                 // Turn around the arm
@@ -239,6 +259,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                currentStep++;
                 break;
             case 3:
                 // Turn around the arm
@@ -287,6 +308,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                currentStep++;
                 break;
             case 3:
                 // Turn around the arm
@@ -334,6 +356,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                currentStep++;
                 break;
             case 3:
                 // Turn around the arm
@@ -381,6 +404,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                currentStep++;
                 break;
             case 3:
                 // Turn around the arm
@@ -407,25 +431,42 @@ public class NewAutoEngine {
                 DriveBase.rightmotor.setInverted(false);// need to test
         }
     }
-    // autonomous written with timer
-    public static void BlueLeftTimer(){
+
+    // Autonomous written with timer
+    public static void LeftRightTimer() {
         double leftV = 0.5;
         double rightV = 0.5;
         timer.reset();
         timer.start();
-        if(timer.get()<=1.5){
+        if (timer.get() <= 1.5) {
             DriveBase.directControl(leftV, rightV);
-        }else if (timer.get()>1.5 && timer.get()<=6){
+        } else if (timer.get() > 1.5 && timer.get() <= 6) {
             // arm and intake
-        }else if(timer.get()>6 && timer.get()<=10.5){
-            //arm
-        }else if(timer.get()>10.5 && timer.get()<15){
+        } else if (timer.get() > 6 && timer.get() <= 10.5) {
+            // arm
+        } else if (timer.get() > 10.5 && timer.get() < 15) {
+            DriveBase.directControl(-leftV, -rightV);
+        }
+    }
+
+    public static void MiddleTimer() {
+        double leftV = 0.5;
+        double rightV = 0.5;
+        timer.reset();
+        timer.start();
+        if (timer.get() <= 1.5) {
+            DriveBase.directControl(leftV, rightV);
+        } else if (timer.get() > 1.5 && timer.get() <= 6) {
+            // arm and intake
+        } else if (timer.get() > 6 && timer.get() <= 10.5) {
+            // arm
+        } else if (timer.get() > 10.5 && timer.get() < 15) {
             DriveBase.directControl(-leftV, -rightV);
         }
     }
 }
 
-// class of path setting
+// Class of path setting
 class pathSet {
     int path1;
     int path2;
