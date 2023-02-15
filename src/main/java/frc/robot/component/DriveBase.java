@@ -136,7 +136,7 @@ public class DriveBase {
 
         // To make the number of the encoder become the motor's volt 
         double leftVolt = leftPID.calculate(positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()/NewAutoEngine.timer.get()), left) + feedforward.calculate(left);
-        double rightVolt = leftPID.calculate(positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()/NewAutoEngine.timer.get()), left) + feedforward.calculate(right);
+        double rightVolt = rightPID.calculate(positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()/NewAutoEngine.timer.get()), left) + feedforward.calculate(right);
     
         leftmotor.setVoltage(leftVolt);
         rightmotor.setVoltage(rightVolt);
