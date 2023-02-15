@@ -30,7 +30,6 @@ public class Arm {
     private static Double kI = 0.0;
     private static Double kD = 0.0;
     private static PIDController ArmPID;
-    
 
     public static void init() {
         ArmMotorleft = new CANSparkMax(karm1, MotorType.kBrushless);
@@ -45,21 +44,29 @@ public class Arm {
     public static void teleop() {
         // rotate arm
         rotateForward = Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis();
-        rotatereverse = Robot.xbox.getRightTriggerAxis() - Robot.xbox.getLeftTriggerAxis();
+        rotatereverse = Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis();
         ArmMotorleft.set(rotateForward);
         ArmMotorright.set(rotatereverse);
+
+        double angle = positionToDegree(ArmEncoder.getPosition());// get the angular position
+        double length = positionTolength(lineEncoder.get()); // get length position
 
         // take up and pay off device
         if (Robot.xbox.getPOV() == 0) {
             lineMotor.set(0.5);
         } else if (Robot.xbox.getPOV() == 180) {
             lineMotor.set(-0.5);
+        } else if (Robot.xbox.getAButton()) {
+            if (length > 186) {
+                lineMotor.set(-0.5);
+            } else if (length < 186) {
+                lineMotor.set(0.5);
+            } else {
+                lineMotor.set(0);
+            }
         } else {
             lineMotor.set(0);
         }
-
-        double angle = positionToDegreeMeter(ArmEncoder.getPosition());// get the angular position
-        double length = positionTolengthMeter(lineEncoder.get()); // get length position
 
         if (Robot.xbox.getAButton()) {
             if (angle > 35) {
@@ -72,19 +79,11 @@ public class Arm {
                 ArmMotorleft.set(0);
                 ArmMotorright.set(0);
             }
-
-            if (length > 186) {
-                lineMotor.set(-0.5);
-            } else if (length < 186) {
-                lineMotor.set(0.5);
-            } else {
-                lineMotor.set(0);
-            }
         }
     }
 
     // do the number of turns calculate(to a particular angle)
-    public static double positionToDegreeMeter(double turns) {
+    public static double positionToDegree(double turns) {
         double sensorRate = turns / ArmencoderPulse;
         double armRate = sensorRate / Armgearing;
         double DegreeMeter = armRate * 360;
@@ -92,7 +91,7 @@ public class Arm {
     }
 
     // do the number of turns calculate(to a particular length)
-    public static double positionTolengthMeter(double position) {
+    public static double positionTolength(double position) {
         double sensorRate = position / lineencoderPulse;
         double armRate = sensorRate / linegearing;
         double lengthMeter = armRate;
