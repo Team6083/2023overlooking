@@ -23,7 +23,7 @@ public class Arm {
     private static final int karm2 = 0;
     private static final int line = 2;
     private static Double rotateForward;
-    private static Double rotatereverse;
+    private static Double rotateReverse;
     private static RelativeEncoder ArmEncoder;
     private static Encoder lineEncoder;
     private static Double kP = 0.0;
@@ -44,9 +44,9 @@ public class Arm {
     public static void teleop() {
         // rotate arm
         rotateForward = Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis();
-        rotatereverse = Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis();
+        rotateReverse = Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis();
         ArmMotorleft.set(rotateForward);
-        ArmMotorright.set(rotatereverse);
+        ArmMotorright.set(rotateReverse);
 
         double angle = positionToDegree(ArmEncoder.getPosition());// get the angular position
         double length = positionTolength(lineEncoder.get()); // get length position
