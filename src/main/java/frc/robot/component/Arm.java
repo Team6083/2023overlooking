@@ -104,7 +104,7 @@ public class Arm {
     }
 
     public static double autoAccessDegree() {
-        double Degree = positionToDegreeMeter(ArmEncoder.getPosition());
+        double Degree = positionTolength(ArmEncoder.getPosition());
         return Degree;
     }
 
