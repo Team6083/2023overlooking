@@ -144,8 +144,8 @@ public class DriveBase {
 
         SmartDashboard.putNumber("leftVolt", leftVolt);
         SmartDashboard.putNumber("rightVolt", rightVolt);
-        SmartDashboard.putNumber("left", left);
-        SmartDashboard.putNumber("right", right);
+        SmartDashboard.putNumber("left_wheel_speed", left);
+        SmartDashboard.putNumber("right_wheel_speed", right);
         SmartDashboard.putNumber("left_error", leftPID.getPositionError());
         SmartDashboard.putNumber("right_error", rightPID.getPositionError());
         SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());// The distance between the
@@ -191,7 +191,7 @@ public class DriveBase {
     public static double positionToDistanceMeter(double position) {
         double sensorRate = position / encoderPulse;
         double wheelRate = sensorRate / gearing;
-        double positionMeter = 2 * Math.PI * Units.inchesToMeters(6) * wheelRate;
+        double positionMeter = 2 * Math.PI *    Units.inchesToMeters(6) * wheelRate;
         return positionMeter;
     }
 
