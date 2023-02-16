@@ -19,13 +19,13 @@ public class Intake {
         if (Robot.xbox.getYButtonPressed()) {
             com_enable = !com_enable;
         }
-        if (Robot.xbox.getYButton()) {
-            if (com_enable == false) {
-                com.enableDigital();
-            } else if (com_enable == true) {
-                com.disable();
-            }
+        if (com_enable) {
+            com.enableDigital();
+        } else if (!com_enable) {
+            com.disable();
         }
+    }
+
     }
 
     public static void teleop() {
