@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.System.NewAutoEngine;
+import frc.robot.component.Arm;
+import frc.robot.component.Camera;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
 
@@ -31,8 +33,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     xbox = new XboxController(0);
-    Intake.init();
     DriveBase.init();
+    Intake.init();
+    Arm.init();
+    Camera.init();
     NewAutoEngine.init();
   }
 
@@ -52,14 +56,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    DriveBase.init();
     Intake.init();
+    Arm.init();
   }
 
   @Override
   public void teleopPeriodic() {
-    Intake.teleop();
     DriveBase.teleop();
-
+    Intake.teleop();
+    Arm.teleop();
   }
 
   @Override
