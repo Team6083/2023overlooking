@@ -8,41 +8,48 @@ import frc.robot.Robot;
 
 public class Intake {
     private static Compressor com;
-    private static DoubleSolenoid sol1;
+    private static DoubleSolenoid sol;
+    private static boolean com_enable = true;
     private static boolean sol_Forward = true;
 
     public static void init() {
-        com = new Compressor(null);
-        sol1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+        com = new Compressor(PneumaticsModuleType.CTREPCM);
+        sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+
+        if (Robot.xbox.getYButtonPressed()) {
+            com_enable = !com_enable;
+        }
+        if (Robot.xbox.getYButton()) {
+            if (com_enable == false) {
+                com.enableDigital();
+            } else if (com_enable == true) {
+                com.disable();
+            }
+        }
     }
 
     public static void teleop() {
-        if (Robot.xbox.getYButton()) {
-            com.enableDigital();
-        } else if (Robot.xbox.getAButton()) {
-            com.disable();
-        }
 
         if (Robot.xbox.getBButtonPressed()) {
             sol_Forward = !sol_Forward;
         }
-        
+
         if (Robot.xbox.getBButton()) {
             if (sol_Forward == false) {
-                sol1.set(Value.kForward);
+                sol.set(Value.kForward);
             } else {
-                sol1.set(Value.kReverse);
+                sol.set(Value.kReverse);
             }
         } else {
-            sol1.set(Value.kOff);
+            sol.set(Value.kOff);
         }
     }
 
     public static void solOn() {
-        sol1.set(Value.kForward);
+        sol.set(Value.kForward);
     }
 
     public static void solOff() {
-        sol1.set(Value.kOff);
+        sol.set(Value.kOff);
     }
 }
