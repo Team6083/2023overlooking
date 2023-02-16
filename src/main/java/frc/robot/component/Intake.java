@@ -15,7 +15,10 @@ public class Intake {
     public static void init() {
         com = new Compressor(PneumaticsModuleType.CTREPCM);
         sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+        com.enableDigital();
+    }
 
+    public static void teleop() {
         if (Robot.xbox.getYButtonPressed()) {
             com_enable = !com_enable;
         }
@@ -24,9 +27,6 @@ public class Intake {
         } else if (!com_enable) {
             com.disable();
         }
-    }
-
-    public static void teleop() {
 
         if (Robot.xbox.getBButtonPressed()) {
             sol_Forward = !sol_Forward;
