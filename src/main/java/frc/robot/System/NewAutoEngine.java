@@ -40,7 +40,7 @@ public class NewAutoEngine {
     private static final String RedMiddle = "RedMiddle";
     private static final String RedRight = "RedRight";
 
-    // the string of the timer
+    // The string of the timer
     private static final String LeftRightTimer = "LeftRightTimer";
     private static final String MiddleTimer = "MiddleTimer";
 
