@@ -98,8 +98,8 @@ public class DriveBase {
         double rightV = Robot.xbox.getRightY() * 0.9;
 
         if (Robot.xbox.getLeftBumper() || Robot.xbox.getRightBumper()) {
-            leftV = 0.95;
-            rightV = 0.95;
+            leftV = 1;
+            rightV = 1;
         }
 
         drive.tankDrive(leftV, rightV);
