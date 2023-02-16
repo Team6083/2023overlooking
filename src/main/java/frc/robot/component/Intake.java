@@ -19,12 +19,10 @@ public class Intake {
         if (Robot.xbox.getYButtonPressed()) {
             com_enable = !com_enable;
         }
-        if (Robot.xbox.getYButton()) {
-            if (com_enable == false) {
-                com.enableDigital();
-            } else if (com_enable == true) {
-                com.disable();
-            }
+        if (com_enable) {
+            com.enableDigital();
+        } else if (!com_enable) {
+            com.disable();
         }
     }
 
@@ -33,13 +31,10 @@ public class Intake {
         if (Robot.xbox.getBButtonPressed()) {
             sol_Forward = !sol_Forward;
         }
-
-        if (Robot.xbox.getBButton()) {
-            if (sol_Forward == false) {
-                sol.set(Value.kForward);
-            } else {
-                sol.set(Value.kReverse);
-            }
+        if (sol_Forward) {
+            sol.set(Value.kForward);
+        } else if (!sol_Forward) {
+            sol.set(Value.kReverse);
         } else {
             sol.set(Value.kOff);
         }

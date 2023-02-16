@@ -81,7 +81,17 @@ public class Arm {
             }
         }
 
-        double point = 
+        double Armdegree = ArmEncoder.getPosition();
+        double goal = ArmEncoder.setPosition();
+
+        ArmPID.setSetpoint(goal);;
+
+        if(Robot.xbox.getXButton()){
+            ArmPID.setSetpoint(goal);
+            double angle = positionToDegreeMeter(ArmEncoder.getPosition());
+            double ArmVolt = ArmPID.calculate(angle);
+            Arm.setVoltage(ArmVolt);
+        }
 
     }
 
