@@ -26,20 +26,15 @@ public class Intake {
         }
     }
 
-    }
-
     public static void teleop() {
 
         if (Robot.xbox.getBButtonPressed()) {
             sol_Forward = !sol_Forward;
         }
-
-        if (Robot.xbox.getBButton()) {
-            if (sol_Forward == false) {
-                sol.set(Value.kForward);
-            } else {
-                sol.set(Value.kReverse);
-            }
+        if (sol_Forward) {
+            sol.set(Value.kForward);
+        } else if (!sol_Forward) {
+            sol.set(Value.kReverse);
         } else {
             sol.set(Value.kOff);
         }
