@@ -6,7 +6,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.Robot;
 
@@ -43,10 +42,8 @@ public class Arm {
 
     public static void teleop() {
         // rotate arm
-        rotateForward = Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis();
-        rotateReverse = Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis();
-        ArmMotorleft.set(rotateForward);
-        ArmMotorright.set(rotateReverse);
+        rotateForward = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis())*1;
+        rotateReverse =( Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis())*1;
 
         double angle = positionToDegree();// get the angular position
         double length = positionTolength(); // get length position
@@ -69,20 +66,20 @@ public class Arm {
         }
 
         if (Robot.xbox.getAButton()) {
-            if (angle > 35) {
-                ArmMotorleft.set(-0.5);
-                ArmMotorright.set(0.5);
-            } else if (angle < 35) {
-                ArmMotorleft.set(0.5);
-                ArmMotorright.set(-0.5);
+            if (angle > 68.5) {
+                Arm.set(0.5);
+            } else if (angle < 68.5) {
+                Arm.set(0.5);
             } else {
-                ArmMotorleft.set(0);
-                ArmMotorright.set(0);
+                Arm.set(0);
             }
+        }else {
+            ArmMotorleft.set(rotateForward);
+            ArmMotorright.set(rotateReverse);
         }
-
+       
         if (Robot.xbox.getXButton()) {
-            ArmPID.setSetpoint(35);
+            ArmPID.setSetpoint(positionToDegree());
         } else {
             double armAngleModify = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 1;
             ArmPID.setSetpoint(ArmPID.getSetpoint() + armAngleModify);
@@ -91,7 +88,7 @@ public class Arm {
     }
 
     // public void setArmAngle(double angle) {
-    //     ArmPID.setSetpoint(angle);
+    // ArmPID.setSetpoint(angle);
     // }
 
     public static void controlloop() {
@@ -101,13 +98,13 @@ public class Arm {
 
     // do the number of turns calculate(to a particular angle)
     public static double positionToDegree() {
-        double armRate = ArmEncoder.getPosition()*360 /(Armgearing*ArmencoderPulse) ;
+        double armRate = ArmEncoder.getPosition() * 360 / (Armgearing * ArmencoderPulse);
         return armRate;
     }
 
     // do the number of turns calculate(to a particular length)
     public static double positionTolength() {
-        double armRate = lineEncoder.get() / (linegearing*lineencoderPulse);
+        double armRate = lineEncoder.get() / (linegearing * lineencoderPulse);
         return armRate;
     }
 
@@ -117,8 +114,8 @@ public class Arm {
     }
 
     // public static double autoAccessDegree() {
-    //     double Degree = positionTolength(ArmEncoder.getPosition());
-    //     return Degree;
+    // double Degree = positionTolength(ArmEncoder.getPosition());
+    // return Degree;
     // }
 
     public static double autoLine(double speed) {
