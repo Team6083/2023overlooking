@@ -102,31 +102,32 @@ public class NewAutoEngine {
                 DriveBase.directControl(0, 0);
                 break;
             case BlueLeft:
-                BlueLeft();
+                DoBlueLeft();
                 break;
             case BlueMiddle:
-                BlueMiddle();
+                DoBlueMiddle();
                 break;
             case BlueRight:
-                BlueRight();
+                DoBlueRight();
                 break;
             case RedLeft:
-                RedLeft();
+                DoRedLeft();
                 break;
             case RedMiddle:
-                RedMiddle();
+                DoRedMiddle();
                 break;
             case RedRight:
-                RedRight();
+                DoRedRight();
                 break;
             case LeftRightTimer:
-                LeftRightTimer();
+                DoLeftRightTimer();
                 break;
             case MiddleTimer:
-                MiddleTimer();
+                DoMiddleTimer();
                 break;
             case GoBackTimer:
-            break;
+                DoGoBackTimer();
+                break;
             default:
         }
     }
@@ -146,7 +147,7 @@ public class NewAutoEngine {
         SmartDashboard.putData(chooser);
     }
 
-    public static void BlueLeft() {
+    public static void DoBlueLeft() {
         switch (currentStep) {
             case 0:
                 DriveBase.resetEncoderOff();
@@ -196,7 +197,7 @@ public class NewAutoEngine {
         }
     }
 
-    public static void BlueMiddle() {
+    public static void DoBlueMiddle() {
         switch (currentStep) {
             case 0:
                 DriveBase.resetEncoderOff();
@@ -246,7 +247,7 @@ public class NewAutoEngine {
         }
     }
 
-    public static void BlueRight() {
+    public static void DoBlueRight() {
         switch (currentStep) {
             case 0:
                 DriveBase.resetEncoderOff();
@@ -296,7 +297,7 @@ public class NewAutoEngine {
         }
     }
 
-    public static void RedLeft() {
+    public static void DoRedLeft() {
         switch (currentStep) {
             case 0:
                 DriveBase.resetEncoderOff();
@@ -345,7 +346,7 @@ public class NewAutoEngine {
         }
     }
 
-    public static void RedMiddle() {
+    public static void DoRedMiddle() {
         switch (currentStep) {
             case 0:
                 DriveBase.resetEncoderOff();
@@ -394,7 +395,7 @@ public class NewAutoEngine {
         }
     }
 
-    public static void RedRight() {
+    public static void DoRedRight() {
         switch (currentStep) {
             case 0:
                 DriveBase.resetEncoderOff();
@@ -445,7 +446,7 @@ public class NewAutoEngine {
     }
 
     // Autonomous written with timer
-    public static void LeftRightTimer() {
+    public static void DoLeftRightTimer() {
         double leftV = 0.5;
         double rightV = 0.5;
         timer.reset();
@@ -461,7 +462,7 @@ public class NewAutoEngine {
         }
     }
 
-    public static void MiddleTimer() {
+    public static void DoMiddleTimer() {
         double leftV = 0.5;
         double rightV = 0.5;
         timer.reset();
@@ -474,22 +475,20 @@ public class NewAutoEngine {
             // arm
         } else if (timer.get() > 10 && timer.get() < 14.5) {
             DriveBase.directControl(-leftV, -rightV);
-        }else{
+        } else {
             DriveBase.directControl(0, 0);
         }
     }
 
-    public static void GoBackTimer(){
+    public static void DoGoBackTimer() {
         double leftV = 0.8;
         double rightV = 0.8;
         timer.reset();
         timer.start();
-        if(timer.get()<=5){
+        if (timer.get() <= 5) {
             DriveBase.directControl(-leftV, -rightV);
-        }else{
+        } else {
             DriveBase.directControl(0, 0);
         }
     }
 }
-
-

@@ -73,7 +73,6 @@ public class DriveBase {
     private static double leftWheelSpeed;
     private static double rightWheelSpeed;
 
-    
     public static void init() {
         leftMotor1 = new WPI_TalonSRX(Lm1);
         leftMotor2 = new WPI_TalonSRX(Lm2);
@@ -107,7 +106,7 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        leftController = -Robot.xbox.getLeftY() * 0.9;
+        leftController = Robot.xbox.getLeftY() * 0.9;
         rightController = Robot.xbox.getRightY() * 0.9;
 
         if (Robot.xbox.getLeftBumper() || Robot.xbox.getRightBumper()) {
@@ -144,10 +143,12 @@ public class DriveBase {
 
         // To make the number of the encoder become the motor's volt
         LeftVolt = leftPID.calculate(
-                positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), leftController)
+                positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
+                leftController)
                 + feedforward.calculate(leftWheelSpeed);
         RightVolt = rightPID.calculate(
-                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), rightController)
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
+                rightController)
                 + feedforward.calculate(rightWheelSpeed);
 
         leftmotor.setVoltage(LeftVolt);
@@ -155,9 +156,9 @@ public class DriveBase {
         drive.feed();
 
         SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());// The distance between the
-                                                                     // target and the position
+        // target and the position
         SmartDashboard.putNumber("errorPosY", currentPose.minus(goal.poseMeters).getY());
-       
+
     }
 
     public static void updateODO() {

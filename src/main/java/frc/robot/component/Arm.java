@@ -42,8 +42,8 @@ public class Arm {
 
     public static void teleop() {
         // rotate arm
-        rotateForward = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis())*1;
-        rotateReverse =( Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis())*1;
+        rotateForward = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 1;
+        rotateReverse = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 1;
 
         double angle = positionToDegree();// get the angular position
         double length = positionTolength(); // get length position
@@ -73,11 +73,11 @@ public class Arm {
             } else {
                 Arm.set(0);
             }
-        }else {
+        } else {
             ArmMotorleft.set(rotateForward);
             ArmMotorright.set(rotateReverse);
         }
-       
+
         if (Robot.xbox.getXButton()) {
             ArmPID.setSetpoint(positionToDegree());
         } else {
