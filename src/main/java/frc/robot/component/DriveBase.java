@@ -67,8 +67,8 @@ public class DriveBase {
     private static double LeftVolt;
     private static double RightVolt;
 
-    private static double left;
-    private static double right;
+    private static double leftController;
+    private static double rightController;
 
     private static double leftWheelSpeed;
     private static double rightWheelSpeed;
@@ -107,21 +107,21 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        left = -Robot.xbox.getLeftY() * 0.9;
-        right = Robot.xbox.getRightY() * 0.9;
+        leftController = -Robot.xbox.getLeftY() * 0.9;
+        rightController = Robot.xbox.getRightY() * 0.9;
 
         if (Robot.xbox.getLeftBumper() || Robot.xbox.getRightBumper()) {
-            left = 1;
-            right = 1;
+            leftController = 1;
+            rightController = 1;
         }
 
-        drive.tankDrive(LeftVolt, RightVolt);
+        drive.tankDrive(leftController, rightController);
     }
 
     public static void directControl(double leftMotorInput, double rightMotorInput) {
-        left = leftMotorInput;
-        right = rightMotorInput;
-        drive.tankDrive(left, right);
+        leftController = leftMotorInput;
+        rightController = rightMotorInput;
+        drive.tankDrive(leftController, rightController);
     }
 
     public static void runTraj(Trajectory trajectory, double timeInsec) {
@@ -144,10 +144,10 @@ public class DriveBase {
 
         // To make the number of the encoder become the motor's volt
         LeftVolt = leftPID.calculate(
-                positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), left)
+                positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), leftController)
                 + feedforward.calculate(leftWheelSpeed);
         RightVolt = rightPID.calculate(
-                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), right)
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()), rightController)
                 + feedforward.calculate(rightWheelSpeed);
 
         leftmotor.setVoltage(LeftVolt);
@@ -191,8 +191,8 @@ public class DriveBase {
         SmartDashboard.putNumber("leftEncoder", leftMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("rightEncoder", rightMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("gyro", gyro.getAngle());
-        SmartDashboard.putNumber("leftController_speed", left);
-        SmartDashboard.putNumber("rightController_speed", right);
+        SmartDashboard.putNumber("leftController_speed", leftController);
+        SmartDashboard.putNumber("rightController_speed", rightController);
         SmartDashboard.putNumber("left_wheel_speed", leftWheelSpeed);
         SmartDashboard.putNumber("right_wheel_speed", rightWheelSpeed);
     }
