@@ -43,6 +43,7 @@ public class NewAutoEngine {
     // The string of the timer
     private static final String LeftRightTimer = "LeftRightTimer";
     private static final String MiddleTimer = "MiddleTimer";
+    private static final String GoBackTimer = "GoBackTimer";
 
     public static Timer timer = new Timer();
 
@@ -126,6 +127,8 @@ public class NewAutoEngine {
             case MiddleTimer:
                 MiddleTimer();
                 break;
+            case GoBackTimer:
+            break;
             default:
         }
     }
@@ -145,6 +148,7 @@ public class NewAutoEngine {
         chooserTimer.setDefaultOption("DoNothing", DoNothing);
         chooserTimer.addOption("LeftRightTimer", LeftRightTimer);
         chooserTimer.addOption("MiddleTimer", MiddleTimer);
+        chooserTimer.addOption("GoBack", GoBackTimer);
         SmartDashboard.putData(chooserTimer);
     }
 
@@ -462,28 +466,30 @@ public class NewAutoEngine {
         double rightV = 0.5;
         timer.reset();
         timer.start();
-        if (timer.get() <= 1.5) {
+        if (timer.get() <= 1) {
             DriveBase.directControl(leftV, rightV);
-        } else if (timer.get() > 1.5 && timer.get() <= 6) {
+        } else if (timer.get() > 1 && timer.get() <= 5.5) {
             // arm and intake
-        } else if (timer.get() > 6 && timer.get() <= 10.5) {
+        } else if (timer.get() > 5.5 && timer.get() <= 10) {
             // arm
-        } else if (timer.get() > 10.5 && timer.get() < 15) {
+        } else if (timer.get() > 10 && timer.get() < 14.5) {
             DriveBase.directControl(-leftV, -rightV);
+        }else{
+            DriveBase.directControl(0, 0);
+        }
+    }
+
+    public static void GoBackTimer(){
+        double leftV = 0.8;
+        double rightV = 0.8;
+        timer.reset();
+        timer.start();
+        if(timer.get()<=5){
+            DriveBase.directControl(-leftV, -rightV);
+        }else{
+            DriveBase.directControl(0, 0);
         }
     }
 }
 
-// Class of path setting
-class pathSet {
-    int path1;
-    int path2;
-    String pathName;
 
-    pathSet(int path1, int path2, String pathName) {
-        this.path1 = path1;
-        this.path2 = path2;
-        this.pathName = pathName; // use in the switch
-    }
-
-}
