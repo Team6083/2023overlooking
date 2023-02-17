@@ -7,10 +7,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import java.lang.Math;
 
 public class Arm {
-    private static final double ArmencoderPulse = 4096;// do the number of turns calculate
+    private static final double ArmencoderPulse = 42;// do the number of turns calculate
     private static final double Armgearing = 198;
     private static final double lineencoderPulse = 8192;
     private static final double linegearing = 64;
@@ -18,32 +20,33 @@ public class Arm {
     private static CANSparkMax ArmMotorright;
     private static MotorControllerGroup Arm;
     private static WPI_VictorSPX lineMotor;// take up and pay off device
-    private static final int karm1 = 0;
-    private static final int karm2 = 0;
+    private static final int armL = 10;
+    private static final int armR = 11;
     private static final int line = 2;
-    private static Double rotateForward;
-    private static Double rotateReverse;
     private static RelativeEncoder ArmEncoder;
-    private static Encoder lineEncoder;
-    private static Double kP = 0.0;
+    private static Double kP = 0.35;
     private static Double kI = 0.0;
     private static Double kD = 0.0;
     private static PIDController ArmPID;
 
     public static void init() {
-        ArmMotorleft = new CANSparkMax(karm1, MotorType.kBrushless);
-        ArmMotorright = new CANSparkMax(karm2, MotorType.kBrushless);
+        ArmMotorleft = new CANSparkMax(armL, MotorType.kBrushless);
+        ArmMotorright = new CANSparkMax(armR, MotorType.kBrushless);
         Arm = new MotorControllerGroup(ArmMotorleft, ArmMotorright);
+        ArmMotorleft.setInverted(true);
         lineMotor = new WPI_VictorSPX(line);
-        ArmEncoder = ArmMotorleft.getEncoder();
-        lineEncoder = new Encoder(0, 1);
         ArmPID = new PIDController(kP, kI, kD);
+
+        lineMotor.configClearPositionOnQuadIdx(true, 10);
+        ArmMotorleft.getEncoder().setPosition(0);
+        ArmMotorright.getEncoder().setPosition(0);
+
+        SmartDashboard.putNumber("arm_kP", kP);
     }
 
     public static void teleop() {
-        // rotate arm
-        rotateForward = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 1;
-        rotateReverse = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 1;
+        kP = SmartDashboard.getNumber("arm_kP", kP);
+        ArmPID.setP(kP);
 
         double angle = positionToDegree();// get the angular position
         double length = positionTolength(); // get length position
@@ -53,47 +56,43 @@ public class Arm {
             lineMotor.set(0.5);
         } else if (Robot.xbox.getPOV() == 180) {
             lineMotor.set(-0.5);
-        } else if (Robot.xbox.getAButton()) {
-            if (length > 186) {
-                lineMotor.set(-0.5);
-            } else if (length < 186) {
-                lineMotor.set(0.5);
-            } else {
-                lineMotor.set(0);
-            }
-        } else {
+        } 
+        // else if (Robot.xbox.getXButton()) {
+        //     if (length > 122 * (1 / Math.cos(35.2)) - 58) {
+        //         lineMotor.set(-0.5);
+        //     }
+        // } else if (length > 122 * (1 / Math.cos(angle)) - 58) {
+        //     lineMotor.set(-0.5);
+        // } 
+        else {
             lineMotor.set(0);
         }
 
-        if (Robot.xbox.getAButton()) {
-            if (angle > 68.5) {
-                Arm.set(0.5);
-            } else if (angle < 68.5) {
-                Arm.set(0.5);
-            } else {
-                Arm.set(0);
-            }
-        } else {
-            ArmMotorleft.set(rotateForward);
-            ArmMotorright.set(rotateReverse);
-        }
-
         if (Robot.xbox.getXButton()) {
-            ArmPID.setSetpoint(positionToDegree());
+            ArmPID.setSetpoint(35.2);
+        } else if (Robot.xbox.getAButton()) {
+            ArmPID.setSetpoint(68.5);
+            length = 0;
         } else {
-            double armAngleModify = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 1;
+            double armAngleModify = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 0.01;
             ArmPID.setSetpoint(ArmPID.getSetpoint() + armAngleModify);
         }
+        SmartDashboard.putNumber("setpoint", ArmPID.getSetpoint());
+        SmartDashboard.putNumber("current", positionToDegree());
+        SmartDashboard.putNumber("arm enc", ArmEncoder.getPosition());
+
         controlloop();
     }
 
-    // public void setArmAngle(double angle) {
-    // ArmPID.setSetpoint(angle);
-    // }
-
     public static void controlloop() {
         var ArmVolt = ArmPID.calculate(positionToDegree());
+
+        if (Math.abs(ArmVolt) > 10) {
+            ArmVolt = 10 * (ArmVolt > 0 ? 1 : -1);
+        }
         Arm.setVoltage(ArmVolt);
+
+        SmartDashboard.putNumber("ArmVolt", ArmVolt);
     }
 
     // do the number of turns calculate(to a particular angle)
@@ -104,19 +103,14 @@ public class Arm {
 
     // do the number of turns calculate(to a particular length)
     public static double positionTolength() {
-        double armRate = lineEncoder.get() / (linegearing * lineencoderPulse);
-        return armRate;
+        double length = lineMotor.getSelectedSensorPosition() / (linegearing * lineencoderPulse);
+        return length;
     }
 
     public static double autoArm(double speed) {
-        ArmMotorleft.set(speed);
+        Arm.set(speed);
         return 0;
     }
-
-    // public static double autoAccessDegree() {
-    // double Degree = positionTolength(ArmEncoder.getPosition());
-    // return Degree;
-    // }
 
     public static double autoLine(double speed) {
         lineMotor.set(speed);

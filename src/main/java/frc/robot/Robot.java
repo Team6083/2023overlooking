@@ -34,9 +34,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     xbox = new XboxController(0);
     DriveBase.init();
-    Intake.init();
-    Arm.init();
-    Camera.init();
+    //Intake.init();
+    //Arm.init();
+    //Camera.init();
     NewAutoEngine.init();
   }
 
@@ -56,16 +56,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    DriveBase.init();
-    Intake.init();
-    Arm.init();
+
   }
 
   @Override
   public void teleopPeriodic() {
+    //Arm.teleop();
     DriveBase.teleop();
-    Intake.teleop();
-    Arm.teleop();
   }
 
   @Override
