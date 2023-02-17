@@ -24,7 +24,7 @@ public class Intake {
         }
         if (com_enable) {
             com.enableDigital();
-        } else if (!com_enable) {
+        } else {
             com.disable();
         }
 
