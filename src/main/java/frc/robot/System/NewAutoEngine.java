@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.component.DriveBase;
+import frc.robot.component.Intake;
 
 public class NewAutoEngine {
 
@@ -48,16 +49,13 @@ public class NewAutoEngine {
     public static Timer timer = new Timer();
 
     public static SendableChooser<String> chooser;
-    public static SendableChooser<String> chooserTimer;
     public static String autoSeclected;
 
     public static void init() {
 
         chooser = new SendableChooser<String>();
-        chooserTimer = new SendableChooser<String>();
 
         putChooser();
-        putChooserTimer();
 
         for (int i = 0; i < trajectoryAmount; i++) {
             try {
@@ -141,15 +139,11 @@ public class NewAutoEngine {
         chooser.addOption("RedLeft", RedLeft);
         chooser.addOption("RedMiddle", RedMiddle);
         chooser.addOption("RedRight", RedRight);
-        SmartDashboard.putData(chooser);
-    }
 
-    protected static void putChooserTimer() {
-        chooserTimer.setDefaultOption("DoNothing", DoNothing);
-        chooserTimer.addOption("LeftRightTimer", LeftRightTimer);
-        chooserTimer.addOption("MiddleTimer", MiddleTimer);
-        chooserTimer.addOption("GoBack", GoBackTimer);
-        SmartDashboard.putData(chooserTimer);
+        chooser.addOption("LeftRightTimer", LeftRightTimer);
+        chooser.addOption("MiddleTimer", MiddleTimer);
+        chooser.addOption("GoBack", GoBackTimer);
+        SmartDashboard.putData(chooser);
     }
 
     public static void BlueLeft() {
@@ -173,6 +167,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                Intake.solOn();
                 currentStep++;
                 break;
             case 3:
@@ -222,6 +217,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                Intake.solOn();
                 currentStep++;
                 break;
             case 3:
@@ -271,6 +267,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                Intake.solOn();
                 currentStep++;
                 break;
             case 3:
@@ -320,6 +317,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                Intake.solOn();
                 currentStep++;
                 break;
             case 3:
@@ -368,6 +366,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                Intake.solOn();
                 currentStep++;
                 break;
             case 3:
@@ -416,6 +415,7 @@ public class NewAutoEngine {
                 break;
             case 2:
                 // Put cone
+                Intake.solOn();
                 currentStep++;
                 break;
             case 3:
