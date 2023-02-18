@@ -9,26 +9,16 @@ import frc.robot.Robot;
 public class Intake {
     private static Compressor com;
     private static DoubleSolenoid sol;
-    private static boolean com_enable = true;
     private static boolean sol_Forward = true;
 
     public static void init() {
         com = new Compressor(PneumaticsModuleType.CTREPCM);
-        sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+        sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
         com.enableDigital();
     }
 
     public static void teleop() {
-        if (Robot.xbox.getYButtonPressed()) {
-            com_enable = !com_enable;
-        }
-        if (com_enable) {
-            com.enableDigital();
-        } else {
-            com.disable();
-        }
-
-        if (Robot.xbox.getBButtonPressed()) {
+        if (Robot.xbox.getAButtonPressed()) {
             sol_Forward = !sol_Forward;
         }
         if (sol_Forward) {

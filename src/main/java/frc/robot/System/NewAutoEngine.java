@@ -483,12 +483,11 @@ public class NewAutoEngine {
     public static void DoGoBackTimer() {
         double leftV = 0.8;
         double rightV = 0.8;
-        timer.reset();
-        timer.start();
-        if (timer.get() <= 5) {
-            DriveBase.directControl(-leftV, -rightV);
+        if (timer.get() <= 1.3) {
+            DriveBase.directControl(leftV, rightV);
         } else {
             DriveBase.directControl(0, 0);
         }
+        DriveBase.putDashboard();
     }
 }

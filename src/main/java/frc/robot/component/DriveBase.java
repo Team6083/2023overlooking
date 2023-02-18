@@ -1,6 +1,7 @@
 package frc.robot.component;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -23,16 +24,16 @@ import frc.robot.System.NewAutoEngine;
 public class DriveBase {
 
     // Port
-    private static final int Lm1 = 1;// MotorController ID
-    private static final int Lm2 = 2;
-    private static final int Rm1 = 3;
-    private static final int Rm2 = 4;
+    private static final int Lm1 = 13;// MotorController ID
+    private static final int Lm2 = 14;
+    private static final int Rm1 = 11;
+    private static final int Rm2 = 12;
 
     // Basis divebase
     public static WPI_TalonSRX leftMotor1;
-    public static WPI_TalonSRX leftMotor2;
+    public static WPI_VictorSPX leftMotor2;
     public static WPI_TalonSRX rightMotor1;
-    public static WPI_TalonSRX rightMotor2;
+    public static WPI_VictorSPX rightMotor2;
 
     public static MotorControllerGroup leftmotor;
     public static MotorControllerGroup rightmotor;
@@ -76,9 +77,9 @@ public class DriveBase {
     
     public static void init() {
         leftMotor1 = new WPI_TalonSRX(Lm1);
-        leftMotor2 = new WPI_TalonSRX(Lm2);
+        leftMotor2 = new WPI_VictorSPX(Lm2);
         rightMotor1 = new WPI_TalonSRX(Rm1);
-        rightMotor2 = new WPI_TalonSRX(Rm2);
+        rightMotor2 = new WPI_VictorSPX(Rm2);
 
         leftmotor = new MotorControllerGroup(leftMotor1, leftMotor2);
         rightmotor = new MotorControllerGroup(rightMotor1, rightMotor2);
@@ -106,21 +107,20 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        leftController = Robot.xbox.getLeftY() * 0.9;
-        rightController = Robot.xbox.getRightY() * 0.9;
+        leftController = Robot.xbox.getLeftY() * 0.8;
+        rightController = Robot.xbox.getRightY() * 0.8;
 
         if (Robot.xbox.getLeftBumper() || Robot.xbox.getRightBumper()) {
-            leftController = 1;
-            rightController = 1;
+            leftController = Robot.xbox.getLeftY();
+            rightController = Robot.xbox.getRightY();
         }
 
         drive.tankDrive(leftController, rightController);
+        putDashboard();
     }
 
     public static void directControl(double leftMotorInput, double rightMotorInput) {
-        leftController = leftMotorInput;
-        rightController = rightMotorInput;
-        drive.tankDrive(leftController, rightController);
+        drive.tankDrive(leftMotorInput, rightMotorInput);
     }
 
     public static void runTraj(Trajectory trajectory, double timeInsec) {
@@ -169,7 +169,7 @@ public class DriveBase {
         SmartDashboard.putNumber("y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("heading", odometry.getPoseMeters().getRotation().getDegrees());
 
-        kP = SmartDashboard.getNumber("kP", kP);// problem
+        kP = SmartDashboard.getNumber("kP", kP);// can adjust the number on Dashboard
         kI = SmartDashboard.getNumber("kI", kI);
         kD = SmartDashboard.getNumber("kD", kD);
 
