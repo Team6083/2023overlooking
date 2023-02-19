@@ -9,7 +9,7 @@ import frc.robot.Robot;
 public class Intake {
     private static Compressor com;
     private static DoubleSolenoid sol;
-    private static boolean sol_Forward = true;
+    private static boolean sol_Forward = false;
 
     public static void init() {
         com = new Compressor(PneumaticsModuleType.CTREPCM);
