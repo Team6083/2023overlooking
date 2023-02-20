@@ -37,12 +37,13 @@ public class Arm {
         Arm = new MotorControllerGroup(ArmMotorleft, ArmMotorright);
         ArmMotorleft.setInverted(true);
 
-        ArmEncoder = ArmMotorleft.getEncoder();
+        //ArmEncoder = ArmMotorleft.getEncoder();
 
         lineMotor = new WPI_TalonSRX(line);
         //ArmPID = new PIDController(kP, kI, kD);
 
-        //lineMotor.configClearPositionOnQuadIdx(true, 10);
+        lineMotor.configClearPositionOnQuadIdx(true, 10);
+        lineMotor.setInverted(true);
         //ArmMotorleft.getEncoder().setPosition(0);
         //ArmMotorright.getEncoder().setPosition(0);
 
@@ -56,15 +57,16 @@ public class Arm {
 
         //kP = SmartDashboard.getNumber("arm_kP", kP);
         //ArmPID.setP(kP);
+        lineMotor.configClearPositionOnQuadIdx(false, 10);
 
         //double angle = positionToDegree();// get the angular position
-        //double length = positionTolength(); // get length position
+        //double length = positionToLength(); // get length position
 
         // take up and pay off device
         if (Robot.xbox.getPOV() == 0) {
-            lineMotor.set(-0.3);
-        } else if (Robot.xbox.getPOV() == 180) {
             lineMotor.set(0.3);
+        } else if (Robot.xbox.getPOV() == 180) {
+            lineMotor.set(-0.3);
         } else {
             lineMotor.set(0);
         }
@@ -116,7 +118,7 @@ public class Arm {
     // }
 
     // do the number of turns calculate(to a particular length)
-    // public static double positionTolength() {
+    // public static double positionToLength() {
     //     double length = lineMotor.getSelectedSensorPosition() / (linegearing * lineencoderPulse);
     //     return length;
     // }
