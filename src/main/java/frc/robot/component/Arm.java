@@ -92,7 +92,7 @@ public class Arm {
         //SmartDashboard.putNumber("current", positionToDegree());
         //SmartDashboard.putNumber("arm enc", ArmEncoder.getPosition());
         //SmartDashboard.putNumber("angle",angle);
-        //SmartDashboard.putNumber("line enc",lineMotor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("line enc",lineMotor.getSelectedSensorPosition());
         //SmartDashboard.putNumber("length",length);
 
         //controlloop();
