@@ -449,8 +449,6 @@ public class NewAutoEngine {
     public static void DoLeftRightTimer() {
         double leftV = 0.5;
         double rightV = 0.5;
-        timer.reset();
-        timer.start();
         if (timer.get() <= 1.5) {
             DriveBase.directControl(leftV, rightV);
         } else if (timer.get() > 1.5 && timer.get() <= 6) {
@@ -465,8 +463,6 @@ public class NewAutoEngine {
     public static void DoMiddleTimer() {
         double leftV = 0.5;
         double rightV = 0.5;
-        timer.reset();
-        timer.start();
         if (timer.get() <= 1) {
             DriveBase.directControl(leftV, rightV);
         } else if (timer.get() > 1 && timer.get() <= 5.5) {
