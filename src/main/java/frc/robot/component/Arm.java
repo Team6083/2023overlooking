@@ -28,6 +28,11 @@ public class Arm {
     private static Double kI = 0.0;
     private static Double kD = 0.0;
     private static PIDController ArmPID;
+
+    private static Double lP = 0.3;
+    private static Double lI = 0.0;
+    private static Double lD = 0.0;
+    private static PIDController LinePID;
     private static Double rotate;
     // private static Double rotateReverse;
 
@@ -40,6 +45,7 @@ public class Arm {
         // ArmEncoder = ArmMotorleft.getEncoder();
 
         lineMotor = new WPI_TalonSRX(line);
+        LinePID = new PIDController(lP, lI, lD);
         // ArmPID = new PIDController(kP, kI, kD);
 
         lineMotor.configClearPositionOnQuadIdx(true, 10);
@@ -58,6 +64,7 @@ public class Arm {
 
         // kP = SmartDashboard.getNumber("arm_kP", kP);
         // ArmPID.setP(kP);
+        lP = SmartDashboard.getNumber("line_kP", lP);
         lineMotor.configClearPositionOnQuadIdx(false, 10);
 
         // double angle = positionToDegree();// get the angular position
@@ -104,20 +111,27 @@ public class Arm {
         // SmartDashboard.putNumber("angle",angle);
         SmartDashboard.putNumber("line enc", lineMotor.getSelectedSensorPosition());
         // SmartDashboard.putNumber("length",length);
-        SmartDashboard.putNumber("length sim", positionToLength(lineMotor.getSelectedSensorPosition()));
+        SmartDashboard.putNumber("line length", positionToLength());
         // controlloop();
     }
 
-    // public static void controlloop() {
-    // var ArmVolt = ArmPID.calculate(positionToDegree());
+    public static void Controlloop() {
+        // var ArmVolt = ArmPID.calculate(positionToDegree());
 
-    // if (Math.abs(ArmVolt) > 10) {
-    // ArmVolt = 10 * (ArmVolt > 0 ? 1 : -1);
-    // }
-    // Arm.setVoltage(ArmVolt);
+        // if (Math.abs(ArmVolt) > 10) {
+        // ArmVolt = 10 * (ArmVolt > 0 ? 1 : -1);
+        // }
+        // Arm.setVoltage(ArmVolt);
 
-    // SmartDashboard.putNumber("ArmVolt", ArmVolt);
-    // }
+        // SmartDashboard.putNumber("ArmVolt", ArmVolt);
+
+        var LineVolt = LinePID.calculate(positionToLength());
+        if (Math.abs(LineVolt) > 10) {
+            LineVolt = LineVolt > 0 ? 10 : -10;
+        }
+        lineMotor.setVoltage(LineVolt);
+        SmartDashboard.putNumber("LineVolt", LineVolt);
+    }
 
     // do the number of turns calculate(to a particular angle)
     // public static double positionToDegree() {
@@ -127,7 +141,8 @@ public class Arm {
     // }
 
     // do the number of turns calculate(to a particular length)
-    public static double positionToLength(double x) {
+    public static double positionToLength() {
+        double x = lineMotor.getSelectedSensorPosition();
         double length = 98.4 + 0.00473 * x - 0.0000000348 * x * x;
         return length;
     }
