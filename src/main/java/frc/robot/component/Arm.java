@@ -41,7 +41,7 @@ public class Arm {
         Arm = new MotorControllerGroup(ArmMotorleft, ArmMotorright);
         ArmMotorleft.setInverted(true);
 
-        //ArmEncoder = ArmMotorleft.getEncoder();
+        // ArmEncoder = ArmMotorleft.getEncoder();
 
         lineMotor = new WPI_TalonSRX(line);
         LinePID = new PIDController(kLP, kLI, kLD);
@@ -74,15 +74,15 @@ public class Arm {
         double lineLengthModify = 0.0;
         if (Robot.xbox.getXButtonPressed()) {
             LinePID.setSetpoint(33.02);
-        } else if(length > 122 * (1 / Math.cos(35.2)) - 58) {
+        } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {
             lineMotor.set(-0.5);
-            } else if (length > 122 * (1 / Math.cos(angle)) - 58) {
+        } else if (length > 122 * (1 / Math.cos(angle)) - 58) {
             lineMotor.set(-0.5);
-            }else if (Robot.xbox.getPOV() == 0) {
+        } else if (Robot.xbox.getPOV() == 0) {
             lineLengthModify += 0.5;
         } else if (Robot.xbox.getPOV() == 180) {
             lineLengthModify -= 0.5;
-        }else {
+        } else {
             lineMotor.set(0);
         }
         if (lineMotor.getSelectedSensorPosition() < 0) {
@@ -90,8 +90,7 @@ public class Arm {
         } else {
             lineMotor.configClearPositionOnQuadIdx(false, 10);
         }
-        
-        
+
         LinePID.setSetpoint(LinePID.getSetpoint() + lineLengthModify);
 
         // if (Robot.xbox.getXButton()) {
@@ -134,9 +133,9 @@ public class Arm {
 
     // do the number of turns calculate(to a particular angle)
     public static double positionToDegree() {
-    double armRate = ArmEncoder.getPosition() * 360 / (Armgearing *
-    ArmencoderPulse);
-    return armRate;
+        double armRate = ArmEncoder.getPosition() * 360 / (Armgearing *
+                ArmencoderPulse);
+        return armRate;
     }
 
     // do the number of turns calculate(to a particular length)
