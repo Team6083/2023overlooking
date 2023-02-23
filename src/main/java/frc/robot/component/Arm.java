@@ -33,6 +33,7 @@ public class Arm {
     private static Double kLI = 0.0;
     private static Double kLD = 0.0;
     private static PIDController LinePID;
+    private static double lineLengthModify;
     private static Double rotate;
 
     public static void init() {
@@ -54,6 +55,8 @@ public class Arm {
         LinePID.setSetpoint(0);
         // SmartDashboard.putNumber("arm_kP", kAP);
         SmartDashboard.putNumber("line_kP", kLP);
+
+        lineLengthModify = 0;
     }
 
     public static void teleop() {
@@ -71,9 +74,9 @@ public class Arm {
         double length = positionToLength(); // get length position
 
         // take up and pay off device
-        double lineLengthModify = 0.0;
         if (Robot.xbox.getXButtonPressed()) {
             LinePID.setSetpoint(33.02);
+            lineLengthModify = 0;
         } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {
             lineMotor.set(-0.5);
         } else if (length > 122 * (1 / Math.cos(angle)) - 58) {
