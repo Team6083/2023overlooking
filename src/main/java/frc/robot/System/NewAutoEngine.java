@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.component.Arm;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
 
@@ -167,7 +168,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // Put cone
+                Arm.autoArmLine();
                 Intake.solOn();
                 currentStep++;
                 break;
@@ -217,7 +218,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // Put cone
+                Arm.autoArmLine();
                 Intake.solOn();
                 currentStep++;
                 break;
@@ -267,7 +268,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // Put cone
+                Arm.autoArmLine();
                 Intake.solOn();
                 currentStep++;
                 break;
@@ -317,7 +318,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // Put cone
+                Arm.autoArmLine();
                 Intake.solOn();
                 currentStep++;
                 break;
@@ -366,7 +367,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // Put cone
+                Arm.autoArmLine();
                 Intake.solOn();
                 currentStep++;
                 break;
@@ -415,7 +416,7 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // Put cone
+                Arm.autoArmLine();
                 Intake.solOn();
                 currentStep++;
                 break;
@@ -466,7 +467,7 @@ public class NewAutoEngine {
         if (timer.get() <= 1) {
             DriveBase.directControl(leftV, rightV);
         } else if (timer.get() > 1 && timer.get() <= 5.5) {
-            // arm and intake
+            Arm.autoArmLine();
         } else if (timer.get() > 5.5 && timer.get() <= 10) {
             // arm
         } else if (timer.get() > 10 && timer.get() < 14.5) {
