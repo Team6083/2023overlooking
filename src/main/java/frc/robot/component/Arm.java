@@ -24,17 +24,16 @@ public class Arm {
     private static final int armR = 16;
     private static final int line = 17;
     private static RelativeEncoder ArmEncoder;
-    private static Double kP = 0.35;
-    private static Double kI = 0.0;
-    private static Double kD = 0.0;
+    private static Double kAP = 0.35;
+    private static Double kAI = 0.0;
+    private static Double kAD = 0.0;
     private static PIDController ArmPID;
 
-    private static Double lP = 0.3;
-    private static Double lI = 0.0;
-    private static Double lD = 0.0;
+    private static Double kLP = 0.3;
+    private static Double kLI = 0.0;
+    private static Double kLD = 0.0;
     private static PIDController LinePID;
     private static Double rotate;
-    // private static Double rotateReverse;
 
     public static void init() {
         ArmMotorleft = new CANSparkMax(armL, MotorType.kBrushless);
@@ -42,18 +41,19 @@ public class Arm {
         Arm = new MotorControllerGroup(ArmMotorleft, ArmMotorright);
         ArmMotorleft.setInverted(true);
 
-        // ArmEncoder = ArmMotorleft.getEncoder();
+        //ArmEncoder = ArmMotorleft.getEncoder();
 
         lineMotor = new WPI_TalonSRX(line);
-        LinePID = new PIDController(lP, lI, lD);
-        // ArmPID = new PIDController(kP, kI, kD);
+        LinePID = new PIDController(kLP, kLI, kLD);
+        // ArmPID = new PIDController(kAP, kAI, kAD);
 
         lineMotor.configClearPositionOnQuadIdx(true, 10);
         lineMotor.setInverted(true);
         // ArmMotorleft.getEncoder().setPosition(0);
         // ArmMotorright.getEncoder().setPosition(0);
-
-        // SmartDashboard.putNumber("arm_kP", kP);
+        LinePID.setSetpoint(0);
+        // SmartDashboard.putNumber("arm_kP", kAP);
+        SmartDashboard.putNumber("line_kP", kLP);
     }
 
     public static void teleop() {
@@ -62,38 +62,37 @@ public class Arm {
         // ArmMotorleft.set(rotate);
         // ArmMotorright.set(rotate);
 
-        // kP = SmartDashboard.getNumber("arm_kP", kP);
-        // ArmPID.setP(kP);
-        lP = SmartDashboard.getNumber("line_kP", lP);
+        // kP = SmartDashboard.getNumber("arm_kP", kAP);
+        // ArmPID.setP(kAP);
+        kLP = SmartDashboard.getNumber("line_kP", kLP);
         lineMotor.configClearPositionOnQuadIdx(false, 10);
 
-        // double angle = positionToDegree();// get the angular position
-        // double length = positionToLength(); // get length position
+        double angle = positionToDegree();// get the angular position
+        double length = positionToLength(); // get length position
 
         // take up and pay off device
-        if (Robot.xbox.getPOV() == 0) {
-            lineMotor.set(0.3);
+        double lineLengthModify = 0.0;
+        if (Robot.xbox.getXButtonPressed()) {
+            LinePID.setSetpoint(33.02);
+        } else if(length > 122 * (1 / Math.cos(35.2)) - 58) {
+            lineMotor.set(-0.5);
+            } else if (length > 122 * (1 / Math.cos(angle)) - 58) {
+            lineMotor.set(-0.5);
+            }else if (Robot.xbox.getPOV() == 0) {
+            lineLengthModify += 0.5;
         } else if (Robot.xbox.getPOV() == 180) {
-            lineMotor.set(-0.3);
-        } else {
+            lineLengthModify -= 0.5;
+        }else {
             lineMotor.set(0);
         }
-        // else if (Robot.xbox.getXButton()) {
-        // if (length > 122 * (1 / Math.cos(35.2)) - 58) {
-        // lineMotor.set(-0.5);
-        // }
-        // } else if (length > 122 * (1 / Math.cos(angle)) - 58) {
-        // lineMotor.set(-0.5);
-        // }
-        // else {
-        // lineMotor.set(0);
-        // }
-
         if (lineMotor.getSelectedSensorPosition() < 0) {
             lineMotor.configClearPositionOnQuadIdx(true, 10);
         } else {
             lineMotor.configClearPositionOnQuadIdx(false, 10);
         }
+        
+        
+        LinePID.setSetpoint(LinePID.getSetpoint() + lineLengthModify);
 
         // if (Robot.xbox.getXButton()) {
         // ArmPID.setSetpoint(35.2);
@@ -112,7 +111,7 @@ public class Arm {
         SmartDashboard.putNumber("line enc", lineMotor.getSelectedSensorPosition());
         // SmartDashboard.putNumber("length",length);
         SmartDashboard.putNumber("line length", positionToLength());
-        // controlloop();
+        Controlloop();
     }
 
     public static void Controlloop() {
@@ -134,16 +133,16 @@ public class Arm {
     }
 
     // do the number of turns calculate(to a particular angle)
-    // public static double positionToDegree() {
-    // double armRate = ArmEncoder.getPosition() * 360 / (Armgearing *
-    // ArmencoderPulse);
-    // return armRate;
-    // }
+    public static double positionToDegree() {
+    double armRate = ArmEncoder.getPosition() * 360 / (Armgearing *
+    ArmencoderPulse);
+    return armRate;
+    }
 
     // do the number of turns calculate(to a particular length)
     public static double positionToLength() {
         double x = lineMotor.getSelectedSensorPosition();
-        double length = 98.4 + 0.00473 * x - 0.0000000348 * x * x;
+        double length = 0.00473 * x - 0.0000000348 * x * x - 19.5;
         return length;
     }
 
