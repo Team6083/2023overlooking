@@ -14,8 +14,6 @@ import java.lang.Math;
 public class Arm {
     private static final double ArmencoderPulse = 42;// do the number of turns calculate
     private static final double Armgearing = 198;
-    private static final double lineencoderPulse = 8192;
-    private static final double linegearing = 64;
     private static CANSparkMax ArmMotorleft;// rotate arm
     private static CANSparkMax ArmMotorright;
     private static MotorControllerGroup Arm;
@@ -60,8 +58,7 @@ public class Arm {
     public static void teleop() {
         // rotate = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis())
         // * 0.2;
-        // ArmMotorleft.set(rotate);
-        // ArmMotorright.set(rotate);
+        // Arm.set(rotate);
 
         // kP = SmartDashboard.getNumber("arm_kP", kAP);
         // ArmPID.setP(kAP);
