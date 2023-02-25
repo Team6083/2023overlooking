@@ -153,7 +153,7 @@ public class Arm {
                 LinePID.setSetpoint(19.5);
                 break;
             case 2: // the second level
-                LinePID.setSetpoint(53.52);
+                LinePID.setSetpoint(52.52);
                 break;
             case 3:// the third level
                 LinePID.setSetpoint(105.65);// the third level
