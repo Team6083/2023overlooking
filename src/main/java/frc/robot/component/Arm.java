@@ -14,8 +14,6 @@ import java.lang.Math;
 public class Arm {
     private static final double ArmencoderPulse = 42;// do the number of turns calculate
     private static final double Armgearing = 198;
-    private static final double lineencoderPulse = 8192;
-    private static final double linegearing = 64;
     private static CANSparkMax ArmMotorleft;// rotate arm
     private static CANSparkMax ArmMotorright;
     private static MotorControllerGroup Arm;
@@ -33,7 +31,7 @@ public class Arm {
     private static Double kLI = 0.0;
     private static Double kLD = 0.0;
     private static PIDController LinePID;
-    private static double lineLengthModify;
+    private static double lineLengthModify = 0;
     private static Double rotate;
 
     public static void init() {
@@ -60,8 +58,7 @@ public class Arm {
     public static void teleop() {
         // rotate = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis())
         // * 0.2;
-        // ArmMotorleft.set(rotate);
-        // ArmMotorright.set(rotate);
+        // Arm.set(rotate);
 
         // kP = SmartDashboard.getNumber("arm_kP", kAP);
         // ArmPID.setP(kAP);
@@ -72,9 +69,9 @@ public class Arm {
         double length = positionToLength(); // get length position
 
         // take up and pay off device
-        double lineLengthModify = 0.0;
         if (Robot.xbox.getXButtonPressed()) {
             LinePID.setSetpoint(33.02);
+            lineLengthModify = 0;
         } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {
             lineMotor.set(-0.5);
         } else if (length > 122 * (1 / Math.cos(angle)) - 58) {
