@@ -186,6 +186,7 @@ public class NewAutoEngine {
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[blueLeft[1]].getInitialPose());
                 currentStep++;
+                break;
             case 4:
                 // Run the second path of blueLeft
                 DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
@@ -237,6 +238,7 @@ public class NewAutoEngine {
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[blueMiddle[1]].getInitialPose());
                 currentStep++;
+                break;
             case 4:
                 // Run the second path of blueMiddle
                 DriveBase.runTraj(trajectory[blueMiddle[1]], timer.get());
@@ -288,6 +290,7 @@ public class NewAutoEngine {
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[blueRight[1]].getInitialPose());
                 currentStep++;
+                break;
             case 4:
                 // Run the second path of blueRight
                 DriveBase.runTraj(trajectory[blueRight[1]], timer.get());
@@ -338,6 +341,7 @@ public class NewAutoEngine {
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[redLeft[1]].getInitialPose());
+                break;
             case 4:
                 // Run the second path of redLeft
                 DriveBase.runTraj(trajectory[redLeft[1]], timer.get());
@@ -388,6 +392,7 @@ public class NewAutoEngine {
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[redMiddle[1]].getInitialPose());
+                break;
             case 4:
                 // Run the second path of redMiddle
                 DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
@@ -480,7 +485,7 @@ public class NewAutoEngine {
             Intake.solOn();
         } else if (timer.get() > 5.5 && timer.get() <= 10) {
             // arm
-            Arm.autoArmControl(0,0);
+            Arm.autoArmControl(0, 0);
         } else if (timer.get() > 10 && timer.get() < 14.5) {
             DriveBase.directControl(-leftV, -rightV);
         } else {
