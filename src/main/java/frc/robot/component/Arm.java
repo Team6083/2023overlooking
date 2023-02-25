@@ -1,15 +1,14 @@
 package frc.robot.component;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import java.lang.Math;
 
 public class Arm {
     private static final double ArmencoderPulse = 42;// do the number of turns calculate
@@ -70,8 +69,8 @@ public class Arm {
         double length = positionToLength(); // get length position
 
         // take up and pay off device
-        if (Robot.xbox.getAButtonPressed()) {
-            LinePID.setSetpoint(33.02);
+        if (Robot.xbox.getYButtonPressed()) {
+            LinePID.setSetpoint(52.52);
             lineLengthModify = 0;
         } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {
             lineMotor.set(-0.5);
@@ -140,10 +139,12 @@ public class Arm {
     // do the number of turns calculate(to a particular length)
     public static double positionToLength() {
         double x = lineMotor.getSelectedSensorPosition();
-        double length = 0.00473 * x - 0.0000000348 * x * x + 19.5;
-        if (length < 19.5) {
-            length = 19.5;
+        if (x < 0) {
+            lineMotor.configClearPositionOnQuadIdx(true, 10);
+        } else {
+            lineMotor.configClearPositionOnQuadIdx(false, 10);
         }
+        double length = 0.00473 * x - 0.0000000348 * x * x + 19.5;
         return length;
     }
 
