@@ -149,10 +149,17 @@ public class Arm {
         return length;
     }
 
-    public static void autoArmLine(){
+    public static int autoArmLine(int mode){
+        switch(mode){
+            case 1:
+            LinePID.setSetpoint(86.15);
+            case 2:
+            LinePID.setSetpoint(19.5);
+        }
         LinePID.setSetpoint(86.15);
         Controlloop();
         SmartDashboard.putNumber("line enc", lineMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("line length", positionToLength());
+        return 0;
     }
 }
