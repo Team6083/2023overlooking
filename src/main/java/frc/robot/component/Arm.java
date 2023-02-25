@@ -50,7 +50,8 @@ public class Arm {
         lineMotor.setInverted(true);
         // ArmMotorleft.getEncoder().setPosition(0);
         // ArmMotorright.getEncoder().setPosition(0);
-        LinePID.setSetpoint(0);
+        LinePID.setSetpoint(19.5);
+        ArmPID.setSetpoint(68.5);
         // SmartDashboard.putNumber("arm_kP", kAP);
         SmartDashboard.putNumber("line_kP", kLP);
     }
@@ -69,7 +70,7 @@ public class Arm {
         double length = positionToLength(); // get length position
 
         // take up and pay off device
-        if (Robot.xbox.getXButtonPressed()) {
+        if (Robot.xbox.getAButtonPressed()) {
             LinePID.setSetpoint(33.02);
             lineLengthModify = 0;
         } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {
@@ -140,20 +141,40 @@ public class Arm {
     public static double positionToLength() {
         double x = lineMotor.getSelectedSensorPosition();
         double length = 0.00473 * x - 0.0000000348 * x * x + 19.5;
-        if(length<19.5){
+        if (length < 19.5) {
             length = 19.5;
         }
         return length;
     }
 
-    public static int autoArmLine(int mode){
-        switch(mode){
-            case 1:
-            LinePID.setSetpoint(86.15);
-            case 2:
-            LinePID.setSetpoint(19.5);
+    public static int autoArmControl(int modeLine, int modeArm) {
+        switch (modeLine) {
+            case 0:// the beginning position
+                LinePID.setSetpoint(19.5);
+                break;
+            case 2: // the second level
+                LinePID.setSetpoint(53.52);
+                break;
+            case 3:// the third level
+                LinePID.setSetpoint(105.65);// the third level
+                break;
+            default:
+                break;
         }
-        LinePID.setSetpoint(86.15);
+
+        switch (modeArm) {
+            case 0:// the beginning position
+                ArmPID.setSetpoint(68.5);
+                break;
+            case 1: // the second level
+                ArmPID.setSetpoint(-10);
+                break;
+            case 2:// the third level
+                ArmPID.setSetpoint(35.5);
+                break;
+            default:
+                break;
+        }
         Controlloop();
         SmartDashboard.putNumber("line enc", lineMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("line length", positionToLength());

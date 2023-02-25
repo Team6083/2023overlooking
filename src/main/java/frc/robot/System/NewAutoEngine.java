@@ -168,13 +168,13 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                Arm.autoArmLine(0);
+                Arm.autoArmControl(3, 2);
                 Intake.solOn();
                 currentStep++;
                 break;
             case 3:
                 // Turn around the arm
-                Arm.autoArmLine(1);
+                Arm.autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoderOn();
@@ -219,13 +219,13 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                Arm.autoArmLine(0);
+                Arm.autoArmControl(3, 2);
                 Intake.solOn();
                 currentStep++;
                 break;
             case 3:
                 // Turn around the arm
-                Arm.autoArmLine(1);
+                Arm.autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoderOn();
@@ -270,13 +270,13 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                Arm.autoArmLine(0);
+                Arm.autoArmControl(3, 2);
                 Intake.solOn();
                 currentStep++;
                 break;
             case 3:
                 // Turn around the arm
-                Arm.autoArmLine(1);
+                Arm.autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoderOn();
@@ -321,13 +321,13 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                Arm.autoArmLine(0);
+                Arm.autoArmControl(3, 2);
                 Intake.solOn();
                 currentStep++;
                 break;
             case 3:
                 // Turn around the arm
-                Arm.autoArmLine(1);
+                Arm.autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoderOn();
@@ -371,13 +371,13 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                Arm.autoArmLine(0);
+                Arm.autoArmControl(3, 2);
                 Intake.solOn();
                 currentStep++;
                 break;
             case 3:
                 // Turn around the arm
-                Arm.autoArmLine(1);
+                Arm.autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoderOn();
@@ -421,12 +421,13 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                Arm.autoArmLine(0);
+                Arm.autoArmControl(3, 2);
                 Intake.solOn();
                 currentStep++;
                 break;
             case 3:
                 // Turn around the arm
+                Arm.autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoderOn();
@@ -459,10 +460,11 @@ public class NewAutoEngine {
             DriveBase.directControl(leftV, rightV);
         } else if (timer.get() > 1.5 && timer.get() <= 6) {
             // arm and intake
-            Arm.autoArmLine(0);
+            Arm.autoArmControl(3, 2);
+            Intake.solOn();
         } else if (timer.get() > 6 && timer.get() <= 10.5) {
             // arm
-            Arm.autoArmLine(1);
+            Arm.autoArmControl(0, 1);
         } else if (timer.get() > 10.5 && timer.get() < 15) {
             DriveBase.directControl(-leftV, -rightV);
         }
@@ -474,10 +476,11 @@ public class NewAutoEngine {
         if (timer.get() <= 1) {
             DriveBase.directControl(leftV, rightV);
         } else if (timer.get() > 1 && timer.get() <= 5.5) {
-            Arm.autoArmLine(0);
+            Arm.autoArmControl(3, 2);
+            Intake.solOn();
         } else if (timer.get() > 5.5 && timer.get() <= 10) {
             // arm
-            Arm.autoArmLine(1);
+            Arm.autoArmControl(0,0);
         } else if (timer.get() > 10 && timer.get() < 14.5) {
             DriveBase.directControl(-leftV, -rightV);
         } else {
