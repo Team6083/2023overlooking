@@ -9,7 +9,7 @@ import frc.robot.Robot;
 public class Intake {
     private static Compressor com;
     private static DoubleSolenoid sol;
-    private static boolean sol_Forward = false;
+    private static boolean solForward = false;
 
     public static void init() {
         com = new Compressor(PneumaticsModuleType.CTREPCM);
@@ -19,11 +19,11 @@ public class Intake {
 
     public static void teleop() {
         if (Robot.xbox.getAButtonPressed()) {
-            sol_Forward = !sol_Forward;
+            solForward = !solForward;
         }
-        if (sol_Forward) {
+        if (solForward) {
             sol.set(Value.kForward);
-        } else if (!sol_Forward) {
+        } else if (!solForward) {
             sol.set(Value.kReverse);
         } else {
             sol.set(Value.kOff);
