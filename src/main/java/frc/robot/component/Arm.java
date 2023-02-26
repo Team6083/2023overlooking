@@ -147,8 +147,6 @@ public class Arm {
         Line.controlloop();
         SmartDashboard.putNumber("line enc", Line.lineMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("line length", Line.getEncoderTolength());
-        SmartDashboard.putNumber("line_enc", Line.LineMotor.getSelectedSensorPosition());
-        SmartDashboard.putNumber("line_length", Line.positionToLength());
         return 0;
     }
 }
