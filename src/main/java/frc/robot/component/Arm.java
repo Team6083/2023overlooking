@@ -18,7 +18,7 @@ public class Arm {
     private static WPI_TalonSRX LineMotor;// take up and pay off device
     private static final int armL = 15;
     private static final int armR = 16;
-    private static final int line = 17;\
+    private static final int line = 17;
 
     // encoder
     private static RelativeEncoder ArmEncoder;
