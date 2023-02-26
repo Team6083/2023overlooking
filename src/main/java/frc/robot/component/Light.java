@@ -24,14 +24,9 @@ public class Light {
 
     public static void teleop() {
         if (Robot.xbox.getAButtonPressed()) { // buttons to be confirmed
-            for (var i = 0; i < ledBuffer.getLength(); i++) {
-                ledBuffer.setRGB(i, 255, 0, 255); // purple
-            }
-        }
-        if (Robot.xbox.getBButtonPressed()) { // buttons to be confirmed
-            for (var i = 0; i < ledBuffer.getLength(); i++) {
-                ledBuffer.setRGB(i, 255, 255, 0); // yellow
-            }
+            setRGB(255, 0, 255); // purple
+        } else if (Robot.xbox.getBButtonPressed()) { // buttons to be confirmed
+            setRGB(255, 255, 0); // yellow
         }
         led.setData(ledBuffer);
         putDashboard();
@@ -39,6 +34,12 @@ public class Light {
 
     public static void disabledInit() {
         led.stop();
+    }
+
+    public static void setRGB(int r, int g, int b) {
+        for (var i = 0; i < ledBuffer.getLength(); i++) {
+            ledBuffer.setRGB(i, r, g, b);
+        }
     }
 
     public static void putDashboard() {
