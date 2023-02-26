@@ -24,7 +24,6 @@ public class Line {
         LineMotor.setInverted(true);
 
         // encoder
-        LineMotor.configClearPositionOnQuadIdx(false, 10);
         LineMotor.setSelectedSensorPosition(0);
 
         // pid
@@ -46,29 +45,28 @@ public class Line {
         kLP = SmartDashboard.getNumber("line_kP", kLP);
         LinePID.setP(kLP);
 
-        // take up and pay off device
         lineLengthModify = 0;
         if (Robot.xbox.getYButtonPressed()) {
             LinePID.setSetpoint(33.02);
             lineLengthModify = 0;
-        // } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {
+        // } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {  //the length of the outside bumper
         //     lineLengthModify = 0.5;
         // } else if (length > 122 * Math.abs(1 / Math.cos(Arm.positionToDegree())) - 58) {
         //     lineLengthModify = -0.5;
         } else if (Robot.xbox.getPOV() == 0) {
             lineLengthModify = 0.5;
+            LinePID.setSetpoint(LinePID.getSetpoint() + lineLengthModify);
         } else if (Robot.xbox.getPOV() == 180) {
             lineLengthModify = -0.5;
-        } else {
-            LineMotor.set(0);
-        }
-        LinePID.setSetpoint(length + lineLengthModify);
-        if (length < 0) {
-            LinePID.setSetpoint(0);
-        } else if (length > 122) {
-            LinePID.setSetpoint(122);
+            LinePID.setSetpoint(LinePID.getSetpoint() + lineLengthModify);
         }
 
+        if (length < 0) {//increase the length of arm  //from the top of the third arm to the intake
+            LinePID.setSetpoint(0);
+        } else if (length > 122) {
+            LinePID.setSetpoint(122);// waiting for test
+        }
+        Controlloop();
         // if (Robot.xbox.getPOV() == 0) {
         // LineMotor.set(0.3);
         // } else if (Robot.xbox.getPOV() == 180) {
@@ -77,8 +75,7 @@ public class Line {
         // LineMotor.set(0);
         // }
 
-        Controlloop();
-
+       
         // put dashboard
         SmartDashboard.putNumber("line length", length);
         SmartDashboard.putNumber("Line_setpoint", LinePID.getSetpoint());

@@ -16,6 +16,7 @@ public class Arm {
     private static MotorControllerGroup ArmMotor;
     private static final int armL = 15;
     private static final int armR = 16;
+    private static double rotate;
 
     // encoder
     private static Encoder ArmEncoder;
@@ -27,7 +28,6 @@ public class Arm {
     private static double kAI = 0.0;
     private static double kAD = 0.0;
     private static PIDController ArmPID;
-    private static double rotate;
     private static double armAngleModify = 0;
 
     // value
@@ -73,6 +73,8 @@ public class Arm {
                     Robot.xbox.getRightTriggerAxis()) * 0.01;
             ArmPID.setSetpoint(ArmPID.getSetpoint() + armAngleModify);
         }
+
+        // control through xbox, for test 
         rotate = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 0.2;
         ArmMotor.set(rotate);
 
@@ -100,6 +102,7 @@ public class Arm {
         return armRate;
     }
 
+    // for NewAutoEngine
     public static int autoArmControl(int modeLine, int modeArm) {
         switch (modeArm) {
             case 0:// the beginning position

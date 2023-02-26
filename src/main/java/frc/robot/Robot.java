@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Arm.teleop();
+    //Arm.teleop();
     Line.teleop();
     // DriveBase.teleop();
     // Intake.teleop();
