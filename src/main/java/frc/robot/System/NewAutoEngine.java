@@ -193,8 +193,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftmotor.setInverted(true);
-                DriveBase.rightmotor.setInverted(false);
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);
         }
     }
 
@@ -243,8 +243,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftmotor.setInverted(true);
-                DriveBase.rightmotor.setInverted(false);
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);
         }
     }
 
@@ -277,8 +277,8 @@ public class NewAutoEngine {
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoder();
-                DriveBase.leftmotor.setInverted(false);
-                DriveBase.rightmotor.setInverted(true);
+                DriveBase.leftMotor.setInverted(false);
+                DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueRight[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -293,8 +293,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftmotor.setInverted(true);
-                DriveBase.rightmotor.setInverted(false);
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);
         }
     }
 
@@ -327,8 +327,8 @@ public class NewAutoEngine {
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoder();
-                DriveBase.leftmotor.setInverted(false);
-                DriveBase.rightmotor.setInverted(true);
+                DriveBase.leftMotor.setInverted(false);
+                DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[redLeft[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -343,8 +343,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftmotor.setInverted(true);
-                DriveBase.rightmotor.setInverted(false);
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);
         }
     }
 
@@ -377,8 +377,8 @@ public class NewAutoEngine {
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoder();
-                DriveBase.leftmotor.setInverted(false);
-                DriveBase.rightmotor.setInverted(true);
+                DriveBase.leftMotor.setInverted(false);
+                DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[redMiddle[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -393,8 +393,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftmotor.setInverted(true);
-                DriveBase.rightmotor.setInverted(false);
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);
         }
     }
 
@@ -427,8 +427,8 @@ public class NewAutoEngine {
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoder();
-                DriveBase.leftmotor.setInverted(false);
-                DriveBase.rightmotor.setInverted(true);
+                DriveBase.leftMotor.setInverted(false);
+                DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[redRight[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -443,8 +443,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftmotor.setInverted(true);
-                DriveBase.rightmotor.setInverted(false);// need to test
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);// need to test
         }
     }
 
