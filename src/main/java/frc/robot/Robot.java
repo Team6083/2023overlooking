@@ -4,13 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.System.NewAutoEngine;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import frc.robot.System.NewAutoEngine;
 import frc.robot.component.Arm;
 import frc.robot.component.Camera;
-import frc.robot.component.DriveBase;
+// import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
+import frc.robot.component.Light;
+import frc.robot.component.Line;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +30,8 @@ import frc.robot.component.Intake;
 public class Robot extends TimedRobot {
   public static XboxController xbox;
 
+  PowerDistribution pd;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -35,9 +42,13 @@ public class Robot extends TimedRobot {
     xbox = new XboxController(0);
     // DriveBase.init();
     // Intake.init();
-    Arm.init();
+    // Arm.init();
+    Line.init();
     // Camera.init();
+    // Light.init();
     // NewAutoEngine.init();
+
+    pd = new PowerDistribution(1, ModuleType.kCTRE);
   }
 
   @Override
@@ -61,12 +72,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Arm.teleop();
+    Line.teleop();
     // DriveBase.teleop();
     // Intake.teleop();
+    // Light.teleop();
+
+    SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
   }
 
   @Override
   public void disabledInit() {
+    // Light.disabledInit();
   }
 
   @Override
