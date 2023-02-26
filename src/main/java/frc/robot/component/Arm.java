@@ -73,9 +73,9 @@ public class Arm {
             LinePID.setSetpoint(52.52);
             lineLengthModify = 0;
         } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {
-            lineMotor.set(-0.5);
-        } else if (length > 122 * (1 / Math.cos(angle)) - 58) {
-            lineMotor.set(-0.5);
+            lineLengthModify -= 0.5;
+        } else if (length > 122 * Math.abs(1 / Math.cos(angle)) - 58) {
+            lineLengthModify -= 0.5;
         } else if (Robot.xbox.getPOV() == 0) {
             lineLengthModify += 0.5;
         } else if (Robot.xbox.getPOV() == 180) {
@@ -84,9 +84,7 @@ public class Arm {
             lineMotor.set(0);
         }
         if (lineMotor.getSelectedSensorPosition() < 0) {
-            lineMotor.configClearPositionOnQuadIdx(true, 10);
-        } else {
-            lineMotor.configClearPositionOnQuadIdx(false, 10);
+            lineMotor.setSelectedSensorPosition(0.0);
         }
 
         LinePID.setSetpoint(LinePID.getSetpoint() + lineLengthModify);
