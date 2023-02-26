@@ -25,13 +25,13 @@ public class Arm {
     private static Double kAI = 0.0;
     private static Double kAD = 0.0;
     private static PIDController ArmPID;
+    private static Double rotate;
 
     private static Double kLP = 0.3;
     private static Double kLI = 0.0;
     private static Double kLD = 0.0;
     private static PIDController LinePID;
     private static double lineLengthModify = 0;
-    private static Double rotate;
 
     public static void init() {
         ArmMotorleft = new CANSparkMax(armL, MotorType.kBrushless);
@@ -49,7 +49,7 @@ public class Arm {
         lineMotor.setInverted(true);
         // ArmMotorleft.getEncoder().setPosition(0);
         // ArmMotorright.getEncoder().setPosition(0);
-        LinePID.setSetpoint(19.5);
+        LinePID.setSetpoint(0);
         ArmPID.setSetpoint(68.5);
         // SmartDashboard.putNumber("arm_kP", kAP);
         SmartDashboard.putNumber("line_kP", kLP);
@@ -70,7 +70,7 @@ public class Arm {
 
         // take up and pay off device
         if (Robot.xbox.getYButtonPressed()) {
-            LinePID.setSetpoint(52.52);
+            LinePID.setSetpoint(33.02);
             lineLengthModify = 0;
         } else if (length > 122 * (1 / Math.cos(35.2)) - 58) {
             lineLengthModify -= 0.5;
@@ -82,9 +82,6 @@ public class Arm {
             lineLengthModify -= 0.5;
         } else {
             lineMotor.set(0);
-        }
-        if (lineMotor.getSelectedSensorPosition() < 0) {
-            lineMotor.setSelectedSensorPosition(0.0);
         }
 
         LinePID.setSetpoint(LinePID.getSetpoint() + lineLengthModify);
@@ -136,26 +133,24 @@ public class Arm {
 
     // do the number of turns calculate(to a particular length)
     public static double positionToLength() {
-        double x = lineMotor.getSelectedSensorPosition();
-        if (x < 0) {
-            lineMotor.configClearPositionOnQuadIdx(true, 10);
-        } else {
-            lineMotor.configClearPositionOnQuadIdx(false, 10);
+        if (lineMotor.getSelectedSensorPosition() < 0) {
+            lineMotor.setSelectedSensorPosition(0.0);
         }
-        double length = 0.00473 * x - 0.0000000348 * x * x + 19.5;
+        double x = lineMotor.getSelectedSensorPosition();
+        double length = 0.00473 * x - 0.0000000348 * x * x;
         return length;
     }
 
     public static int autoArmControl(int modeLine, int modeArm) {
         switch (modeLine) {
             case 0:// the beginning position
-                LinePID.setSetpoint(19.5);
+                LinePID.setSetpoint(0);
                 break;
             case 2: // the second level
-                LinePID.setSetpoint(52.52);
+                LinePID.setSetpoint(33.02);
                 break;
             case 3:// the third level
-                LinePID.setSetpoint(105.65);// the third level
+                LinePID.setSetpoint(86.15);// the third level
                 break;
             default:
                 break;
