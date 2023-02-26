@@ -153,8 +153,8 @@ public class DriveBase {
         rightMotor.setVoltage(rightMotorVolt);
         drive.feed();
 
-        SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());// The distance between the
-        // target and the position
+        //put the distances between the target and current position onto Dashboard
+        SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());
         SmartDashboard.putNumber("errorPosY", currentPose.minus(goal.poseMeters).getY());
 
     }
@@ -162,14 +162,15 @@ public class DriveBase {
     public static void updateODO() {
         var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
         odometry.update(gyroAngle, positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()),
-                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
+                        positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
         field.setRobotPose(odometry.getPoseMeters());
 
         SmartDashboard.putNumber("x", odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("heading", odometry.getPoseMeters().getRotation().getDegrees());
 
-        kP = SmartDashboard.getNumber("kP", kP);// can adjust the number on Dashboard
+        // number on Dashboard can be adjusted
+        kP = SmartDashboard.getNumber("kP", kP);
         kI = SmartDashboard.getNumber("kI", kI);
         kD = SmartDashboard.getNumber("kD", kD);
 
@@ -185,7 +186,7 @@ public class DriveBase {
         field.setRobotPose(odometry.getPoseMeters());
     }
 
-    // Input the position of the encoder then calculate the distance(meter)
+    // Input the position of the encoder
     public static void putDashboard() {
         SmartDashboard.putNumber("leftEncoder", leftMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("rightEncoder", rightMotor1.getSelectedSensorPosition());
@@ -196,6 +197,7 @@ public class DriveBase {
         SmartDashboard.putNumber("right_wheel_speed", rightWheelSpeed);
     }
 
+    // Calculate the distance(meter)
     public static double positionToDistanceMeter(double position) {
         double sensorRate = position / encoderPulse;
         double wheelRate = sensorRate / gearRatio;
