@@ -204,14 +204,9 @@ public class DriveBase {
     }
 
     // Here comes some mode to set up or update
-    public static void resetEncoderOn() {
-        leftMotor1.configClearPositionOnQuadIdx(true, 10);
-        rightMotor1.configClearPositionOnQuadIdx(true, 10);
-    }
-
-    public static void resetEncoderOff() {
-        leftMotor1.configClearPositionOnQuadIdx(false, 10);
-        rightMotor1.configClearPositionOnQuadIdx(false, 10);
+    public static void resetEncoder() {
+        leftMotor1.setSelectedSensorPosition(0);
+        rightMotor1.setSelectedSensorPosition(0);
     }
 
     public static void resetGyro() {

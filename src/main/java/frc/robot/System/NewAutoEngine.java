@@ -79,7 +79,7 @@ public class NewAutoEngine {
 
         autoSeclected = chooser.getSelected();
 
-        DriveBase.resetEncoderOn();
+        DriveBase.resetEncoder();
         DriveBase.resetGyro();
         DriveBase.resetPID();
 
@@ -151,7 +151,6 @@ public class NewAutoEngine {
     public static void DoBlueLeft() {
         switch (currentStep) {
             case 0:
-                DriveBase.resetEncoderOff();
                 timer.reset();
                 timer.start();
                 DriveBase.odometry.resetPosition(trajectory[blueLeft[0]].getInitialPose().getRotation(),
@@ -177,8 +176,7 @@ public class NewAutoEngine {
                 Arm.autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoderOn();
-                DriveBase.resetEncoderOff();
+                DriveBase.resetEncoder();
                 DriveBase.leftMotor1.setInverted(false);
                 DriveBase.rightMotor1.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueLeft[1]].getInitialPose().getRotation(),
@@ -203,7 +201,6 @@ public class NewAutoEngine {
     public static void DoBlueMiddle() {
         switch (currentStep) {
             case 0:
-                DriveBase.resetEncoderOff();
                 timer.reset();
                 timer.start();
                 DriveBase.odometry.resetPosition(trajectory[blueMiddle[0]].getInitialPose().getRotation(),
@@ -229,8 +226,7 @@ public class NewAutoEngine {
                 Arm.autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoderOn();
-                DriveBase.resetEncoderOff();
+                DriveBase.resetEncoder();
                 DriveBase.leftMotor1.setInverted(false);
                 DriveBase.rightMotor1.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueMiddle[1]].getInitialPose().getRotation(),
@@ -255,7 +251,6 @@ public class NewAutoEngine {
     public static void DoBlueRight() {
         switch (currentStep) {
             case 0:
-                DriveBase.resetEncoderOff();
                 timer.reset();
                 timer.start();
                 DriveBase.odometry.resetPosition(trajectory[blueRight[0]].getInitialPose().getRotation(),
@@ -281,8 +276,7 @@ public class NewAutoEngine {
                 Arm.autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoderOn();
-                DriveBase.resetEncoderOff();
+                DriveBase.resetEncoder();
                 DriveBase.leftmotor.setInverted(false);
                 DriveBase.rightmotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueRight[1]].getInitialPose().getRotation(),
@@ -307,7 +301,6 @@ public class NewAutoEngine {
     public static void DoRedLeft() {
         switch (currentStep) {
             case 0:
-                DriveBase.resetEncoderOff();
                 timer.reset();
                 timer.start();
                 DriveBase.odometry.resetPosition(trajectory[redLeft[0]].getInitialPose().getRotation(),
@@ -333,14 +326,14 @@ public class NewAutoEngine {
                 Arm.autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoderOn();
-                DriveBase.resetEncoderOff();
+                DriveBase.resetEncoder();
                 DriveBase.leftmotor.setInverted(false);
                 DriveBase.rightmotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[redLeft[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[redLeft[1]].getInitialPose());
+                currentStep++;
                 break;
             case 4:
                 // Run the second path of redLeft
@@ -358,7 +351,6 @@ public class NewAutoEngine {
     public static void DoRedMiddle() {
         switch (currentStep) {
             case 0:
-                DriveBase.resetEncoderOff();
                 timer.reset();
                 timer.start();
                 DriveBase.odometry.resetPosition(trajectory[redMiddle[0]].getInitialPose().getRotation(),
@@ -384,14 +376,14 @@ public class NewAutoEngine {
                 Arm.autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoderOn();
-                DriveBase.resetEncoderOff();
+                DriveBase.resetEncoder();
                 DriveBase.leftmotor.setInverted(false);
                 DriveBase.rightmotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[redMiddle[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[redMiddle[1]].getInitialPose());
+                currentStep++;
                 break;
             case 4:
                 // Run the second path of redMiddle
@@ -409,7 +401,6 @@ public class NewAutoEngine {
     public static void DoRedRight() {
         switch (currentStep) {
             case 0:
-                DriveBase.resetEncoderOff();
                 timer.reset();
                 timer.start();
                 DriveBase.odometry.resetPosition(trajectory[redRight[0]].getInitialPose().getRotation(),
@@ -435,14 +426,14 @@ public class NewAutoEngine {
                 Arm.autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoderOn();
-                DriveBase.resetEncoderOff();
+                DriveBase.resetEncoder();
                 DriveBase.leftmotor.setInverted(false);
                 DriveBase.rightmotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[redRight[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[redRight[1]].getInitialPose());
+                currentStep++;
                 break;
             case 4:
                 // Run the second path of redRight
