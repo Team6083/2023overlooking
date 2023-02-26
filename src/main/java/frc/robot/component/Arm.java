@@ -135,13 +135,13 @@ public class Arm {
 
         switch (modeLine) {
             case 0:// the beginning position
-                Line.LinePID.setSetpoint(0);
+                Line.linePID.setSetpoint(0);
                 break;
             case 2: // the second level
-                Line.LinePID.setSetpoint(33.02);
+                Line.linePID.setSetpoint(33.02);
                 break;
             case 3:// the third level
-                Line.LinePID.setSetpoint(86.15);// the third level
+                Line.linePID.setSetpoint(86.15);// the third level
                 break;
             default:
                 break;
@@ -149,8 +149,8 @@ public class Arm {
 
         controlLoop();
 
-        SmartDashboard.putNumber("line enc", Line.LineMotor.getSelectedSensorPosition());
-        SmartDashboard.putNumber("line length", Line.positionToLength());
+        SmartDashboard.putNumber("line enc", Line.lineMotor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("line length", Line.getEncoderTolength());
         return 0;
     }
 }
