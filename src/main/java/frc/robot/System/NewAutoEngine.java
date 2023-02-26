@@ -43,14 +43,14 @@ public class NewAutoEngine {
     private static final String RedRight = "RedRight";
 
     // The string of the timer
-    private static final String LeftRightTimer = "LeftRightTimer";
+    private static final String SideTimer = "SideTimer";
     private static final String MiddleTimer = "MiddleTimer";
-    private static final String GoBackTimer = "GoBackTimer";
+    private static final String GoBackWithTimer = "GoBackWithTimer";
 
     public static Timer timer = new Timer();
 
     public static SendableChooser<String> chooser;
-    public static String autoSeclected;
+    public static String autoSelected;
 
     public static void init() {
 
@@ -64,20 +64,20 @@ public class NewAutoEngine {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajJSON[i]);
                 trajectory[i] = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
             } catch (IOException ex) {
-                DriverStation.reportError("unable to open trajectory" + trajJSON[i] + "\n" + ex.getMessage(),
+                DriverStation.reportError("Unable to open trajectory" + trajJSON[i] + "\n" + ex.getMessage(),
                         ex.getStackTrace());
             }
 
-            var pose = trajectory[i].getInitialPose();
+            var trajInitialPose = trajectory[i].getInitialPose();
 
-            DriveBase.setODOPose(pose);
+            DriveBase.setODOPose(trajInitialPose);
         }
     }
 
     public static void start() {
         currentStep = 0;
 
-        autoSeclected = chooser.getSelected();
+        autoSelected = chooser.getSelected();
 
         DriveBase.resetEncoder();
         DriveBase.resetGyro();
@@ -98,7 +98,7 @@ public class NewAutoEngine {
         SmartDashboard.putNumber("AutoTimer", timer.get());
         SmartDashboard.putNumber("CurrentStep", currentStep);
 
-        switch (autoSeclected) {
+        switch (autoSelected) {
             case DoNothing:
                 DriveBase.directControl(0, 0);
                 break;
@@ -120,13 +120,13 @@ public class NewAutoEngine {
             case RedRight:
                 DoRedRight();
                 break;
-            case LeftRightTimer:
+            case SideTimer:
                 DoLeftRightTimer();
                 break;
             case MiddleTimer:
                 DoMiddleTimer();
                 break;
-            case GoBackTimer:
+            case GoBackWithTimer:
                 DoGoBackTimer();
                 break;
             default:
@@ -134,17 +134,17 @@ public class NewAutoEngine {
     }
 
     protected static void putChooser() {
-        chooser.setDefaultOption("DoNothing", DoNothing);
-        chooser.addOption("BlueLeft", BlueLeft);
-        chooser.addOption("BlueMiddle", BlueMiddle);
-        chooser.addOption("BlueRight", BlueRight);
-        chooser.addOption("RedLeft", RedLeft);
-        chooser.addOption("RedMiddle", RedMiddle);
-        chooser.addOption("RedRight", RedRight);
+        chooser.setDefaultOption("doNothing", DoNothing);
+        chooser.addOption("blueLeft", BlueLeft);
+        chooser.addOption("blueMiddle", BlueMiddle);
+        chooser.addOption("blueRight", BlueRight);
+        chooser.addOption("redLeft", RedLeft);
+        chooser.addOption("redMiddle", RedMiddle);
+        chooser.addOption("redRight", RedRight);
 
-        chooser.addOption("LeftRightTimer", LeftRightTimer);
-        chooser.addOption("MiddleTimer", MiddleTimer);
-        chooser.addOption("GoBack", GoBackTimer);
+        chooser.addOption("sideTimer", SideTimer);
+        chooser.addOption("middleTimer", MiddleTimer);
+        chooser.addOption("goBack", GoBackWithTimer);
         SmartDashboard.putData(chooser);
     }
 
@@ -450,10 +450,10 @@ public class NewAutoEngine {
 
     // Autonomous written with timer
     public static void DoLeftRightTimer() {
-        double leftV = 0.5;
-        double rightV = 0.5;
+        double leftWheelVoltage = 0.5;
+        double rightWheelVoltage = 0.5;
         if (timer.get() <= 1.5) {
-            DriveBase.directControl(leftV, rightV);
+            DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else if (timer.get() > 1.5 && timer.get() <= 6) {
             // arm and intake
             Arm.autoArmControl(3, 2);
@@ -462,15 +462,15 @@ public class NewAutoEngine {
             // arm
             Arm.autoArmControl(0, 1);
         } else if (timer.get() > 10.5 && timer.get() < 15) {
-            DriveBase.directControl(-leftV, -rightV);
+            DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
         }
     }
 
     public static void DoMiddleTimer() {
-        double leftV = 0.5;
-        double rightV = 0.5;
+        double leftWheelVoltage = 0.5;
+        double rightWheelVoltage = 0.5;
         if (timer.get() <= 1) {
-            DriveBase.directControl(leftV, rightV);
+            DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else if (timer.get() > 1 && timer.get() <= 5.5) {
             Arm.autoArmControl(3, 2);
             Intake.solOn();
@@ -478,17 +478,17 @@ public class NewAutoEngine {
             // arm
             Arm.autoArmControl(0, 0);
         } else if (timer.get() > 10 && timer.get() < 14.5) {
-            DriveBase.directControl(-leftV, -rightV);
+            DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
         } else {
             DriveBase.directControl(0, 0);
         }
     }
 
     public static void DoGoBackTimer() {
-        double leftV = 0.8;
-        double rightV = 0.8;
+        double leftWheelVoltage = 0.8;
+        double rightWheelVoltage = 0.8;
         if (timer.get() <= 1.3) {
-            DriveBase.directControl(leftV, rightV);
+            DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else {
             DriveBase.directControl(0, 0);
         }
