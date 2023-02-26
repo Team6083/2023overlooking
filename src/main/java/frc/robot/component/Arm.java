@@ -11,108 +11,123 @@ import frc.robot.Robot;
 
 public class Arm {
     // motor
-    private static CANSparkMax ArmMotorleft;// rotate arm
-    private static CANSparkMax ArmMotorright;
-    private static MotorControllerGroup ArmMotor;
-    private static final int armL = 15;
-    private static final int armR = 16;
-    private static double rotate;
+    private static CANSparkMax armMotorleft; // rotate arm
+    private static CANSparkMax armMotorright;
+    private static MotorControllerGroup armMotor;
+    private static final int armLeftCANId = 15;
+    private static final int armRightCANId = 16;
 
     // encoder
-    private static Encoder ArmEncoder;
-    private static final int armEnc1 = 8;
-    private static final int armEnc2 = 9;
+    private static Encoder armEncoder;
+    private static final int armEnc1Channel = 8;
+    private static final int armEnc2Channel = 9;
 
-    // pid
+    // arm pid
     private static double kAP = 0.35;
     private static double kAI = 0.0;
     private static double kAD = 0.0;
-    private static PIDController ArmPID;
-    private static double armAngleModify = 0;
+    private static PIDController armPID;
 
     // value
-    private static final double ArmEncoderPulse = 2048;
+    private static final double armEncoderPulse = 2048;
+    private static final double armVoltLimit = 10;
+
+    private static final double armAngleMin = 0;
+    private static final double armAngleMax = 180;
 
     public static void init() {
         // motor
-        ArmMotorleft = new CANSparkMax(armL, MotorType.kBrushless);
-        ArmMotorright = new CANSparkMax(armR, MotorType.kBrushless);
-        ArmMotor = new MotorControllerGroup(ArmMotorleft, ArmMotorright);
-        ArmMotorleft.setInverted(true);
+        armMotorleft = new CANSparkMax(armLeftCANId, MotorType.kBrushless);
+        armMotorright = new CANSparkMax(armRightCANId, MotorType.kBrushless);
+        armMotor = new MotorControllerGroup(armMotorleft, armMotorright);
+        armMotorleft.setInverted(true);
 
         // encoder
-        ArmEncoder = new Encoder(armEnc1, armEnc2);
+        armEncoder = new Encoder(armEnc1Channel, armEnc2Channel);
 
         // pid
-        ArmPID = new PIDController(kAP, kAI, kAD);
-        ArmPID.setSetpoint(68.5);
+        armPID = new PIDController(kAP, kAI, kAD);
+        armPID.setSetpoint(68.5);
 
         // put dashboard
         SmartDashboard.putNumber("arm_kP", kAP);
     }
 
     public static void teleop() {
-        double angle = positionToDegree(); // get the angular position
+        double armCurrentAngle = getArmDegree(); // get the angular position
 
         // encoder reset
-        if (Robot.xbox.getRawButton(7)) {
-            ArmEncoder.reset();
+        if (Robot.xbox.getBackButton()) {
+            armEncoder.reset();
         }
 
         // adjust P
         kAP = SmartDashboard.getNumber("arm_kP", kAP);
-        ArmPID.setP(kAP);
+        armPID.setP(kAP);
 
         // rotate arm
         if (Robot.xbox.getXButton()) {
-            ArmPID.setSetpoint(35.2);
+            setArmSetpoint(35.2);
         } else if (Robot.xbox.getYButton()) {
-            ArmPID.setSetpoint(68.5);
+            setArmSetpoint(68.5);
         } else {
-            armAngleModify = (Robot.xbox.getLeftTriggerAxis() -
+            double armAngleModify = (Robot.xbox.getLeftTriggerAxis() -
                     Robot.xbox.getRightTriggerAxis()) * 0.01;
-            ArmPID.setSetpoint(ArmPID.getSetpoint() + armAngleModify);
+            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
         }
 
-        // control through xbox, for test 
-        rotate = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 0.2;
-        ArmMotor.set(rotate);
+        // control through xbox, for test
+        double rotate = (Robot.xbox.getLeftTriggerAxis() - Robot.xbox.getRightTriggerAxis()) * 0.2;
+        armMotor.set(rotate);
 
-        Controlloop();
+        controlLoop();
 
         // put dashboard
-        SmartDashboard.putNumber("arm angle", angle);
-        SmartDashboard.putNumber("Arm_setpoint", ArmPID.getSetpoint());
-        SmartDashboard.putNumber("arm enc", ArmEncoder.get());
+        SmartDashboard.putNumber("arm angle", armCurrentAngle);
+        SmartDashboard.putNumber("Arm_setpoint", armPID.getSetpoint());
+        SmartDashboard.putNumber("arm enc", armEncoder.get());
     }
 
-    public static void Controlloop() {
-        var ArmVolt = ArmPID.calculate(positionToDegree());
-        if (Math.abs(ArmVolt) > 10) {
-            ArmVolt = 10 * (ArmVolt > 0 ? 1 : -1);
+    public static void controlLoop() {
+        var armVolt = armPID.calculate(getArmDegree());
+        if (Math.abs(armVolt) > armVoltLimit) {
+            armVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
         }
-        ArmMotor.setVoltage(ArmVolt);
+        armMotor.setVoltage(armVolt);
 
-        SmartDashboard.putNumber("ArmVolt", ArmVolt);
+        SmartDashboard.putNumber("ArmVolt", armVolt);
     }
 
     // do the number of turns calculate(to a particular angle)
-    public static double positionToDegree() {
-        double armRate = ArmEncoder.get() * 360 / ArmEncoderPulse;
+    public static double getArmDegree() {
+        double armRate = armEncoder.get() * 360 / armEncoderPulse;
         return armRate;
+    }
+
+    public static void setArmSetpoint(double setpoint) {
+        // TODO: calculate cos here
+
+        // Check if arm exceed it's physical limit
+        if (setpoint < armAngleMin) {
+            setpoint = armAngleMin;
+        } else if (setpoint > armAngleMax) {
+            setpoint = armAngleMax;
+        }
+
+        armPID.setSetpoint(setpoint);
     }
 
     // for NewAutoEngine
     public static int autoArmControl(int modeLine, int modeArm) {
         switch (modeArm) {
             case 0:// the beginning position
-                ArmPID.setSetpoint(68.5);
+                setArmSetpoint(68.5);
                 break;
             case 1: // the second level
-                ArmPID.setSetpoint(-10);
+                setArmSetpoint(-10);
                 break;
             case 2:// the third level
-                ArmPID.setSetpoint(35.5);
+                setArmSetpoint(35.5);
                 break;
             default:
                 break;
@@ -132,7 +147,7 @@ public class Arm {
                 break;
         }
 
-        Controlloop();
+        controlLoop();
 
         SmartDashboard.putNumber("line enc", Line.LineMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("line length", Line.positionToLength());
