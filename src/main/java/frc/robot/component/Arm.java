@@ -1,11 +1,13 @@
 package frc.robot.component;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -21,7 +23,10 @@ public class Arm {
     private static final int line = 17;
 
     // encoder
-    private static RelativeEncoder ArmEncoder;
+    // private static RelativeEncoder ArmEncoder;
+    private static Encoder ArmEncoder;
+    private static final int armEnc1 = 8;
+    private static final int armEnc2 = 9;
 
     // pid
     private static double kAP = 0.35;
@@ -37,7 +42,6 @@ public class Arm {
     private static double lineLengthModify = 0;
 
     // value
-    private static final double ArmencoderPulse = 42;// do the number of turns calculate
     private static final double Armgearing = 198;
 
     public static void init() {
@@ -50,7 +54,7 @@ public class Arm {
         LineMotor.setInverted(true);
 
         // encoder
-        ArmEncoder = ArmMotorleft.getEncoder();
+        ArmEncoder = new Encoder(armEnc1, armEnc2);
         LineMotor.configClearPositionOnQuadIdx(false, 10);
         LineMotor.setSelectedSensorPosition(0);
 
@@ -71,9 +75,7 @@ public class Arm {
 
         // encoder reset
         if (Robot.xbox.getRawButton(7)) {
-            ArmMotorleft.getEncoder().setPosition(0);
-            ArmMotorright.getEncoder().setPosition(0);
-            ArmEncoder = ArmMotorleft.getEncoder();
+            ArmEncoder.reset();
         }
 
         // adjust P
@@ -119,7 +121,7 @@ public class Arm {
         // SmartDashboard.putNumber("line length", length);
         SmartDashboard.putNumber("Arm_setpoint", ArmPID.getSetpoint());
         SmartDashboard.putNumber("Line_set", LinePID.getSetpoint());
-        SmartDashboard.putNumber("arm enc", ArmEncoder.getPosition());
+        SmartDashboard.putNumber("arm enc", ArmEncoder.get());
         SmartDashboard.putNumber("line enc", LineMotor.getSelectedSensorPosition());
     }
 
@@ -142,8 +144,7 @@ public class Arm {
 
     // do the number of turns calculate(to a particular angle)
     public static double positionToDegree() {
-        double armRate = ArmEncoder.getPosition() * 360 / (Armgearing *
-                ArmencoderPulse);
+        double armRate = ArmEncoder.get() * 360 / 2048;
         return armRate;
     }
 
