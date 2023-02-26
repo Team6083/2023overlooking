@@ -24,10 +24,10 @@ import frc.robot.System.NewAutoEngine;
 public class DriveBase {
 
     // Port
-    private static final int Lm1 = 13;// MotorController ID
-    private static final int Lm2 = 14;
-    private static final int Rm1 = 11;
-    private static final int Rm2 = 12;
+    private static final int leftMotorID1 = 13;// MotorController ID
+    private static final int leftMotorID2 = 14;
+    private static final int rightMotorID1 = 11;
+    private static final int rightMotorID2 = 12;
 
     // Basis divebase
     public static WPI_TalonSRX leftMotor1;
@@ -35,9 +35,9 @@ public class DriveBase {
     public static WPI_TalonSRX rightMotor1;
     public static WPI_VictorSPX rightMotor2;
 
-    public static MotorControllerGroup leftmotor;
-    public static MotorControllerGroup rightmotor;
-    public static DifferentialDrive drive;// Use to simplify drivebase program
+    public static MotorControllerGroup leftMotor;
+    public static MotorControllerGroup rightMotor;
+    public static DifferentialDrive drive;// Used to simplify drivebase program
 
     // Sensor
     public static AHRS gyro;
@@ -63,27 +63,27 @@ public class DriveBase {
     // Set the pulse of the encoder
     private static final double encoderPulse = 4096;
 
-    private static final double gearing = 10.71;
+    private static final double gearRatio = 10.71;
 
-    private static double LeftVolt;
-    private static double RightVolt;
+    private static double leftMotorVolt;
+    private static double rightMotorVolt;
 
-    private static double leftController;
-    private static double rightController;
+    private static double leftMotorController;
+    private static double rightMotorController;
 
     private static double leftWheelSpeed;
     private static double rightWheelSpeed;
 
     public static void init() {
-        leftMotor1 = new WPI_TalonSRX(Lm1);
-        leftMotor2 = new WPI_VictorSPX(Lm2);
-        rightMotor1 = new WPI_TalonSRX(Rm1);
-        rightMotor2 = new WPI_VictorSPX(Rm2);
+        leftMotor1 = new WPI_TalonSRX(leftMotorID1);
+        leftMotor2 = new WPI_VictorSPX(leftMotorID2);
+        rightMotor1 = new WPI_TalonSRX(rightMotorID1);
+        rightMotor2 = new WPI_VictorSPX(rightMotorID2);
 
-        leftmotor = new MotorControllerGroup(leftMotor1, leftMotor2);
-        rightmotor = new MotorControllerGroup(rightMotor1, rightMotor2);
-        leftmotor.setInverted(true);
-        drive = new DifferentialDrive(leftmotor, rightmotor);
+        leftMotor = new MotorControllerGroup(leftMotor1, leftMotor2);
+        rightMotor = new MotorControllerGroup(rightMotor1, rightMotor2);
+        leftMotor.setInverted(true);
+        drive = new DifferentialDrive(leftMotor, rightMotor);
 
         // Reset encoder
         resetEncoder();
@@ -105,15 +105,15 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        leftController = Robot.xbox.getLeftY() * 0.8;
-        rightController = Robot.xbox.getRightY() * 0.8;
+        leftMotorController = Robot.xbox.getLeftY() * 0.8;
+        rightMotorController = Robot.xbox.getRightY() * 0.8;
 
         if (Robot.xbox.getLeftBumper() || Robot.xbox.getRightBumper()) {
-            leftController = Robot.xbox.getLeftY();
-            rightController = Robot.xbox.getRightY();
+            leftMotorController = Robot.xbox.getLeftY();
+            rightMotorController = Robot.xbox.getRightY();
         }
 
-        drive.tankDrive(leftController, rightController);
+        drive.tankDrive(leftMotorController, rightMotorController);
         putDashboard();
     }
 
@@ -140,17 +140,17 @@ public class DriveBase {
         rightPID.setSetpoint(rightWheelSpeed);
 
         // To make the number of the encoder become the motor's volt
-        LeftVolt = leftPID.calculate(
+        leftMotorVolt = leftPID.calculate(
                 positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
-                leftController)
+                leftMotorController)
                 + feedforward.calculate(leftWheelSpeed);
-        RightVolt = rightPID.calculate(
+        rightMotorVolt = rightPID.calculate(
                 positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
-                rightController)
+                rightMotorController)
                 + feedforward.calculate(rightWheelSpeed);
 
-        leftmotor.setVoltage(LeftVolt);
-        rightmotor.setVoltage(RightVolt);
+        leftMotor.setVoltage(leftMotorVolt);
+        rightMotor.setVoltage(rightMotorVolt);
         drive.feed();
 
         SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());// The distance between the
@@ -190,15 +190,15 @@ public class DriveBase {
         SmartDashboard.putNumber("leftEncoder", leftMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("rightEncoder", rightMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("gyro", gyro.getAngle());
-        SmartDashboard.putNumber("leftController_speed", leftController);
-        SmartDashboard.putNumber("rightController_speed", rightController);
+        SmartDashboard.putNumber("leftController_speed", leftMotorController);
+        SmartDashboard.putNumber("rightController_speed", rightMotorController);
         SmartDashboard.putNumber("left_wheel_speed", leftWheelSpeed);
         SmartDashboard.putNumber("right_wheel_speed", rightWheelSpeed);
     }
 
     public static double positionToDistanceMeter(double position) {
         double sensorRate = position / encoderPulse;
-        double wheelRate = sensorRate / gearing;
+        double wheelRate = sensorRate / gearRatio;
         double positionMeter = 2 * Math.PI * Units.inchesToMeters(6) * wheelRate;
         return positionMeter;
     }
