@@ -38,7 +38,7 @@ public class Line {
     }
 
     public static void teleop() {
-        double length = getEncoderTolength(); // get length position
+        double length = getEncoderToLength(); // get length position
 
         if (Robot.xbox.getRawButton(8)) {
             linePID.setSetpoint(0);
@@ -67,7 +67,7 @@ public class Line {
         }
 
         setLineSetpoint();
-        controlloop();
+        controlLoop();
         // if (Robot.xbox.getPOV() == 0) {
         // LineMotor.set(0.3);
         // } else if (Robot.xbox.getPOV() == 180) {
@@ -83,9 +83,9 @@ public class Line {
         SmartDashboard.putNumber("length_modify", lineLengthModify);
     }
 
-    public static void controlloop() {
+    public static void controlLoop() {
 
-        var lineVolt = linePID.calculate(getEncoderTolength());
+        var lineVolt = linePID.calculate(getEncoderToLength());
         if (Math.abs(lineVolt) > 10) {
             lineVolt = lineVolt > 0 ? 10 : -10;
         }
@@ -95,7 +95,7 @@ public class Line {
     }
 
     // do the number of turns calculate(to a particular length)
-    public static double getEncoderTolength() {
+    public static double getEncoderToLength() {
         if (lineMotor.getSelectedSensorPosition() < 0) {
             lineMotor.setSelectedSensorPosition(0.0);
         }
@@ -106,13 +106,13 @@ public class Line {
 
     public static void setLineSetpoint() {
         // Check if line exceed it's physical limit
-        double lenght = getEncoderTolength();
-        if (lenght < lineLenghtMin) {
-            lenght = lineLenghtMin;
-        } else if (lenght > lineLenghtMax) {
-            lenght = lineLenghtMax;
+        double length = getEncoderToLength();
+        if (length < lineLenghtMin) {
+            length = lineLenghtMin;
+        } else if (length > lineLenghtMax) {
+            length = lineLenghtMax;
         }
 
-        linePID.setSetpoint(lenght);
+        linePID.setSetpoint(length);
     }
 }
