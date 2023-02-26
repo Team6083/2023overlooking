@@ -42,7 +42,7 @@ public class Arm {
     private static double lineLengthModify = 0;
 
     // value
-    private static final double Armgearing = 198;
+    private static final double ArmEncoderPulse = 2048;
 
     public static void init() {
         // motor
@@ -144,7 +144,7 @@ public class Arm {
 
     // do the number of turns calculate(to a particular angle)
     public static double positionToDegree() {
-        double armRate = ArmEncoder.get() * 360 / 2048;
+        double armRate = ArmEncoder.get() * 360 / ArmEncoderPulse;
         return armRate;
     }
 
