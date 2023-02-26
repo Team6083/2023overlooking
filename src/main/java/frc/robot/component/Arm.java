@@ -132,15 +132,11 @@ public class Arm {
         switch (modeLine) {
             case 0:// the beginning position
                 Line.linePID.setSetpoint(0);
-            case 0: // the beginning position
-                Line.linePID.setSetpoint(0);
                 break;
             case 2: // the second level
                 Line.linePID.setSetpoint(33.02);
                 break;
             case 3:// the third level
-                Line.linePID.setSetpoint(86.15);// the third level
-            case 3: // the third level
                 Line.linePID.setSetpoint(86.15);// the third level
                 break;
             default:
