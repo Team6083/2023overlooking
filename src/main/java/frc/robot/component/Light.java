@@ -43,9 +43,9 @@ public class Light {
 
     public static void putDashboard() {
         if (ledBuffer.getLED(0) == purple) {
-            SmartDashboard.putString("LED_color", "purple cube");
+            SmartDashboard.putString("LED_color", "purple_cube");
         } else if (ledBuffer.getLED(0) == yellow) {
-            SmartDashboard.putString("LED_color", "yellow cone");
+            SmartDashboard.putString("LED_color", "yellow_cone");
         }
     }
 }
