@@ -27,8 +27,8 @@ public class Arm {
     // private static Encoder armEncoder;
 
     private static RelativeEncoder armEncoder;
-    private static final int armEnc1Channel = 8;
-    private static final int armEnc2Channel = 9;
+    private static final int armEnc1Channel = 8; // for normal encoder
+    private static final int armEnc2Channel = 9; // for normal encoder
 
     // arm pid
     private static double kAP = 0.35;
@@ -63,8 +63,9 @@ public class Arm {
         lineMotor.setInverted(true);
 
         // encoder
-        // armEncoder = new Encoder(armEnc1Channel, armEnc2Channel);
-        armEncoder = armMotorleft.getEncoder();
+        // armEncoder = new Encoder(armEnc1Channel, armEnc2Channel); //for normal
+        // encoder
+        armEncoder = armMotorleft.getEncoder(); // for sparkmax encoder
         lineMotor.setSelectedSensorPosition(0);
 
         // arm pid
@@ -81,16 +82,17 @@ public class Arm {
 
     public static void teleop() {
         // arm loop
-        // double armCurrentAngle = getArmDegree(); // get the angular position
+        double armCurrentAngle = getArmDegree(); // get the angular position
 
         // // encoder reset
-        // if (Robot.xbox.getBackButton()) {
-        // armEncoder.reset();
-        // }
+        if (Robot.xbox.getBackButton()) {
+            // armEncoder.reset(); // for normal encoder
+            armEncoder.setPosition(0); // for sparkmax encoder
+        }
 
         // // adjust kAP
-        // kAP = SmartDashboard.getNumber("arm_kP", kAP);
-        // armPID.setP(kAP);
+        kAP = SmartDashboard.getNumber("arm_kP", kAP);
+        armPID.setP(kAP);
 
         // // rotate arm
         // if (Robot.xbox.getXButton()) {
@@ -145,7 +147,7 @@ public class Arm {
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
         }
         // if (linePID.getSetpoint() < lineLengthLimit) {
-        //     linePID.setSetpoint(lineLengthLimit);
+        // linePID.setSetpoint(lineLengthLimit);
         // }
         lineControlLoop();
 
@@ -187,10 +189,12 @@ public class Arm {
 
     // do the number of turns calculate(to a particular angle)
     public static double getArmDegree() {
-        // double armRate = armEncoder.get() * 360 / armEncoderPulse;
-        // SmartDashboard.putNumber("arm_encoder", armEncoder.get());
-        double armRate = armEncoder.getPosition() * 360 / armEncoderGearing;
-        SmartDashboard.putNumber("arm_encoder", armEncoder.getPosition());
+        // double armRate = armEncoder.get() * 360 / armEncoderPulse; // for normal
+        // encoder
+        // SmartDashboard.putNumber("arm_encoder", armEncoder.get()); // for normal
+        // encoder
+        double armRate = armEncoder.getPosition() * 360 / armEncoderGearing; // for sparkmax encoder
+        SmartDashboard.putNumber("arm_encoder", armEncoder.getPosition()); // for sparkmax encoder
 
         SmartDashboard.putNumber("arm_angle", armRate);
         return armRate;
