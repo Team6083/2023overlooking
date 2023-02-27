@@ -3,6 +3,7 @@ package frc.robot.component;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -44,7 +45,7 @@ public class Arm {
     // arm value
     private static final double armEncoderPulse = 2048;
     private static final double armEncoderGearing = 198;
-    private static final double armVoltLimit = 3;
+    private static final double armVoltLimit = 4;
     private static final double armAngleMin = -30;
     private static final double armAngleMax = 210;
     // line value
@@ -54,35 +55,37 @@ public class Arm {
 
     public static void init() {
         // arm motor
-        // armMotorleft = new CANSparkMax(armLeftCANId, MotorType.kBrushless);
-        // armMotorright = new CANSparkMax(armRightCANId, MotorType.kBrushless);
-        // armMotor = new MotorControllerGroup(armMotorleft, armMotorright);
-        // armMotorleft.setInverted(true);
+        armMotorleft = new CANSparkMax(armLeftCANId, MotorType.kBrushless);
+        armMotorright = new CANSparkMax(armRightCANId, MotorType.kBrushless);
+        armMotor = new MotorControllerGroup(armMotorleft, armMotorright);
+        armMotorleft.setInverted(true);
 
         // line motor
-        lineMotor = new WPI_TalonSRX(line);
-        lineMotor.setInverted(true);
+        // lineMotor = new WPI_TalonSRX(line);
+        // lineMotor.setInverted(true);
 
         // arm encoder
         // armEncoder = new Encoder(armEnc1Channel, armEnc2Channel); //for normal
         // encoder
         // encoder
-        // armEncoder = armMotorleft.getEncoder(); // for sparkmax encoder
+        armEncoder = armMotorleft.getEncoder(); // for sparkmax encoder
 
         // arm pid
-        // armPID = new PIDController(kAP, kAI, kAD);
+        armPID = new PIDController(kAP, kAI, kAD);
 
         // line pid
-        linePID = new PIDController(kLP, kLI, kLD);
+        // linePID = new PIDController(kLP, kLI, kLD);
+
+        // setLineSetpoint(0);
 
         // put dashboard
-        // SmartDashboard.putNumber("arm_kP", kAP);
-        SmartDashboard.putNumber("line_kP", kLP);
+        SmartDashboard.putNumber("arm_kP", kAP);
+        // SmartDashboard.putNumber("line_kP", kLP);
     }
 
     public static void teleop() {
-        // armLoop();
-        lineLoop();
+        armLoop();
+        // lineLoop();
     }
 
     public static void armLoop() {
@@ -99,10 +102,10 @@ public class Arm {
         // rotate arm
         double armAngleModify = 0;
         if (Robot.xbox.getXButton()) {
-            setArmSetpoint(80);
+            setArmSetpoint(35.2);
             armControlLoop();
         } else if (Robot.xbox.getYButton()) {
-            setArmSetpoint(-10);
+            setArmSetpoint(68.5);
         } else if (Robot.xbox.getPOV() == 90) {
             // control through xbox, for test
             double rotate = (Robot.xbox.getLeftTriggerAxis() -
@@ -128,7 +131,6 @@ public class Arm {
 
         // encoder reset
         resetLineEncoder();
-
         // adjust kLP
         kLP = SmartDashboard.getNumber("line_kP", kLP);
         linePID.setP(kLP);
@@ -144,12 +146,15 @@ public class Arm {
             // } else if (length > 122 * Math.abs(1 / Math.cos(Arm.positionToDegree())) -
             // 58) {
             // lineLengthModify = -0.5;
+            // lineControlLoop();
         } else if (Robot.xbox.getPOV() == 0) {
             lineLengthModify = 0.3;
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
+            // lineControlLoop();
         } else if (Robot.xbox.getPOV() == 180) {
-            lineLengthModify = -0.3;
+            lineLengthModify = -0.4;
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
+            // lineControlLoop();
         } else if (Robot.xbox.getPOV() == 270) {
             if (Robot.xbox.getPOV() == 0) {
                 lineMotor.set(0.3);
@@ -163,22 +168,25 @@ public class Arm {
         // if (linePID.getSetpoint() < lineLengthLimit) {
         // linePID.setSetpoint(lineLengthLimit);
         // }
-        lineControlLoop();
 
         // put dashboard
         SmartDashboard.putNumber("line_setpoint", linePID.getSetpoint());
         SmartDashboard.putNumber("line_current_length", lineCurrentLength);
         SmartDashboard.putNumber("line_length_modify", lineLengthModify);
+
     }
 
     public static void armControlLoop() {
         var armVolt = armPID.calculate(getArmDegree());
-        if (Math.abs(armVolt) > armVoltLimit) {
-            armVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
-        }
-        armMotor.setVoltage(armVolt);
 
-        SmartDashboard.putNumber("arm_volt", armVolt);
+        double modifiedArmVolt = armVolt;
+        if (Math.abs(modifiedArmVolt) > armVoltLimit) {
+            modifiedArmVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
+        }
+        armMotor.setVoltage(modifiedArmVolt);
+
+        SmartDashboard.putNumber("arm_orig_volt", armVolt);
+        SmartDashboard.putNumber("arm_volt", modifiedArmVolt);
     }
 
     public static void lineControlLoop() {
