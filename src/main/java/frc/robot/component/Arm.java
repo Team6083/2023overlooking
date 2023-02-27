@@ -127,10 +127,10 @@ public class Arm {
             // 58) {
             // lineLengthModify = -0.5;
         } else if (Robot.xbox.getPOV() == 0) {
-            lineLengthModify = 0.5;
+            lineLengthModify = 0.1;
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
         } else if (Robot.xbox.getPOV() == 180) {
-            lineLengthModify = -0.5;
+            lineLengthModify = -0.1;
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
         }
 
@@ -178,6 +178,8 @@ public class Arm {
     // do the number of turns calculate(to a particular angle)
     public static double getArmDegree() {
         double armRate = armEncoder.get() * 360 / armEncoderPulse;
+        SmartDashboard.putNumber("arm_encoder", armEncoder.get());
+        SmartDashboard.putNumber("arm_angle", armRate);
         return armRate;
     }
 
@@ -188,6 +190,8 @@ public class Arm {
         }
         double x = lineMotor.getSelectedSensorPosition();
         double length = 0.00473 * x - 0.0000000348 * x * x;
+        SmartDashboard.putNumber("line_encoder", lineMotor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("line_length", length);
         return length;
     }
 
@@ -208,43 +212,10 @@ public class Arm {
         } else if (setpoint > lineLenghtMax) {
             setpoint = lineLenghtMax;
         }
+        // check if line exceed it's game limit
+        if (setpoint > 122 * Math.abs(1 / Math.cos(getArmDegree())) - 58) {
+            setpoint = 122 * Math.abs(1 / Math.cos(getArmDegree())) - 58;
+        }
         linePID.setSetpoint(setpoint);
-    }
-
-    // for NewAutoEngine
-    public static int autoArmControl(int modeLine, int modeArm) {
-        switch (modeArm) {
-            case 0: // the beginning position
-                setArmSetpoint(68.5);
-                break;
-            case 1: // the second level
-                setArmSetpoint(-10);
-                break;
-            case 2: // the third level
-                setArmSetpoint(35.5);
-                break;
-            default:
-                break;
-        }
-
-        switch (modeLine) {
-            case 0: // the beginning position
-                linePID.setSetpoint(0);
-                break;
-            case 2: // the second level
-                linePID.setSetpoint(33.02);
-                break;
-            case 3: // the third level
-                linePID.setSetpoint(86.15);
-                break;
-            default:
-                break;
-        }
-
-        armControlLoop();
-        lineControlLoop();
-        SmartDashboard.putNumber("line_enc", lineMotor.getSelectedSensorPosition());
-        SmartDashboard.putNumber("line_length", getEncoderToLength());
-        return 0;
     }
 }
