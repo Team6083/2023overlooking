@@ -18,7 +18,7 @@ public class Intake {
     }
 
     public static void teleop() {
-        if (Robot.xbox.getAButtonPressed()) {
+        if (Robot.xbox.getYButtonPressed()) {
             solForward = !solForward;
         }
         if (solForward) {
