@@ -2,13 +2,10 @@ package frc.robot.component;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -93,29 +90,35 @@ public class Arm {
         double armCurrentAngle = getArmDegree();
 
         // encoder reset
-        resetArmEncoder();
+        if (Robot.xbox.getBackButton()) {
+            // armEncoder.reset(); // for normal encoder
+            armEncoder.setPosition(0); // for sparkmax encoder
+            setArmSetpoint(0);
+        }
 
         // adjust kAP
         kAP = SmartDashboard.getNumber("arm_kP", kAP);
         armPID.setP(kAP);
 
         // rotate arm
+        boolean armInManual = (Robot.xbox.getPOV() == 90);
         double armAngleModify = 0;
         if (Robot.xbox.getXButton()) {
             setArmSetpoint(35.2);
-            armControlLoop();
         } else if (Robot.xbox.getYButton()) {
             setArmSetpoint(68.5);
-        } else if (Robot.xbox.getPOV() == 90) {
+        } else {
+            armAngleModify = (Robot.xbox.getLeftTriggerAxis() -
+                    Robot.xbox.getRightTriggerAxis()) * -0.3;
+            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
+        }
+        if (armInManual) {
             // control through xbox, for test
             double rotate = (Robot.xbox.getLeftTriggerAxis() -
                     Robot.xbox.getRightTriggerAxis()) * -0.15;
             armMotor.set(rotate);
             setArmSetpoint(armCurrentAngle);
         } else {
-            armAngleModify = (Robot.xbox.getLeftTriggerAxis() -
-                    Robot.xbox.getRightTriggerAxis()) * -0.3;
-            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
             armControlLoop();
         }
 
@@ -127,15 +130,19 @@ public class Arm {
 
     public static void lineLoop() {
         // get length position
-        double lineCurrentLength = getEncoderToLength();
+        final double lineCurrentLength = getEncoderToLength();
 
         // encoder reset
-        resetLineEncoder();
+        if (Robot.xbox.getAButton()) {
+            lineMotor.setSelectedSensorPosition(0);
+            setLineSetpoint(0);
+        }
         // adjust kLP
         kLP = SmartDashboard.getNumber("line_kP", kLP);
         linePID.setP(kLP);
 
         // stretch line
+        boolean lineInManual = (Robot.xbox.getPOV() == 90);
         double lineLengthModify = 0.0;
         if (Robot.xbox.getYButtonPressed()) {
             setLineSetpoint(33.02);
@@ -150,12 +157,12 @@ public class Arm {
         } else if (Robot.xbox.getPOV() == 0) {
             lineLengthModify = 0.3;
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
-            // lineControlLoop();
         } else if (Robot.xbox.getPOV() == 180) {
             lineLengthModify = -0.4;
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
             // lineControlLoop();
-        } else if (Robot.xbox.getPOV() == 270) {
+        }
+        if (lineInManual) {
             if (Robot.xbox.getPOV() == 0) {
                 lineMotor.set(0.3);
             } else if (Robot.xbox.getPOV() == 180) {
@@ -164,6 +171,8 @@ public class Arm {
                 lineMotor.set(0);
             }
             setLineSetpoint(lineCurrentLength);
+        }else{
+            lineControlLoop();
         }
         // if (linePID.getSetpoint() < lineLengthLimit) {
         // linePID.setSetpoint(lineLengthLimit);
@@ -251,18 +260,4 @@ public class Arm {
         linePID.setSetpoint(setpoint);
     }
 
-    public static void resetArmEncoder() {
-        if (Robot.xbox.getBackButton()) {
-            // armEncoder.reset(); // for normal encoder
-            armEncoder.setPosition(0); // for sparkmax encoder
-            setArmSetpoint(0);
-        }
-    }
-
-    public static void resetLineEncoder() {
-        if (Robot.xbox.getAButton()) {
-            lineMotor.setSelectedSensorPosition(0);
-            setLineSetpoint(0);
-        }
-    }
 }
