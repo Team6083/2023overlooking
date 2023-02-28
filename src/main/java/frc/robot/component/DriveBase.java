@@ -106,12 +106,12 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        leftMotorController = Robot.xbox.getLeftY() * 0.6;
-        rightMotorController = Robot.xbox.getRightY() * 0.6;
+        leftMotorController = Robot.mainController.getLeftY() * 0.6;
+        rightMotorController = Robot.mainController.getRightY() * 0.6;
 
-        if (Robot.xbox.getLeftBumper() || Robot.xbox.getRightBumper()) {
-            leftMotorController = Robot.xbox.getLeftY();
-            rightMotorController = Robot.xbox.getRightY();
+        if (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) {
+            leftMotorController = Robot.mainController.getLeftY();
+            rightMotorController = Robot.mainController.getRightY();
         }
 
         drive.tankDrive(leftMotorController, rightMotorController);

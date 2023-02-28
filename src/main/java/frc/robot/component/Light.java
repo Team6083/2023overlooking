@@ -13,6 +13,7 @@ public class Light {
     private static final Color yellow = new Color(255, 255, 0);
     private static final int ledPort = 0; // PWM port to be confirmed
     private static final int ledLength = 10; // to be confirmed
+    private static boolean lightYellow = false;
 
     public static void init() {
         led = new AddressableLED(ledPort);
@@ -23,9 +24,14 @@ public class Light {
     }
 
     public static void teleop() {
-        if (Robot.xbox.getAButtonPressed()) { // buttons to be confirmed
+        if (Robot.mainController.getYButtonPressed()) {
+            lightYellow = !lightYellow;
+        }
+        if(Robot.viceController.getAButton()){
+            // light free
+    } else if (lightYellow) { // buttons to be confirmed
             setRGB(255, 0, 255); // purple
-        } else if (Robot.xbox.getBButtonPressed()) { // buttons to be confirmed
+        } else if (!lightYellow) { // buttons to be confirmed
             setRGB(255, 255, 0); // yellow
         }
         led.setData(ledBuffer);

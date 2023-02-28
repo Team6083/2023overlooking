@@ -27,7 +27,8 @@ import frc.robot.component.Light;
  */
 
 public class Robot extends TimedRobot {
-  public static XboxController xbox;
+  public static XboxController mainController;
+  public static XboxController viceController;
 
   PowerDistribution pd;
 
@@ -38,7 +39,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    xbox = new XboxController(0);
+    mainController = new XboxController(0);
+    viceController = new XboxController(1);
     // DriveBase.init();
     // Intake.init();
     Arm.init();
