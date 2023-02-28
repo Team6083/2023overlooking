@@ -219,4 +219,8 @@ public class DriveBase {
         leftPID.reset();
         rightPID.reset();
     }
+
+    public static double getGyroDegree(){
+        return gyro.getPitch();
+    }
 }

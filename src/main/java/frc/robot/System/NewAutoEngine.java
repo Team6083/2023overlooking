@@ -3,6 +3,7 @@ package frc.robot.System;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -52,12 +53,16 @@ public class NewAutoEngine {
     public static SendableChooser<String> chooser;
     public static String autoSelected;
 
-    private static double lastTime;
-    private static double lastDegree;
+    private static PIDController gyroPID;
+    private static double kP = 0.4;
+    private static double kI = 0;
+    private static double kD = -0.05;
+    private static boolean mode = false;
 
     public static void init() {
 
         chooser = new SendableChooser<String>();
+        gyroPID = new PIDController(kP, kI, kD);
 
         putChooser();
 
@@ -534,33 +539,23 @@ public class NewAutoEngine {
 
     public static void doMiddle(){
         double degree = DriveBase.getGyroDegree();
-        lastTime = timer.getFPGATimestamp();
-        if(degree > 0){
             if(degree >= 5){
                 goChargeStation();
-            }else{
+            }else if(!mode){
                 DriveBase.directControl(0.4, 0.4);
             }
-        }else if(degree < 0){
-           
-            if(degree <= -5){
-                goChargeStation();
-            }else{
-                DriveBase.directControl(0.4, 0.4);
-            }
-        }else{
-            DriveBase.directControl(0.4, 0.4);
-        }
     }
 
     public static void goChargeStation(){
-        double Kp = ;
-        double Kd = ;
-        double goal = 0;
-        double error = DriveBase.getGyroDegree()-goal;
-        double limitDegree = ;
-        double limitTime = timer.getFPGATimestamp()- lastTime;
-        double m ; 
-        double driveSpeed = Kp*error+Kd*;
+        mode = true;
+        gyroPID.setSetpoint(0);
+        double driveDegree = DriveBase.getGyroDegree();
+        double driveSpeed = -gyroPID.calculate(driveDegree);
+        if(driveDegree>=0.4){
+            driveSpeed = 0.4;
+        }else  if(driveDegree<=-0.4){
+            driveSpeed = -0.4;
+        }
+        DriveBase.directControl(driveSpeed, driveSpeed);
     }
 }
