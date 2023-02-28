@@ -3,13 +3,14 @@ package frc.robot.component;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.hardware.armEncoder.ArmEncoder;
+import frc.robot.hardware.armEncoder.NeoArmEncoder;
+import frc.robot.hardware.armEncoder.RevHexArmEncoder;
 
 public class Arm {
     // arm motor
@@ -18,32 +19,27 @@ public class Arm {
     private static MotorControllerGroup armMotor;
     private static final int armLeftCANId = 15;
     private static final int armRightCANId = 16;
+
     // line motor
     protected static WPI_TalonSRX lineMotor;
     private static final int line = 17;
 
     // arm encoder
-    // private static Encoder armEncoder; // for normal encoder
-    private static RelativeEncoder armEncoder;
-
-    // private static RelativeEncoder armEncoder;
-    // private static final int armEnc1Channel = 8; // for normal encoder
-    // private static final int armEnc2Channel = 9; // for normal encoder
+    private static ArmEncoder armEncoder;
+    private static final boolean useNEOEnc = false;
 
     // arm pid
     private static double kAP = 0.3;
     private static double kAI = 0.0;
     private static double kAD = 0.0;
     private static PIDController armPID;
-    // // line pid
+    // line pid
     private static double kLP = 0.35;
     private static double kLI = 0.0;
     private static double kLD = 0.0;
     protected static PIDController linePID;
 
     // arm value
-    private static final double armEncoderPulse = 2048;
-    private static final double armEncoderGearing = 198;
     private static final double armVoltLimit = 4;
     private static final double armAngleMin = -10;
     private static final double armAngleMax = 185;
@@ -64,11 +60,11 @@ public class Arm {
         lineMotor.setInverted(true);
 
         // arm encoder
-        // armEncoder = new Encoder(armEnc1Channel, armEnc2Channel); // for normal encoder
-        // armEncoder.setReverseDirection(true);
-
-        // encoder
-        armEncoder = armMotorleft.getEncoder(); // for sparkmax encoder
+        if (useNEOEnc) {
+            armEncoder = new NeoArmEncoder(armMotorleft.getEncoder());
+        } else {
+            armEncoder = new RevHexArmEncoder(8, 9);
+        }
 
         // arm pid
         armPID = new PIDController(kAP, kAI, kAD);
@@ -95,9 +91,7 @@ public class Arm {
 
         // encoder reset
         if (Robot.viceController.getBackButton()) {
-            //armEncoder.reset(); // for normal encoder
-            armEncoder.setPosition(0); // for sparkmax encoder
-            setArmSetpoint(0);
+            armEncoder.reset();
         }
 
         // adjust kAP
@@ -212,15 +206,11 @@ public class Arm {
 
     // do the number of turns calculate(to a particular angle)
     public static double getArmDegree() {
-        // double armRate = armEncoder.get() * 360 / armEncoderPulse; // for normal encoder
-        // SmartDashboard.putNumber("arm_encoder", armEncoder.get()); // for normal encoder
-        double armRate = armEncoder.getPosition() * 360 / armEncoderGearing; // for
-        // sparkmax encoder
-        SmartDashboard.putNumber("arm_encoder", armEncoder.getPosition()); // for
-        // sparkmax encoder
+        var angle = armEncoder.getAngleDegree();
 
-        SmartDashboard.putNumber("arm_angle", armRate);
-        return armRate;
+        SmartDashboard.putNumber("arm_encoder", armEncoder.getRawPosition());
+        SmartDashboard.putNumber("arm_angle", angle);
+        return angle;
     }
 
     // do the number of turns calculate(to a particular length)
