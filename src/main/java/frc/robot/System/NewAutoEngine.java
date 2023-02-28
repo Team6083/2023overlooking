@@ -506,13 +506,13 @@ public class NewAutoEngine {
     public static int autoArmControl(int modeLine, int modeArm) {
         switch (modeArm) {
             case 0: // the beginning position
-                Arm.setArmSetpoint(68.5);
+                // Arm.setArmSetpoint(68.5);
                 break;
             case 1: // the second level
-                Arm.setArmSetpoint(-10);
+                // Arm.setArmSetpoint(-10);
                 break;
             case 2: // the third level
-                Arm.setArmSetpoint(35.5);
+                // Arm.setArmSetpoint(35.5);
                 break;
             default:
                 break;
@@ -520,13 +520,13 @@ public class NewAutoEngine {
 
         switch (modeLine) {
             case 0: // the beginning position
-                Arm.setLineSetpoint(0);
+                // Arm.setLineSetpoint(0);
                 break;
             case 2: // the second level
-                Arm.setLineSetpoint(33.02);
+                // Arm.setLineSetpoint(33.02);
                 break;
             case 3: // the third level
-                Arm.setLineSetpoint(86.15);
+                // Arm.setLineSetpoint(86.15);
                 break;
             default:
                 break;
