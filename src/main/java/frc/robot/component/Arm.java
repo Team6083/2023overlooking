@@ -22,7 +22,7 @@ public class Arm {
     protected static WPI_TalonSRX lineMotor;
     private static final int line = 17;
 
-    // encoder
+    // arm encoder
     private static Encoder armEncoder;
 
     // private static RelativeEncoder armEncoder;
@@ -30,10 +30,10 @@ public class Arm {
     private static final int armEnc2Channel = 9; // for normal encoder
 
     // arm pid
-    // private static double kAP = 0.3;
-    // private static double kAI = 0.0;
-    // private static double kAD = 0.0;
-    // private static PIDController armPID;
+    private static double kAP = 0.3;
+    private static double kAI = 0.0;
+    private static double kAD = 0.0;
+    private static PIDController armPID;
     // // line pid
     // private static double kLP = 0.35;
     // private static double kLI = 0.0;
@@ -63,13 +63,14 @@ public class Arm {
         // lineMotor.setInverted(true);
 
         // arm encoder
-        armEncoder = new Encoder(armEnc1Channel, armEnc2Channel); //for normal
-        // encoder
+        armEncoder = new Encoder(armEnc1Channel, armEnc2Channel); // for normal encoder
+        armEncoder.setReverseDirection(true);
+
         // encoder
         // armEncoder = armMotorleft.getEncoder(); // for sparkmax encoder
 
         // arm pid
-        // armPID = new PIDController(kAP, kAI, kAD);
+        armPID = new PIDController(kAP, kAI, kAD);
         // setArmSetpoint(68.5);
 
         // line pid
@@ -78,7 +79,7 @@ public class Arm {
         // setLineSetpoint(0);
 
         // put dashboard
-        // SmartDashboard.putNumber("arm_kP", kAP);
+        SmartDashboard.putNumber("arm_kP", kAP);
         // SmartDashboard.putNumber("line_kP", kLP);
     }
 
@@ -95,40 +96,40 @@ public class Arm {
         if (Robot.xbox.getBackButton()) {
             armEncoder.reset(); // for normal encoder
             // armEncoder.setPosition(0); // for sparkmax encoder
-            // setArmSetpoint(0);
+            setArmSetpoint(0);
         }
 
         // adjust kAP
-        // kAP = SmartDashboard.getNumber("arm_kP", kAP);
-        // armPID.setP(kAP);
+        kAP = SmartDashboard.getNumber("arm_kP", kAP);
+        armPID.setP(kAP);
 
         // rotate arm
         boolean armInManual = (Robot.xbox.getXButton());
         double armAngleModify = 0;
-        // if (Robot.xbox.getAButton()) {
-        //     setArmSetpoint(35.2);
-        // } else if (Robot.xbox.getBButton()) {
-        //     setArmSetpoint(68.5);
-        // } else {
-        //     armAngleModify = (Robot.xbox.getLeftTriggerAxis() -
-        //             Robot.xbox.getRightTriggerAxis()) * -0.3;
-        //     // setArmSetpoint(armPID.getSetpoint() + armAngleModify);
-        // }
+        if (Robot.xbox.getAButton()) {
+            setArmSetpoint(35.2);
+        } else if (Robot.xbox.getBButton()) {
+            setArmSetpoint(68.5);
+        } else {
+            armAngleModify = (Robot.xbox.getLeftTriggerAxis() -
+                    Robot.xbox.getRightTriggerAxis()) * -0.3;
+            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
+        }
         if (armInManual) {
             // control through xbox, for test
             double rotate = (Robot.xbox.getLeftTriggerAxis() -
                     Robot.xbox.getRightTriggerAxis()) * -0.15;
             armMotor.set(rotate);
-            // setArmSetpoint(armCurrentAngle);
-        }// else {
-            // armControlLoop();
-        // }
+            setArmSetpoint(armCurrentAngle);
+        } else {
+            armControlLoop();
+        }
         // setLineSetpoint(linePID.getSetpoint());
         // lineControlLoop();
         // put dashboard
-        // SmartDashboard.putNumber("arm_setpoint", armPID.getSetpoint());
+        SmartDashboard.putNumber("arm_setpoint", armPID.getSetpoint());
         SmartDashboard.putNumber("aem_current_angle", armCurrentAngle);
-        // SmartDashboard.putNumber("arm_angle_modify", armAngleModify);
+        SmartDashboard.putNumber("arm_angle_modify", armAngleModify);
     }
 
     public static void lineLoop() {
@@ -168,7 +169,7 @@ public class Arm {
                 lineMotor.set(0);
             }
             // setLineSetpoint(lineCurrentLength);
-        }else{
+        } else {
             lineControlLoop();
         }
         // put dashboard
@@ -179,38 +180,34 @@ public class Arm {
     }
 
     public static void armControlLoop() {
-        if (Robot.xbox.getBButtonPressed()){
-            armEncoder.reset();
+
+        var armVolt = armPID.calculate(getArmDegree());
+
+        double modifiedArmVolt = armVolt;
+        if (Math.abs(modifiedArmVolt) > armVoltLimit) {
+            modifiedArmVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
         }
-    //     var armVolt = armPID.calculate(getArmDegree());
+        armMotor.setVoltage(modifiedArmVolt);
 
-    //     double modifiedArmVolt = armVolt;
-    //     if (Math.abs(modifiedArmVolt) > armVoltLimit) {
-    //         modifiedArmVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
-    //     }
-    //     armMotor.setVoltage(modifiedArmVolt);
-
-    //     SmartDashboard.putNumber("arm_orig_volt", armVolt);
-    //     SmartDashboard.putNumber("arm_volt", modifiedArmVolt);
+        SmartDashboard.putNumber("arm_orig_volt", armVolt);
+        SmartDashboard.putNumber("arm_volt", modifiedArmVolt);
     }
 
     public static void lineControlLoop() {
 
-    //     var lineVolt = linePID.calculate(getEncoderToLength());
-    //     if (Math.abs(lineVolt) > 10) {
-    //         lineVolt = lineVoltLimit * (lineVolt > 0 ? 1 : -1);
-    //     }
-    //     lineMotor.setVoltage(lineVolt);
+        // var lineVolt = linePID.calculate(getEncoderToLength());
+        // if (Math.abs(lineVolt) > 10) {
+        // lineVolt = lineVoltLimit * (lineVolt > 0 ? 1 : -1);
+        // }
+        // lineMotor.setVoltage(lineVolt);
 
-    //     SmartDashboard.putNumber("line_volt", lineVolt);
+        // SmartDashboard.putNumber("line_volt", lineVolt);
     }
 
     // do the number of turns calculate(to a particular angle)
     public static double getArmDegree() {
-        double armRate = -armEncoder.get() * 360 / armEncoderPulse; // for normal
-        // encoder
-        SmartDashboard.putNumber("arm_encoder", armEncoder.get()); // for normal
-        // encoder
+        double armRate = armEncoder.get() * 360 / armEncoderPulse; // for normal encoder
+        SmartDashboard.putNumber("arm_encoder", armEncoder.get()); // for normal encoder
         // double armRate = armEncoder.getPosition() * 360 / armEncoderGearing; // for
         // sparkmax encoder
         // SmartDashboard.putNumber("arm_encoder", armEncoder.getPosition()); // for
@@ -232,28 +229,28 @@ public class Arm {
         return length;
     }
 
-    // public static void setArmSetpoint(double setpoint) {
-    //     // Check if arm exceed it's physical limit
-    //     if (setpoint < armAngleMin) {
-    //         setpoint = armAngleMin;
-    //     } else if (setpoint > armAngleMax) {
-    //         setpoint = armAngleMax;
-    //     }
-    //     armPID.setSetpoint(setpoint);
-    // }
+    public static void setArmSetpoint(double setpoint) {
+        // Check if arm exceed it's physical limit
+        if (setpoint < armAngleMin) {
+            setpoint = armAngleMin;
+        } else if (setpoint > armAngleMax) {
+            setpoint = armAngleMax;
+        }
+        armPID.setSetpoint(setpoint);
+    }
 
     // public static void setLineSetpoint(double setpoint) {
-    //     // Check if line exceed it's physical limit
-    //     if (setpoint < lineLenghtMin) {
-    //         setpoint = lineLenghtMin;
-    //     } else if (setpoint > lineLenghtMax) {
-    //         setpoint = lineLenghtMax;
-    //     }
-    //     // check if line exceed it's game limit
-    //     if (setpoint > 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58) {
-    //     setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58;
-    //     }
-    //     linePID.setSetpoint(setpoint);
+    // // Check if line exceed it's physical limit
+    // if (setpoint < lineLenghtMin) {
+    // setpoint = lineLenghtMin;
+    // } else if (setpoint > lineLenghtMax) {
+    // setpoint = lineLenghtMax;
+    // }
+    // // check if line exceed it's game limit
+    // if (setpoint > 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58) {
+    // setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58;
+    // }
+    // linePID.setSetpoint(setpoint);
     // }
 
 }
