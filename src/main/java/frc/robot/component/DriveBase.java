@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 //import frc.robot.System.NewAutoEngine;
+import frc.robot.System.NewAutoEngine;
 
 public class DriveBase {
 
@@ -121,43 +122,43 @@ public class DriveBase {
         drive.tankDrive(leftMotorInput, rightMotorInput);
     }
 
-    // public static void runTraj(Trajectory trajectory, double timeInsec) {
+    public static void runTraj(Trajectory trajectory, double timeInsec) {
 
-    //     // Set the goal of the robot in that second
-    //     Trajectory.State goal = trajectory.sample(timeInsec);
-    //     trajField.setRobotPose(goal.poseMeters);
+        // Set the goal of the robot in that second
+        Trajectory.State goal = trajectory.sample(timeInsec);
+        trajField.setRobotPose(goal.poseMeters);
 
-    //     var currentPose = odometry.getPoseMeters();
+        var currentPose = odometry.getPoseMeters();
 
-    //     var chaspeed = ramseteController.calculate(currentPose, goal);
+        var chaspeed = ramseteController.calculate(currentPose, goal);
 
-    //     // Convert chassis speed to wheel speed
-    //     var wheelSpeeds = kinematics.toWheelSpeeds(chaspeed); // Left and right speed
-    //     leftWheelSpeed = wheelSpeeds.leftMetersPerSecond; // Catch speed from wheelSpeed(with ctrl + left mice)
-    //     rightWheelSpeed = wheelSpeeds.rightMetersPerSecond;
+        // Convert chassis speed to wheel speed
+        var wheelSpeeds = kinematics.toWheelSpeeds(chaspeed); // Left and right speed
+        leftWheelSpeed = wheelSpeeds.leftMetersPerSecond; // Catch speed from wheelSpeed(with ctrl + left mice)
+        rightWheelSpeed = wheelSpeeds.rightMetersPerSecond;
 
-    //     leftPID.setSetpoint(leftWheelSpeed);
-    //     rightPID.setSetpoint(rightWheelSpeed);
+        leftPID.setSetpoint(leftWheelSpeed);
+        rightPID.setSetpoint(rightWheelSpeed);
 
-    //     // To make the number of the encoder become the motor's volt
-    //     leftMotorVolt = leftPID.calculate(
-    //             positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
-    //             leftMotorController)
-    //             + feedforward.calculate(leftWheelSpeed);
-    //     rightMotorVolt = rightPID.calculate(
-    //             positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
-    //             rightMotorController)
-    //             + feedforward.calculate(rightWheelSpeed);
+        // To make the number of the encoder become the motor's volt
+        leftMotorVolt = leftPID.calculate(
+                positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
+                leftMotorController)
+                + feedforward.calculate(leftWheelSpeed);
+        rightMotorVolt = rightPID.calculate(
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
+                rightMotorController)
+                + feedforward.calculate(rightWheelSpeed);
 
-    //     leftMotor.setVoltage(leftMotorVolt);
-    //     rightMotor.setVoltage(rightMotorVolt);
-    //     drive.feed();
+        leftMotor.setVoltage(leftMotorVolt);
+        rightMotor.setVoltage(rightMotorVolt);
+        drive.feed();
 
-    //     //put the distances between the target and current position onto Dashboard
-    //     SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());
-    //     SmartDashboard.putNumber("errorPosY", currentPose.minus(goal.poseMeters).getY());
+        //put the distances between the target and current position onto Dashboard
+        SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());
+        SmartDashboard.putNumber("errorPosY", currentPose.minus(goal.poseMeters).getY());
 
-    // }
+    }
 
     public static void updateODO() {
         var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
