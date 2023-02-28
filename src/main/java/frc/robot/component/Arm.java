@@ -122,7 +122,8 @@ public class Arm {
         } else {
             armControlLoop();
         }
-
+        setLineSetpoint(linePID.getSetpoint());
+        lineControlLoop();
         // put dashboard
         SmartDashboard.putNumber("arm_setpoint", armPID.getSetpoint());
         SmartDashboard.putNumber("aem_current_angle", armCurrentAngle);
@@ -148,12 +149,6 @@ public class Arm {
         if (Robot.xbox.getAButtonPressed()) {
             setLineSetpoint(33.02);
             lineLengthModify = 0.0;
-            // } else if (length > 122 * (1 / Math.cos(35.2)) - 58) { //the length of the
-            // outside bumper
-            // lineLengthModify = 0.5;
-            // } else if (length > 122 * Math.abs(1 / Math.cos(Arm.positionToDegree())) -
-            // 58) {
-            // lineLengthModify = -0.5;
             lineControlLoop();
         } else if (Robot.xbox.getPOV() == 0) {
             lineLengthModify = 0.3;
@@ -175,7 +170,6 @@ public class Arm {
         }else{
             lineControlLoop();
         }
-
         // put dashboard
         SmartDashboard.putNumber("line_setpoint", linePID.getSetpoint());
         SmartDashboard.putNumber("line_current_length", lineCurrentLength);
@@ -252,8 +246,8 @@ public class Arm {
             setpoint = lineLenghtMax;
         }
         // check if line exceed it's game limit
-        if (setpoint > 122 * Math.abs(1 / Math.cos(getArmDegree())) - 58) {
-        setpoint = 122 * Math.abs(1 / Math.cos(getArmDegree())) - 58;
+        if (setpoint > 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58) {
+        setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58;
         }
         linePID.setSetpoint(setpoint);
     }

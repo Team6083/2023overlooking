@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import frc.robot.System.NewAutoEngine;
+import frc.robot.System.NewAutoEngine;
 import frc.robot.component.Arm;
 import frc.robot.component.Camera;
-// import frc.robot.component.DriveBase;
+import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
 import frc.robot.component.Light;
 
