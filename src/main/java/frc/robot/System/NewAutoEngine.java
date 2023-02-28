@@ -508,10 +508,10 @@ public class NewAutoEngine {
             case 0: // the beginning position
                 // Arm.setArmSetpoint(68.5);
                 break;
-            case 1: // the second level
+            case 1: // the first level
                 // Arm.setArmSetpoint(-10);
                 break;
-            case 2: // the third level
+            case 2: // the second level and the third level
                 // Arm.setArmSetpoint(35.5);
                 break;
             default:
