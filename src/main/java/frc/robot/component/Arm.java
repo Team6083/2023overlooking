@@ -121,7 +121,7 @@ public class Arm {
             armMotor.set(rotate);
             // setArmSetpoint(armCurrentAngle);
         }// else {
-             armControlLoop();
+            // armControlLoop();
         // }
         // setLineSetpoint(linePID.getSetpoint());
         // lineControlLoop();
