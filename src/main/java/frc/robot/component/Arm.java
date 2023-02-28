@@ -43,8 +43,8 @@ public class Arm {
     private static final double armEncoderPulse = 2048;
     private static final double armEncoderGearing = 198;
     private static final double armVoltLimit = 4;
-    private static final double armAngleMin = -30;
-    private static final double armAngleMax = 210;
+    private static final double armAngleMin = 20;
+    private static final double armAngleMax = 80;
     // line value
     private static final double lineVoltLimit = 3;
     private static final double lineLenghtMax = 100.0;
@@ -69,6 +69,7 @@ public class Arm {
 
         // arm pid
         armPID = new PIDController(kAP, kAI, kAD);
+        setArmSetpoint(68.5);
 
         // line pid
         // linePID = new PIDController(kLP, kLI, kLD);
@@ -101,11 +102,11 @@ public class Arm {
         armPID.setP(kAP);
 
         // rotate arm
-        boolean armInManual = (Robot.xbox.getPOV() == 90);
+        boolean armInManual = (Robot.xbox.getXButton());
         double armAngleModify = 0;
-        if (Robot.xbox.getXButton()) {
+        if (Robot.xbox.getAButton()) {
             setArmSetpoint(35.2);
-        } else if (Robot.xbox.getYButton()) {
+        } else if (Robot.xbox.getBButton()) {
             setArmSetpoint(68.5);
         } else {
             armAngleModify = (Robot.xbox.getLeftTriggerAxis() -
@@ -142,9 +143,9 @@ public class Arm {
         linePID.setP(kLP);
 
         // stretch line
-        boolean lineInManual = (Robot.xbox.getPOV() == 90);
+        boolean lineInManual = (Robot.xbox.getXButton());
         double lineLengthModify = 0.0;
-        if (Robot.xbox.getYButtonPressed()) {
+        if (Robot.xbox.getAButtonPressed()) {
             setLineSetpoint(33.02);
             lineLengthModify = 0.0;
             // } else if (length > 122 * (1 / Math.cos(35.2)) - 58) { //the length of the
