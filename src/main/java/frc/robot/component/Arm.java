@@ -45,7 +45,7 @@ public class Arm {
     private static final double armEncoderPulse = 2048;
     private static final double armEncoderGearing = 198;
     private static final double armVoltLimit = 4;
-    private static final double armAngleMin = -10;
+    private static final double armAngleMin = -15;
     private static final double armAngleMax = 185;
     // line value
     private static final double lineVoltLimit = 3;
@@ -72,7 +72,7 @@ public class Arm {
 
         // arm pid
         armPID = new PIDController(kAP, kAI, kAD);
-        setArmSetpoint(68.5);
+        // setArmSetpoint(68.5);
 
         // line pid
         linePID = new PIDController(kLP, kLI, kLD);
@@ -94,7 +94,7 @@ public class Arm {
         double armCurrentAngle = getArmDegree();
 
         // encoder reset
-        if (Robot.viceController.getBackButton()) {
+        if (Robot.mainController.getBackButton()) {
             //armEncoder.reset(); // for normal encoder
             armEncoder.setPosition(0); // for sparkmax encoder
             setArmSetpoint(0);
@@ -140,7 +140,7 @@ public class Arm {
         final double lineCurrentLength = getEncoderToLength();
 
         // encoder reset
-        if (Robot.viceController.getStartButton()) {
+        if (Robot.mainController.getStartButton()) {
             lineMotor.setSelectedSensorPosition(0);
             setLineSetpoint(0);
         }
@@ -194,6 +194,9 @@ public class Arm {
             modifiedArmVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
         }
         armMotor.setVoltage(modifiedArmVolt);
+        setLineSetpoint(linePID.getSetpoint());
+        lineControlLoop();
+        
 
         SmartDashboard.putNumber("arm_orig_volt", armVolt);
         SmartDashboard.putNumber("arm_volt", modifiedArmVolt);

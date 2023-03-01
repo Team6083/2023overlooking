@@ -41,10 +41,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     mainController = new XboxController(0);
     viceController = new XboxController(1);
-    // DriveBase.init();
-    // Intake.init();
+    DriveBase.init();
+    Intake.init();
     Arm.init();
-    // Line.init();
     // Camera.init();
     // Light.init();
     // NewAutoEngine.init();
@@ -73,9 +72,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Arm.teleop();
-    // Line.teleop();
-    // DriveBase.teleop();
-    // Intake.teleop();
+    DriveBase.teleop();
+    Intake.teleop();
     // Light.teleop();
 
     //SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
