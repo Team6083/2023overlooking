@@ -3,17 +3,15 @@ package frc.robot.component;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Robot;
 
 public class Light {
     public static AddressableLED led;
     public static AddressableLEDBuffer ledBuffer;
-    private static final Color purple = new Color(255, 0, 255);
-    private static final Color yellow = new Color(255, 255, 0);
     private static final int ledPort = 0; // PWM port to be confirmed
     private static final int ledLength = 10; // to be confirmed
-    private static boolean lightYellow = false;
+    private static int firstHue = 0;
+    private static int mode = 0;
 
     public static void init() {
         led = new AddressableLED(ledPort);
@@ -24,15 +22,22 @@ public class Light {
     }
 
     public static void teleop() {
-        if (Robot.mainController.getYButtonPressed()) {
-            lightYellow = !lightYellow;
+        if (Robot.viceController.getXButtonPressed()) {
+            mode = (mode == 1 ? 2 : 1);
+        } else if (Robot.viceController.getAButtonPressed()) {
+            mode = 0;
         }
-        if(Robot.viceController.getAButton()){
-            // light free
-    } else if (lightYellow) { // buttons to be confirmed
-            setRGB(255, 0, 255); // purple
-        } else if (!lightYellow) { // buttons to be confirmed
-            setRGB(255, 255, 0); // yellow
+        switch (mode) {
+            case 0:
+                rainbow();
+                break;
+            case 1: // purple cube
+                setHSVLoop(80, 255, 127);
+                break;
+            case 2: // yellow cone
+                setHSVLoop(300, 255, 127);
+                break;
+            default:
         }
         led.setData(ledBuffer);
         putDashboard();
@@ -42,17 +47,33 @@ public class Light {
         led.stop();
     }
 
-    public static void setRGB(int r, int g, int b) {
+    public static void setHSVLoop(int h, int s, int v) {
         for (var i = 0; i < ledBuffer.getLength(); i++) {
-            ledBuffer.setRGB(i, r, g, b);
+            ledBuffer.setHSV(i, h, s, v);
         }
     }
 
+    public static void rainbow() {
+        for (var i = 0; i < ledBuffer.getLength(); i++) {
+            var hue = (firstHue + (i * 180 / ledBuffer.getLength())) % 180;
+            ledBuffer.setHSV(i, hue, 255, 127);
+        }
+        firstHue += 3;
+        firstHue %= 180;
+    }
+
     public static void putDashboard() {
-        if (ledBuffer.getLED(0) == purple) {
-            SmartDashboard.putString("LED_color", "purple_cube");
-        } else if (ledBuffer.getLED(0) == yellow) {
-            SmartDashboard.putString("LED_color", "yellow_cone");
+        switch (mode) {
+            case 0:
+                SmartDashboard.putString("LED_color", "none");
+                break;
+            case 1:
+                SmartDashboard.putString("LED_color", "purple_cube");
+                break;
+            case 2:
+                SmartDashboard.putString("LED_color", "yellow_cone");
+                break;
+            default:
         }
     }
 }
