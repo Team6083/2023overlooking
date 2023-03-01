@@ -64,7 +64,8 @@ public class Arm {
         lineMotor.setInverted(true);
 
         // arm encoder
-        // armEncoder = new Encoder(armEnc1Channel, armEnc2Channel); // for normal encoder
+        // armEncoder = new Encoder(armEnc1Channel, armEnc2Channel); // for normal
+        // encoder
         // armEncoder.setReverseDirection(true);
 
         // encoder
@@ -95,7 +96,7 @@ public class Arm {
 
         // encoder reset
         if (Robot.mainController.getBackButton()) {
-            //armEncoder.reset(); // for normal encoder
+            // armEncoder.reset(); // for normal encoder
             armEncoder.setPosition(0); // for sparkmax encoder
             setArmSetpoint(0);
         }
@@ -105,7 +106,7 @@ public class Arm {
         armPID.setP(kAP);
 
         // rotate arm
-        boolean armInManual = (Robot.mainController.getXButton());
+        boolean armInManual = (Robot.mainController.getAButton());
         double armAngleModify = 0;
         if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
             setArmSetpoint(35.2);
@@ -131,7 +132,7 @@ public class Arm {
         }
         // put dashboard
         SmartDashboard.putNumber("arm_setpoint", armPID.getSetpoint());
-        SmartDashboard.putNumber("aem_current_angle", armCurrentAngle);
+        SmartDashboard.putNumber("arm_current_angle", armCurrentAngle);
         SmartDashboard.putNumber("arm_angle_modify", armAngleModify);
     }
 
@@ -156,8 +157,6 @@ public class Arm {
         } else if (Robot.viceController.getRightBumper()) {
             setLineSetpoint(86.15);
         } else if (Robot.viceController.getBButton()) {
-            setArmSetpoint(28.38);
-        } else if (Robot.viceController.getYButton()) {
             setLineSetpoint(58.14);
         } else if (Robot.mainController.getPOV() == 0) {
             lineLengthModify = 0.3;
@@ -196,7 +195,6 @@ public class Arm {
         armMotor.setVoltage(modifiedArmVolt);
         setLineSetpoint(linePID.getSetpoint());
         lineControlLoop();
-        
 
         SmartDashboard.putNumber("arm_orig_volt", armVolt);
         SmartDashboard.putNumber("arm_volt", modifiedArmVolt);
@@ -215,8 +213,10 @@ public class Arm {
 
     // do the number of turns calculate(to a particular angle)
     public static double getArmDegree() {
-        // double armRate = armEncoder.get() * 360 / armEncoderPulse; // for normal encoder
-        // SmartDashboard.putNumber("arm_encoder", armEncoder.get()); // for normal encoder
+        // double armRate = armEncoder.get() * 360 / armEncoderPulse; // for normal
+        // encoder
+        // SmartDashboard.putNumber("arm_encoder", armEncoder.get()); // for normal
+        // encoder
         double armRate = armEncoder.getPosition() * 360 / armEncoderGearing; // for
         // sparkmax encoder
         SmartDashboard.putNumber("arm_encoder", armEncoder.getPosition()); // for
