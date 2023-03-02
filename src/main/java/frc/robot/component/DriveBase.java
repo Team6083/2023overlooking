@@ -48,13 +48,13 @@ public class DriveBase {
     protected static RamseteController ramseteController = new RamseteController();
 
     // Feedforward Controller
-    protected static SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.7, 0.1);
+    protected static SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.63228, 2.1943);
 
     protected static Field2d field = new Field2d();
     protected static Field2d trajField = new Field2d();
 
     // For PID
-    private static double kP = 0.13;
+    private static double kP = 2.063;
     private static double kI = 0;
     private static double kD = 0;
 
