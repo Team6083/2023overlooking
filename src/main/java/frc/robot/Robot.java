@@ -30,8 +30,6 @@ public class Robot extends TimedRobot {
   public static XboxController mainController;
   public static XboxController viceController;
 
-  PowerDistribution pd;
-
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -47,8 +45,6 @@ public class Robot extends TimedRobot {
     // Camera.init();
     // Light.init();
     // NewAutoEngine.init();
-
-    pd = new PowerDistribution(1, ModuleType.kCTRE);
   }
 
   @Override

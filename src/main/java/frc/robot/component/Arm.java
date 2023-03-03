@@ -260,6 +260,8 @@ public class Arm {
             setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58;
         }
         linePID.setSetpoint(setpoint);
+        SmartDashboard.putNumber("1/cos", Math.abs(1 / Math.cos(getArmDegree())));
+        SmartDashboard.putNumber("delta long", (175 * Math.abs(1 / Math.cos(getArmDegree())) - 58));
     }
 
 }
