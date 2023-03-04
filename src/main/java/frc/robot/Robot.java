@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     pd = new PowerDistribution(1, ModuleType.kCTRE);
-    // SmartDashboard.putData(pd);
+    SmartDashboard.putData(pd);
 
     mainController = new XboxController(0);
     viceController = new XboxController(1);
@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
     // Intake.teleop();
     // Light.teleop();
 
-    // SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
+    SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
   }
 
   @Override

@@ -50,8 +50,8 @@ public class Arm {
     private static final double armAngleMax = 185;
     // line value
     private static final double lineVoltLimit = 3;
-    private static final double lineLenghtMax = 100.0;
-    private static final double lineLenghtMin = 0;
+    private static final double lineLenghtMax = 140.0;
+    private static final double lineLenghtMin = 40;
 
     public static void init() {
         // arm motor
@@ -137,6 +137,13 @@ public class Arm {
         SmartDashboard.putNumber("arm_setpoint", armPID.getSetpoint());
         SmartDashboard.putNumber("arm_current_angle", armCurrentAngle);
         SmartDashboard.putNumber("arm_angle_modify", armAngleModify);
+        // double limit  = Math.abs(74 / 253125 * Math.pow(armCurrentAngle, 3)
+        // + 11 / 1000 *Math.pow(armCurrentAngle, 2) + 323 / 9000 * armCurrentAngle + 69);
+        // System.out.println("first part:"+74 / 253125 * Math.pow(armCurrentAngle, 3));
+        // System.out.println("second part:"+11 / 1000 *Math.pow(armCurrentAngle, 2));
+        // System.out.println("thrid: "+323 / 9000 * armCurrentAngle);
+        // SmartDashboard.putNumber("delta_long_function", limit);
+
     }
 
     public static void lineLoop() {
@@ -203,11 +210,11 @@ public class Arm {
         if (Math.abs(modifiedArmVolt) > armVoltLimit) {
             modifiedArmVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
         }
-        
+
         armMotor.setVoltage(modifiedArmVolt);
         setLineSetpoint(linePID.getSetpoint());
         lineControlLoop();
-        
+
         SmartDashboard.putNumber("arm_orig_volt", armVolt);
         SmartDashboard.putNumber("arm_volt", modifiedArmVolt);
     }
@@ -241,7 +248,7 @@ public class Arm {
     // do the number of turns calculate(to a particular length)
     public static double getEncoderToLength() {
         double x = lineMotor.getSelectedSensorPosition();
-        double length = 0.00473 * x - 0.0000000348 * x * x;
+        double length = 0.00473 * x - 0.0000000348 * x * x+40;
         SmartDashboard.putNumber("line_encoder", lineMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("line_length", length);
         return length;
@@ -259,19 +266,22 @@ public class Arm {
 
     public static void setLineSetpoint(double setpoint) {
         // Check if line exceed it's physical limit
+        // double angle = getArmDegree();
         if (setpoint < lineLenghtMin) {
             setpoint = lineLenghtMin;
         } else if (setpoint > lineLenghtMax) {
             setpoint = lineLenghtMax;
         }
         // check if line exceed it's game limit
-        if (setpoint > 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58) {
-            setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58;
+        double radian = Math.toRadians(getArmDegree());
+        if (setpoint > 175 * Math.abs(1 / Math.cos(radian))-60) {
+        setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree()));
         }
         linePID.setSetpoint(setpoint);
-        SmartDashboard.putNumber("cos", Math.cos(getArmDegree()));
-        SmartDashboard.putNumber("1/cos", Math.abs(1 / Math.cos(getArmDegree())));
-        SmartDashboard.putNumber("delta long", (175 * Math.abs(1 / Math.cos(getArmDegree())) - 58));
+       
+        SmartDashboard.putNumber("rafdian", radian);
+        SmartDashboard.putNumber("delta_long_cos", 175 * Math.abs(1 / Math.cos(radian))-60);
+
     }
 
     public static double getLineCurrent() {
