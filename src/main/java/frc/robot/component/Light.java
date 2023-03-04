@@ -21,9 +21,9 @@ public class Light {
     }
 
     public static void teleop() {
-        if (Robot.viceController.getXButton()) {
+        if (Robot.viceController.getXButtonPressed()) {
             lightMode = (lightMode == 1 ? 2 : 1);
-        } else if (Robot.viceController.getXButton()) {
+        } else if (Robot.viceController.getAButtonPressed()) {
             lightMode = 0;
         }
         switch (lightMode) {
@@ -42,8 +42,10 @@ public class Light {
     }
 
     public static void free() {
+        SmartDashboard.putNumber("timer", time.get());
         if (time.get() > 0.25) {
-            int freeMode = (int) Math.random() % 3;
+            int freeMode = (int) (Math.random() * 3); 
+            SmartDashboard.putNumber("freemode", freeMode);
             switch (freeMode) {
                 case 0:
                     setLight(!redLight.get(), greenLight.get(), blueLight.get());

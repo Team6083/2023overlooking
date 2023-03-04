@@ -70,6 +70,7 @@ public class Arm {
         // armEncoder.setReverseDirection(true);
 
         // encoder
+        lineMotor.setSensorPhase(true);
         armEncoder = armMotorLeft.getEncoder(); // for sparkmax encoder
 
         // arm pid
@@ -202,10 +203,11 @@ public class Arm {
         if (Math.abs(modifiedArmVolt) > armVoltLimit) {
             modifiedArmVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
         }
+        
         armMotor.setVoltage(modifiedArmVolt);
         setLineSetpoint(linePID.getSetpoint());
         lineControlLoop();
-
+        
         SmartDashboard.putNumber("arm_orig_volt", armVolt);
         SmartDashboard.putNumber("arm_volt", modifiedArmVolt);
     }
@@ -267,6 +269,7 @@ public class Arm {
             setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree())) - 58;
         }
         linePID.setSetpoint(setpoint);
+        SmartDashboard.putNumber("cos", Math.cos(getArmDegree()));
         SmartDashboard.putNumber("1/cos", Math.abs(1 / Math.cos(getArmDegree())));
         SmartDashboard.putNumber("delta long", (175 * Math.abs(1 / Math.cos(getArmDegree())) - 58));
     }

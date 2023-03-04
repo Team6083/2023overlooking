@@ -40,14 +40,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     pd = new PowerDistribution(1, ModuleType.kCTRE);
-    SmartDashboard.putData(pd);
+    // SmartDashboard.putData(pd);
 
     mainController = new XboxController(0);
     viceController = new XboxController(1);
     DriveBase.init();
     // Intake.init();
     Arm.init();
-    // Camera.init();
+    Camera.init();
     // Light.init();
     // NewAutoEngine.init();
   }
