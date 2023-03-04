@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
   public static XboxController mainController;
   public static XboxController viceController;
 
+  public static PowerDistribution pd;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -37,10 +39,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    pd = new PowerDistribution(1, ModuleType.kCTRE);
+    SmartDashboard.putData(pd);
+
     mainController = new XboxController(0);
     viceController = new XboxController(1);
     DriveBase.init();
-    Intake.init();
+    // Intake.init();
     Arm.init();
     // Camera.init();
     // Light.init();
@@ -69,7 +74,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Arm.teleop();
     DriveBase.teleop();
-    Intake.teleop();
+    // Intake.teleop();
     // Light.teleop();
 
     //SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));

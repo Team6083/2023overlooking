@@ -7,14 +7,15 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class Arm {
     // arm motor
-    private static CANSparkMax armMotorleft;
-    private static CANSparkMax armMotorright;
+    private static CANSparkMax armMotorLeft;
+    private static CANSparkMax armMotorRight;
     private static MotorControllerGroup armMotor;
     private static final int armLeftCANId = 15;
     private static final int armRightCANId = 16;
@@ -54,10 +55,10 @@ public class Arm {
 
     public static void init() {
         // arm motor
-        armMotorleft = new CANSparkMax(armLeftCANId, MotorType.kBrushless);
-        armMotorright = new CANSparkMax(armRightCANId, MotorType.kBrushless);
-        armMotor = new MotorControllerGroup(armMotorleft, armMotorright);
-        armMotorleft.setInverted(true);
+        armMotorLeft = new CANSparkMax(armLeftCANId, MotorType.kBrushless);
+        armMotorRight = new CANSparkMax(armRightCANId, MotorType.kBrushless);
+        armMotor = new MotorControllerGroup(armMotorLeft, armMotorRight);
+        armMotorLeft.setInverted(true);
 
         // line motor
         lineMotor = new WPI_TalonSRX(line);
@@ -69,11 +70,11 @@ public class Arm {
         // armEncoder.setReverseDirection(true);
 
         // encoder
-        armEncoder = armMotorleft.getEncoder(); // for sparkmax encoder
+        armEncoder = armMotorLeft.getEncoder(); // for sparkmax encoder
 
         // arm pid
         armPID = new PIDController(kAP, kAI, kAD);
-        // setArmSetpoint(68.5);
+        setArmSetpoint(68.5);
 
         // line pid
         linePID = new PIDController(kLP, kLI, kLD);
@@ -83,6 +84,7 @@ public class Arm {
         // put dashboard
         SmartDashboard.putNumber("arm_kP", kAP);
         SmartDashboard.putNumber("line_kP", kLP);
+        SmartDashboard.putData(lineMotor);
     }
 
     public static void teleop() {
@@ -165,23 +167,31 @@ public class Arm {
             lineLengthModify = -0.4;
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
         }
-        if (lineInManual) {
-            if (Robot.mainController.getPOV() == 0) {
-                lineMotor.set(0.3);
-            } else if (Robot.mainController.getPOV() == 180) {
-                lineMotor.set(-0.3);
-            } else {
-                lineMotor.set(0);
-            }
-            setLineSetpoint(lineCurrentLength);
+
+        final double lineMotorCurrentLimit = 10;
+        double lineMotorCurrent = getLineCurrent();
+        if (lineMotorCurrent > lineMotorCurrentLimit) {
+            lineMotor.stopMotor();
         } else {
-            lineControlLoop();
+            if (lineInManual) {
+                if (Robot.mainController.getPOV() == 0) {
+                    lineMotor.set(0.3);
+                } else if (Robot.mainController.getPOV() == 180) {
+                    lineMotor.set(-0.3);
+                } else {
+                    lineMotor.set(0);
+                }
+                setLineSetpoint(lineCurrentLength);
+            } else {
+                lineControlLoop();
+            }
         }
+
         // put dashboard
         SmartDashboard.putNumber("line_setpoint", linePID.getSetpoint());
         SmartDashboard.putNumber("line_current_length", lineCurrentLength);
         SmartDashboard.putNumber("line_length_modify", lineLengthModify);
-
+        SmartDashboard.putNumber("line_current", lineMotorCurrent);
     }
 
     public static void armControlLoop() {
@@ -228,9 +238,6 @@ public class Arm {
 
     // do the number of turns calculate(to a particular length)
     public static double getEncoderToLength() {
-        if (lineMotor.getSelectedSensorPosition() < 0) {
-            lineMotor.setSelectedSensorPosition(0.0);
-        }
         double x = lineMotor.getSelectedSensorPosition();
         double length = 0.00473 * x - 0.0000000348 * x * x;
         SmartDashboard.putNumber("line_encoder", lineMotor.getSelectedSensorPosition());
@@ -264,4 +271,7 @@ public class Arm {
         SmartDashboard.putNumber("delta long", (175 * Math.abs(1 / Math.cos(getArmDegree())) - 58));
     }
 
+    public static double getLineCurrent() {
+        return Robot.pd.getCurrent(0);
+    }
 }
