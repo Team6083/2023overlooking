@@ -77,12 +77,11 @@ public class Robot extends TimedRobot {
     // Intake.teleop();
     // Light.teleop();
 
-    //SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
+    // SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
   }
 
   @Override
   public void disabledInit() {
-    // Light.disabledInit();
   }
 
   @Override

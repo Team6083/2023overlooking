@@ -1,71 +1,74 @@
 package frc.robot.component;
 
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class Light {
-    public static AddressableLED led;
-    public static AddressableLEDBuffer ledBuffer;
-    private static final int ledPort = 0; // PWM port to be confirmed
-    private static final int ledLength = 10; // to be confirmed
-    private static int firstHue = 0;
-    private static int mode = 0;
+    public static DigitalOutput redLight;
+    public static DigitalOutput greenLight;
+    public static DigitalOutput blueLight;
+    private static Timer time;
+    private static int lightMode = 0;
 
     public static void init() {
-        led = new AddressableLED(ledPort);
-        ledBuffer = new AddressableLEDBuffer(ledLength); // set length
-        led.setLength(ledBuffer.getLength());
-        led.start();
-        led.setData(ledBuffer);
+        redLight = new DigitalOutput(2); // red dio channel
+        greenLight = new DigitalOutput(0); // green dio channel
+        blueLight = new DigitalOutput(1); // blue dio channel
+        time = new Timer();
+        time.start();
     }
 
     public static void teleop() {
-        if (Robot.viceController.getXButtonPressed()) {
-            mode = (mode == 1 ? 2 : 1);
-        } else if (Robot.viceController.getAButtonPressed()) {
-            mode = 0;
+        if (Robot.viceController.getXButton()) {
+            lightMode = (lightMode == 1 ? 2 : 1);
+        } else if (Robot.viceController.getXButton()) {
+            lightMode = 0;
         }
-        switch (mode) {
+        switch (lightMode) {
             case 0:
-                rainbow();
+                free();
                 break;
             case 1: // purple cube
-                setHSVLoop(80, 255, 127);
+                setLight(false, true, false);
                 break;
             case 2: // yellow cone
-                setHSVLoop(300, 255, 127);
+                setLight(false, false, true);
                 break;
-            default:
         }
-        led.setData(ledBuffer);
         putDashboard();
+
     }
 
-    public static void disabledInit() {
-        led.stop();
-    }
-
-    public static void setHSVLoop(int h, int s, int v) {
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-            ledBuffer.setHSV(i, h, s, v);
+    public static void free() {
+        if (time.get() > 0.25) {
+            int freeMode = (int) Math.random() % 3;
+            switch (freeMode) {
+                case 0:
+                    setLight(!redLight.get(), greenLight.get(), blueLight.get());
+                    break;
+                case 1:
+                    setLight(redLight.get(), !greenLight.get(), blueLight.get());
+                    break;
+                case 2:
+                    setLight(redLight.get(), greenLight.get(), !blueLight.get());
+                    break;
+            }
+            time.reset();
         }
     }
 
-    public static void rainbow() {
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-            var hue = (firstHue + (i * 180 / ledBuffer.getLength())) % 180;
-            ledBuffer.setHSV(i, hue, 255, 127);
-        }
-        firstHue += 3;
-        firstHue %= 180;
+    public static void setLight(boolean r, boolean g, boolean b) {
+        redLight.set(r);
+        greenLight.set(g);
+        blueLight.set(b);
     }
 
     public static void putDashboard() {
-        switch (mode) {
+        switch (lightMode) {
             case 0:
-                SmartDashboard.putString("LED_color", "none");
+                SmartDashboard.putString("LED_color", "free");
                 break;
             case 1:
                 SmartDashboard.putString("LED_color", "purple_cube");
