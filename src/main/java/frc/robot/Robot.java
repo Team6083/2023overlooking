@@ -46,10 +46,10 @@ public class Robot extends TimedRobot {
     viceController = new XboxController(1);
     DriveBase.init();
     // Intake.init();
-    Arm.init();
-    Camera.init();
+    // Arm.init();
+    // Camera.init();
     // Light.init();
-    // NewAutoEngine.init();
+    NewAutoEngine.init();
   }
 
   @Override
@@ -58,12 +58,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // NewAutoEngine.start();
+    NewAutoEngine.start();
   }
 
   @Override
   public void autonomousPeriodic() {
-    // NewAutoEngine.loop();
+    NewAutoEngine.loop();
   }
 
   @Override
@@ -72,8 +72,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Arm.teleop();
-    DriveBase.teleop();
+    // Arm.teleop();
+    // DriveBase.teleop();
     // Intake.teleop();
     // Light.teleop();
 
