@@ -111,15 +111,38 @@ public class Arm {
         // rotate arm
         boolean armInManual = (Robot.mainController.getAButton());
         double armAngleModify = 0;
+    if(Robot.viceController.getBackButton()){
+        if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
+            setArmSetpoint(144.8);
+        } else if (Robot.viceController.getPOV() == 270) {
+            setArmSetpoint(111.5);
+        } else if (Robot.viceController.getBButton()) {
+            setArmSetpoint(151.62);
+        }else {
+            armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
+                    Robot.mainController.getRightTriggerAxis()) * -0.3;
+            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
+        }
+    }else{
         if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
             setArmSetpoint(35.2);
         } else if (Robot.viceController.getPOV() == 270) {
             setArmSetpoint(68.5);
         } else if (Robot.viceController.getBButton()) {
             setArmSetpoint(28.38);
-        } else if (Robot.viceController.getYButton()) {
-            setArmSetpoint(90);
-        } else {
+        }else {
+            armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
+                    Robot.mainController.getRightTriggerAxis()) * -0.3;
+            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
+        }
+    }
+        if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
+            setArmSetpoint(35.2);
+        } else if (Robot.viceController.getPOV() == 270) {
+            setArmSetpoint(68.5);
+        } else if (Robot.viceController.getBButton()) {
+            setArmSetpoint(28.38);
+        }else {
             armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
                     Robot.mainController.getRightTriggerAxis()) * -0.3;
             setArmSetpoint(armPID.getSetpoint() + armAngleModify);
