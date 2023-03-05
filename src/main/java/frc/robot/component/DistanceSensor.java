@@ -14,7 +14,7 @@ public class DistanceSensor {
     }
 
     public static void teleop() {
-        SmartDashboard.putNumber("null", distSens.GetRange() * 2.54);
+        SmartDashboard.putNumber("dis", distSens.GetRange() * 2.54);
     }
 
 }
