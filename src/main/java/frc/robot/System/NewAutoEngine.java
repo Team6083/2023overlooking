@@ -180,13 +180,14 @@ public class NewAutoEngine {
                 // autoArmControl(3, 2);
                 // Intake.solOn();
                 currentStep++;
+                DriveBase.directControl(0, 0);
                 break;
             case 3:
                 // Turn around the arm
                 // autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoder();
+                //DriveBase.resetEncoder();
                 DriveBase.leftMotor.setInverted(false);
                 DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueLeft[1]].getInitialPose().getRotation(),
@@ -203,8 +204,9 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftMotor.setInverted(true);
-                DriveBase.rightMotor.setInverted(false);
+                // DriveBase.leftMotor.setInverted(true);
+                // DriveBase.rightMotor.setInverted(false);
+                DriveBase.directControl(0, 0);
         }
     }
 
@@ -229,6 +231,7 @@ public class NewAutoEngine {
             case 2:
                 // autoArmControl(3, 2);
                 // Intake.solOn();
+                DriveBase.directControl(0, 0);
                 currentStep++;
                 break;
             case 3:
@@ -236,7 +239,7 @@ public class NewAutoEngine {
                 // autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoder();
+                //DriveBase.resetEncoder();
                 DriveBase.leftMotor.setInverted(false);
                 DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueMiddle[1]].getInitialPose().getRotation(),
@@ -253,8 +256,10 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftMotor.setInverted(true);
-                DriveBase.rightMotor.setInverted(false);
+                //DriveBase.leftMotor.setInverted(true);
+                //DriveBase.rightMotor.setInverted(false);
+                DriveBase.directControl(0, 0);
+
         }
     }
 
@@ -489,6 +494,7 @@ public class NewAutoEngine {
         } else if (timer.get() > 1 && timer.get() <= 5.5) {
             // autoArmControl(3, 2);
             // Intake.solOn();
+            DriveBase.directControl(0, 0);
         } else if (timer.get() > 5.5 && timer.get() <= 10) {
             // arm
             // autoArmControl(0, 0);
