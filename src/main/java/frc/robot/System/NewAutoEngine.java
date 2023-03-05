@@ -129,13 +129,13 @@ public class NewAutoEngine {
                 DoRedRight();
                 break;
             case SideTimer:
-                // DoLeftRightTimer();
+                DoLeftRightTimer();
                 break;
             case MiddleTimer:
-                // DoMiddleTimer();
+                DoMiddleTimer();
                 break;
             case GoBackWithTimer:
-                // DoGoBackTimer();
+                DoGoBackTimer();
                 break;
             default:
         }
@@ -464,11 +464,11 @@ public class NewAutoEngine {
             DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else if (timer.get() > 1.5 && timer.get() <= 6) {
             // arm and intake
-            autoArmControl(3, 2);
-            Intake.solOn();
+            // autoArmControl(3, 2);
+            // Intake.solOn();
         } else if (timer.get() > 6 && timer.get() <= 10.5) {
             // arm
-            autoArmControl(0, 1);
+            // autoArmControl(0, 1);
         } else if (timer.get() > 10.5 && timer.get() < 15) {
             DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
         }
@@ -480,11 +480,11 @@ public class NewAutoEngine {
         if (timer.get() <= 1) {
             DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else if (timer.get() > 1 && timer.get() <= 5.5) {
-            autoArmControl(3, 2);
-            Intake.solOn();
+            // autoArmControl(3, 2);
+            // Intake.solOn();
         } else if (timer.get() > 5.5 && timer.get() <= 10) {
             // arm
-            autoArmControl(0, 0);
+            // autoArmControl(0, 0);
         } else if (timer.get() > 10 && timer.get() < 14.5) {
             DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
         } else {
@@ -506,13 +506,13 @@ public class NewAutoEngine {
     public static int autoArmControl(int modeLine, int modeArm) {
         switch (modeArm) {
             case 0: // the beginning position
-                // Arm.setArmSetpoint(68.5);
+                Arm.setArmSetpoint(68.5);
                 break;
             case 1: // the first level
-                // Arm.setArmSetpoint(-10);
+                Arm.setArmSetpoint(-10);
                 break;
             case 2: // the second level and the third level
-                // Arm.setArmSetpoint(35.5);
+                Arm.setArmSetpoint(35.5);
                 break;
             default:
                 break;
@@ -520,20 +520,20 @@ public class NewAutoEngine {
 
         switch (modeLine) {
             case 0: // the beginning position
-                // Arm.setLineSetpoint(0);
+                Arm.setLineSetpoint(0);
                 break;
             case 2: // the second level
-                // Arm.setLineSetpoint(33.02);
+                Arm.setLineSetpoint(33.02);
                 break;
             case 3: // the third level
-                // Arm.setLineSetpoint(86.15);
+                Arm.setLineSetpoint(86.15);
                 break;
             default:
                 break;
         }
 
         Arm.armControlLoop();
-        // Arm.lineControlLoop();
+        Arm.lineControlLoop();
         return 0;
     }
 
