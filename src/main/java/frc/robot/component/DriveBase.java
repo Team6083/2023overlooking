@@ -224,4 +224,10 @@ public class DriveBase {
     public static double getGyroDegree(){
         return gyro.getPitch();
     }
+
+    // public static void driveControl(){
+    //    double x = Robot.mainController.getLeftX();
+    //    double y = Robot.mainController.getLeftY();
+    //    directControl(0.8*(y+x), 0.8*(y-x));
+    // }
 }

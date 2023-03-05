@@ -544,6 +544,7 @@ public class NewAutoEngine {
             }else if(!mode){
                 DriveBase.directControl(0.4, 0.4);
             }
+        SmartDashboard.getNumber("pitch", degree);
     }
 
     public static void goChargeStation(){
