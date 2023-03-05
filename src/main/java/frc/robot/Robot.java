@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
     DriveBase.init();
     // Intake.init();
     // Arm.init();
-    // Camera.init();
+    Camera.init();
     // Light.init();
     NewAutoEngine.init();
   }
