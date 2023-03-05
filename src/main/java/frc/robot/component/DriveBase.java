@@ -82,7 +82,7 @@ public class DriveBase {
 
         leftMotor = new MotorControllerGroup(leftMotor1, leftMotor2);
         rightMotor = new MotorControllerGroup(rightMotor1, rightMotor2);
-        leftMotor.setInverted(true);
+        rightMotor.setInverted(true);
         leftMotor1.setSensorPhase(true);
         drive = new DifferentialDrive(leftMotor, rightMotor);
 
@@ -137,16 +137,19 @@ public class DriveBase {
         leftWheelSpeed = wheelSpeeds.leftMetersPerSecond; // Catch speed from wheelSpeed(with ctrl + left mice)
         rightWheelSpeed = wheelSpeeds.rightMetersPerSecond;
 
+        SmartDashboard.putNumber("leftWheelSpeed", leftWheelSpeed);
+        SmartDashboard.putNumber("rightWheelSpeed", rightWheelSpeed);
+
         leftPID.setSetpoint(leftWheelSpeed);
         rightPID.setSetpoint(rightWheelSpeed);
 
         // To make the number of the encoder become the motor's volt
         leftMotorVolt = leftPID.calculate(
-                positionToDistanceMeter(leftMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
+                positionToDistanceMeter(leftMotor1.getSelectedSensorVelocity()),
                 leftMotorController)
                 + feedforward.calculate(leftWheelSpeed);
         rightMotorVolt = rightPID.calculate(
-                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition() / NewAutoEngine.timer.get()),
+                positionToDistanceMeter(rightMotor1.getSelectedSensorVelocity()),
                 rightMotorController)
                 + feedforward.calculate(rightWheelSpeed);
 
@@ -154,7 +157,10 @@ public class DriveBase {
         rightMotor.setVoltage(rightMotorVolt);
         drive.feed();
 
-        //put the distances between the target and current position onto Dashboard
+        // put the distances between the target and current position onto Dashboard
+        SmartDashboard.putNumber("left_volt", leftMotorVolt);
+        SmartDashboard.putNumber("right_volt", rightMotorVolt);
+
         SmartDashboard.putNumber("errorPosX", currentPose.minus(goal.poseMeters).getX());
         SmartDashboard.putNumber("errorPosY", currentPose.minus(goal.poseMeters).getY());
 
@@ -162,13 +168,17 @@ public class DriveBase {
 
     public static void updateODO() {
         var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
-        odometry.update(gyroAngle, positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()),
-                        positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
+
+        var leftPos = positionToDistanceMeter(leftMotor1.getSelectedSensorPosition());
+        odometry.update(gyroAngle, leftPos,
+                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
         field.setRobotPose(odometry.getPoseMeters());
 
         SmartDashboard.putNumber("x", odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("heading", odometry.getPoseMeters().getRotation().getDegrees());
+
+        SmartDashboard.putNumber("leftPos", leftPos);
 
         // number on Dashboard can be adjusted
         kP = SmartDashboard.getNumber("kP", kP);
@@ -201,7 +211,9 @@ public class DriveBase {
     // Calculate the distance(meter)
     public static double positionToDistanceMeter(double position) {
         double sensorRate = position / encoderPulse;
-        double wheelRate = sensorRate / gearRatio;
+        double wheelRate = sensorRate * 0.5;
+
+        ;
         double positionMeter = 2 * Math.PI * Units.inchesToMeters(6) * wheelRate;
         return positionMeter;
     }
@@ -221,13 +233,13 @@ public class DriveBase {
         rightPID.reset();
     }
 
-    public static double getGyroDegree(){
+    public static double getGyroDegree() {
         return gyro.getPitch();
     }
 
     // public static void driveControl(){
-    //    double x = Robot.mainController.getLeftX();
-    //    double y = Robot.mainController.getLeftY();
-    //    directControl(0.8*(y+x), 0.8*(y-x));
+    // double x = Robot.mainController.getLeftX();
+    // double y = Robot.mainController.getLeftY();
+    // directControl(0.8*(y+x), 0.8*(y-x));
     // }
 }
