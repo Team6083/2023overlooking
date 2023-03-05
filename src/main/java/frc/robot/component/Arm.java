@@ -111,42 +111,43 @@ public class Arm {
         // rotate arm
         boolean armInManual = (Robot.mainController.getAButton());
         double armAngleModify = 0;
-    if(Robot.viceController.getBackButton()){
-        if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
-            setArmSetpoint(144.8);
-        } else if (Robot.viceController.getPOV() == 270) {
-            setArmSetpoint(111.5);
-        } else if (Robot.viceController.getBButton()) {
-            setArmSetpoint(151.62);
-        }else {
-            armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
-                    Robot.mainController.getRightTriggerAxis()) * -0.3;
-            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
+        if (Robot.viceController.getBackButton()) {
+            if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
+                setArmSetpoint(144.8);
+            } else if (Robot.viceController.getPOV() == 270) {
+                setArmSetpoint(111.5);
+            } else if (Robot.viceController.getBButton()) {
+                setArmSetpoint(151.62);
+            } else {
+                armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
+                        Robot.mainController.getRightTriggerAxis()) * -0.3;
+                setArmSetpoint(armPID.getSetpoint() + armAngleModify);
+            }
+        } else {
+            if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
+                setArmSetpoint(35.2);
+            } else if (Robot.viceController.getPOV() == 270) {
+                setArmSetpoint(68.5);
+            } else if (Robot.viceController.getBButton()) {
+                setArmSetpoint(28.38);
+            } else {
+                armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
+                        Robot.mainController.getRightTriggerAxis()) * -0.3;
+                setArmSetpoint(armPID.getSetpoint() + armAngleModify);
+            }
         }
-    }else{
-        if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
-            setArmSetpoint(35.2);
-        } else if (Robot.viceController.getPOV() == 270) {
-            setArmSetpoint(68.5);
-        } else if (Robot.viceController.getBButton()) {
-            setArmSetpoint(28.38);
-        }else {
-            armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
-                    Robot.mainController.getRightTriggerAxis()) * -0.3;
-            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
-        }
-    }
-        if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
-            setArmSetpoint(35.2);
-        } else if (Robot.viceController.getPOV() == 270) {
-            setArmSetpoint(68.5);
-        } else if (Robot.viceController.getBButton()) {
-            setArmSetpoint(28.38);
-        }else {
-            armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
-                    Robot.mainController.getRightTriggerAxis()) * -0.3;
-            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
-        }
+        // if (Robot.viceController.getRightBumper() ||
+        // Robot.viceController.getLeftBumper()) {
+        // setArmSetpoint(35.2);
+        // } else if (Robot.viceController.getPOV() == 270) {
+        // setArmSetpoint(68.5);
+        // } else if (Robot.viceController.getBButton()) {
+        // setArmSetpoint(28.38);
+        // }else {
+        // armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
+        // Robot.mainController.getRightTriggerAxis()) * -0.3;
+        // setArmSetpoint(armPID.getSetpoint() + armAngleModify);
+        // }
         if (armInManual) {
             // control through xbox, for test
             double rotate = (Robot.mainController.getLeftTriggerAxis() -
@@ -160,8 +161,9 @@ public class Arm {
         SmartDashboard.putNumber("arm_setpoint", armPID.getSetpoint());
         SmartDashboard.putNumber("arm_current_angle", armCurrentAngle);
         SmartDashboard.putNumber("arm_angle_modify", armAngleModify);
-        // double limit  = Math.abs(74 / 253125 * Math.pow(armCurrentAngle, 3)
-        // + 11 / 1000 *Math.pow(armCurrentAngle, 2) + 323 / 9000 * armCurrentAngle + 69);
+        // double limit = Math.abs(74 / 253125 * Math.pow(armCurrentAngle, 3)
+        // + 11 / 1000 *Math.pow(armCurrentAngle, 2) + 323 / 9000 * armCurrentAngle +
+        // 69);
         // System.out.println("first part:"+74 / 253125 * Math.pow(armCurrentAngle, 3));
         // System.out.println("second part:"+11 / 1000 *Math.pow(armCurrentAngle, 2));
         // System.out.println("thrid: "+323 / 9000 * armCurrentAngle);
@@ -271,7 +273,7 @@ public class Arm {
     // do the number of turns calculate(to a particular length)
     public static double getEncoderToLength() {
         double x = lineMotor.getSelectedSensorPosition();
-        double length = 0.00473 * x - 0.0000000348 * x * x+40;
+        double length = 0.00473 * x - 0.0000000348 * x * x + 40;
         SmartDashboard.putNumber("line_encoder", lineMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("line_length", length);
         return length;
@@ -297,13 +299,13 @@ public class Arm {
         }
         // check if line exceed it's game limit
         double radian = Math.toRadians(getArmDegree());
-        if (setpoint > 175 * Math.abs(1 / Math.cos(radian))-60) {
-        setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree()));
+        if (setpoint > 175 * Math.abs(1 / Math.cos(radian)) - 60) {
+            setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree()));
         }
         linePID.setSetpoint(setpoint);
-       
+
         SmartDashboard.putNumber("rafdian", radian);
-        SmartDashboard.putNumber("delta_long_cos", 175 * Math.abs(1 / Math.cos(radian))-60);
+        SmartDashboard.putNumber("delta_long_cos", 175 * Math.abs(1 / Math.cos(radian)) - 60);
 
     }
 
