@@ -83,6 +83,7 @@ public class DriveBase {
         leftMotor = new MotorControllerGroup(leftMotor1, leftMotor2);
         rightMotor = new MotorControllerGroup(rightMotor1, rightMotor2);
         leftMotor.setInverted(true);
+        leftMotor1.setSensorPhase(true);
         drive = new DifferentialDrive(leftMotor, rightMotor);
 
         // Reset encoder
@@ -105,8 +106,8 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        leftMotorController = Robot.mainController.getLeftY() * 0.5;
-        rightMotorController = Robot.mainController.getRightY() * 0.5
+        leftMotorController = Robot.mainController.getLeftY() * 0.8;
+        rightMotorController = Robot.mainController.getRightY() * 0.78
         ;
 
         if (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) {

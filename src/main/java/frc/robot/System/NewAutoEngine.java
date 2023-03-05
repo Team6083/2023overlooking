@@ -3,6 +3,8 @@ package frc.robot.System;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import javax.lang.model.element.ModuleElement.DirectiveVisitor;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
@@ -185,8 +187,8 @@ public class NewAutoEngine {
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoder();
-                DriveBase.leftMotor1.setInverted(false);
-                DriveBase.rightMotor1.setInverted(true);
+                DriveBase.leftMotor.setInverted(false);
+                DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueLeft[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -235,8 +237,8 @@ public class NewAutoEngine {
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoder();
-                DriveBase.leftMotor1.setInverted(false);
-                DriveBase.rightMotor1.setInverted(true);
+                DriveBase.leftMotor.setInverted(false);
+                DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueMiddle[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -351,8 +353,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftMotor.setInverted(true);
-                DriveBase.rightMotor.setInverted(false);
+                // DriveBase.leftMotor.setInverted(true);
+                // DriveBase.rightMotor.setInverted(false);
         }
     }
 
@@ -466,11 +468,16 @@ public class NewAutoEngine {
             // arm and intake
             // autoArmControl(3, 2);
             // Intake.solOn();
+            // leftWheelVoltage = 0;
+            // rightWheelVoltage = 0;
+            DriveBase.directControl(0, 0);
         } else if (timer.get() > 6 && timer.get() <= 10.5) {
             // arm
             // autoArmControl(0, 1);
         } else if (timer.get() > 10.5 && timer.get() < 15) {
             DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
+        }else {
+            DriveBase.directControl(0, 0);
         }
     }
 
