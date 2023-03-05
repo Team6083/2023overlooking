@@ -240,8 +240,8 @@ public class NewAutoEngine {
                 timer.reset();
                 timer.start();
                 //DriveBase.resetEncoder();
-                DriveBase.leftMotor.setInverted(false);
-                DriveBase.rightMotor.setInverted(true);
+                // DriveBase.leftMotor.setInverted(false);
+                // DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueMiddle[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -284,6 +284,7 @@ public class NewAutoEngine {
             case 2:
                 // autoArmControl(3, 2);
                 // Intake.solOn();
+                DriveBase.directControl(0, 0);
                 currentStep++;
                 break;
             case 3:
@@ -291,9 +292,9 @@ public class NewAutoEngine {
                 // autoArmControl(0, 1);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoder();
-                DriveBase.leftMotor.setInverted(false);
-                DriveBase.rightMotor.setInverted(true);
+                // DriveBase.resetEncoder();
+                // DriveBase.leftMotor.setInverted(false);
+                // DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueRight[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
@@ -308,8 +309,9 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftMotor.setInverted(true);
-                DriveBase.rightMotor.setInverted(false);
+                // DriveBase.leftMotor.setInverted(true);
+                // DriveBase.rightMotor.setInverted(false);
+                DriveBase.directControl(0, 0);
         }
     }
 

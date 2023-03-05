@@ -107,7 +107,7 @@ public class DriveBase {
     public static void teleop() {
 
         leftMotorController = Robot.mainController.getLeftY() * 0.8;
-        rightMotorController = Robot.mainController.getRightY() * 0.78;
+        rightMotorController = Robot.mainController.getRightY() * 0.8;
 
         if (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) {
             leftMotorController = Robot.mainController.getLeftY();
