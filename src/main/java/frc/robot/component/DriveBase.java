@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-//import frc.robot.System.NewAutoEngine;
 import frc.robot.System.NewAutoEngine;
 
 public class DriveBase {
