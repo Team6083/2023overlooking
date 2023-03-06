@@ -49,7 +49,7 @@ public class Arm {
     private static final double armAngleMin = -15;
     private static final double armAngleMax = 185;
     // line value
-    private static final double lineVoltLimit = 3;
+    private static final double modifiedLineVoltLimit = 3;
     private static final double lineLenghtMax = 140.0;
     private static final double lineLenghtMin = 40;
 
@@ -70,7 +70,8 @@ public class Arm {
         // armEncoder.setReverseDirection(true);
 
         // encoder
-        lineMotor.setSensorPhase(true);
+        lineMotor.setSensorPhase(false);
+        lineMotor.setSelectedSensorPosition(0);
         armEncoder = armMotorLeft.getEncoder(); // for sparkmax encoder
 
         // arm pid
@@ -80,12 +81,13 @@ public class Arm {
         // line pid
         linePID = new PIDController(kLP, kLI, kLD);
 
-        setLineSetpoint(0);
+        setLineSetpoint(40);
 
         // put dashboard
         SmartDashboard.putNumber("arm_kP", kAP);
         SmartDashboard.putNumber("line_kP", kLP);
         SmartDashboard.putData(lineMotor);
+        SmartDashboard.putData(linePID);
     }
 
     public static void teleop() {
@@ -177,8 +179,8 @@ public class Arm {
 
         // encoder reset
         if (Robot.mainController.getStartButton()) {
-            lineMotor.setSelectedSensorPosition(0);
-            setLineSetpoint(0);
+            lineMotor.setSelectedSensorPosition(40);
+            setLineSetpoint(40);
         }
         // adjust kLP
         kLP = SmartDashboard.getNumber("line_kP", kLP);
@@ -188,11 +190,11 @@ public class Arm {
         boolean lineInManual = (Robot.mainController.getXButton());
         double lineLengthModify = 0.0;
         if (Robot.viceController.getLeftBumper()) {
-            setLineSetpoint(33.02);
+            setLineSetpoint(73.02);
         } else if (Robot.viceController.getRightBumper()) {
-            setLineSetpoint(86.15);
+            setLineSetpoint(126.15);
         } else if (Robot.viceController.getBButton()) {
-            setLineSetpoint(58.14);
+            setLineSetpoint(98.14);
         } else if (Robot.mainController.getPOV() == 0) {
             lineLengthModify = 0.3;
             setLineSetpoint(linePID.getSetpoint() + lineLengthModify);
@@ -247,12 +249,14 @@ public class Arm {
     public static void lineControlLoop() {
 
         var lineVolt = linePID.calculate(getEncoderToLength());
-        if (Math.abs(lineVolt) > 10) {
-            lineVolt = lineVoltLimit * (lineVolt > 0 ? 1 : -1);
+        double modifiedLineVolt = lineVolt;
+        if (Math.abs(lineVolt) > modifiedLineVoltLimit) {
+            modifiedLineVolt = modifiedLineVoltLimit * (modifiedLineVolt > 0 ? 1 : -1);
         }
-        lineMotor.setVoltage(lineVolt);
+        lineMotor.setVoltage(modifiedLineVolt);
 
-        SmartDashboard.putNumber("line_volt", lineVolt);
+        SmartDashboard.putNumber("line_orig_volt", lineVolt);
+        SmartDashboard.putNumber("line_volt", modifiedLineVolt);
     }
 
     // do the number of turns calculate(to a particular angle)
