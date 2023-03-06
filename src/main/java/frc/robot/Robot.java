@@ -72,9 +72,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+<<<<<<< HEAD
     Arm.teleop();
     DriveBase.teleop();
     Intake.teleop();
+=======
+    // Arm.teleop();
+    DriveBase.teleop();
+    // Intake.teleop();
+>>>>>>> 72e6eadc3b1b65a6a4cbb6712fb25ca12c6b69ec
     // Light.teleop();
 
     SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
