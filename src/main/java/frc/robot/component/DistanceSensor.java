@@ -17,4 +17,7 @@ public class DistanceSensor {
         SmartDashboard.putNumber("dis", distSens.GetRange() * 2.54);
     }
 
+    public static double getDistence(){
+        return distSens.GetRange()*2.54;
+    }
 }

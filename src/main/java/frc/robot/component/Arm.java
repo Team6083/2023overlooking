@@ -115,7 +115,7 @@ public class Arm {
         double armAngleModify = 0;
         if (Robot.viceController.getBackButton()) {
             if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
-                setArmSetpoint(144.8);
+                setArmSetpoint(140.8);
             } else if (Robot.viceController.getPOV() == 270) {
                 setArmSetpoint(111.5);
             } else if (Robot.viceController.getBButton()) {
@@ -138,18 +138,7 @@ public class Arm {
                 setArmSetpoint(armPID.getSetpoint() + armAngleModify);
             }
         }
-        // if (Robot.viceController.getRightBumper() ||
-        // Robot.viceController.getLeftBumper()) {
-        // setArmSetpoint(35.2);
-        // } else if (Robot.viceController.getPOV() == 270) {
-        // setArmSetpoint(68.5);
-        // } else if (Robot.viceController.getBButton()) {
-        // setArmSetpoint(28.38);
-        // }else {
-        // armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
-        // Robot.mainController.getRightTriggerAxis()) * -0.3;
-        // setArmSetpoint(armPID.getSetpoint() + armAngleModify);
-        // }
+
         if (armInManual) {
             // control through xbox, for test
             double rotate = (Robot.mainController.getLeftTriggerAxis() -
@@ -190,9 +179,9 @@ public class Arm {
         boolean lineInManual = (Robot.mainController.getXButton());
         double lineLengthModify = 0.0;
         if (Robot.viceController.getLeftBumper()) {
-            setLineSetpoint(73.02);
+            setLineSetpoint(84.6);
         } else if (Robot.viceController.getRightBumper()) {
-            setLineSetpoint(126.15);
+            setLineSetpoint(131);
         } else if (Robot.viceController.getBButton()) {
             setLineSetpoint(98.14);
         } else if (Robot.mainController.getPOV() == 0) {

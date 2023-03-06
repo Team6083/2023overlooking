@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import javax.lang.model.element.ModuleElement.DirectiveVisitor;
+import javax.tools.Diagnostic;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.component.Arm;
+import frc.robot.component.DistanceSensor;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
 
@@ -48,7 +50,7 @@ public class NewAutoEngine {
     // The string of the timer
     private static final String SideTimer = "SideTimer";
     private static final String MiddleTimer = "MiddleTimer";
-    private static final String GoBackWithTimer = "GoBackWithTimer";
+    private static final String GoBackTimer = "GoBackTimer";
 
     public static Timer timer = new Timer();
 
@@ -136,7 +138,7 @@ public class NewAutoEngine {
             case MiddleTimer:
                 DoMiddleTimer();
                 break;
-            case GoBackWithTimer:
+            case GoBackTimer:
                 DoGoBackTimer();
                 break;
             default:
@@ -154,7 +156,7 @@ public class NewAutoEngine {
 
         chooser.addOption("sideTimer", SideTimer);
         chooser.addOption("middleTimer", MiddleTimer);
-        chooser.addOption("goBack", GoBackWithTimer);
+        chooser.addOption("goBack", GoBackTimer);
         SmartDashboard.putData(chooser);
     }
 
@@ -177,17 +179,26 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // autoArmControl(3, 2);
-                // Intake.solOn();
-                currentStep++;
+                autoArmControl(2, 3);
+                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
+                    if (Arm.getEncoderToLength() > 82 && Arm.getEncoderToLength() < 87) {
+                        currentStep++;
+                    }
+                    currentStep++;
+                }
                 DriveBase.directControl(0, 0);
                 break;
             case 3:
+                Intake.solOn();
+                currentStep++;
+                break;
+            case 4:
                 // Turn around the arm
-                // autoArmControl(0, 1);
+                autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
-                //DriveBase.resetEncoder();
+                // DriveBase.resetEncoder();//when you turn on this, you would get the wrong
+                // path
                 DriveBase.leftMotor.setInverted(false);
                 DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueLeft[1]].getInitialPose().getRotation(),
@@ -196,7 +207,7 @@ public class NewAutoEngine {
                         trajectory[blueLeft[1]].getInitialPose());
                 currentStep++;
                 break;
-            case 4:
+            case 5:
                 // Run the second path of blueLeft
                 DriveBase.runTraj(trajectory[blueLeft[1]], timer.get());
                 if (timer.get() > trajectory[blueLeft[1]].getTotalTimeSeconds()) {
@@ -204,8 +215,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                // DriveBase.leftMotor.setInverted(true);
-                // DriveBase.rightMotor.setInverted(false);
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);
                 DriveBase.directControl(0, 0);
         }
     }
@@ -229,17 +240,25 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // autoArmControl(3, 2);
-                // Intake.solOn();
+                autoArmControl(2, 3);
+                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
+                    if (Arm.getEncoderToLength() > 82 && Arm.getEncoderToLength() < 87) {
+                        currentStep++;
+                    }
+                    currentStep++;
+                }
                 DriveBase.directControl(0, 0);
-                currentStep++;
                 break;
             case 3:
+                Intake.solOn();
+                currentStep++;
+                break;
+            case 4:
                 // Turn around the arm
-                // autoArmControl(0, 0);
+                autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
-                //DriveBase.resetEncoder();
+                // DriveBase.resetEncoder();
                 // DriveBase.leftMotor.setInverted(false);
                 // DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueMiddle[1]].getInitialPose().getRotation(),
@@ -248,7 +267,7 @@ public class NewAutoEngine {
                         trajectory[blueMiddle[1]].getInitialPose());
                 currentStep++;
                 break;
-            case 4:
+            case 5:
                 // Run the second path of blueMiddle
                 DriveBase.runTraj(trajectory[blueMiddle[1]], timer.get());
                 if (timer.get() > trajectory[blueMiddle[1]].getTotalTimeSeconds()) {
@@ -256,8 +275,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                //DriveBase.leftMotor.setInverted(true);
-                //DriveBase.rightMotor.setInverted(false);
+                // DriveBase.leftMotor.setInverted(true);
+                // DriveBase.rightMotor.setInverted(false);
                 DriveBase.directControl(0, 0);
 
         }
@@ -282,26 +301,34 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // autoArmControl(3, 2);
-                // Intake.solOn();
+                autoArmControl(2, 3);
+                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
+                    if (Arm.getEncoderToLength() > 82 && Arm.getEncoderToLength() < 87) {
+                        currentStep++;
+                    }
+                    currentStep++;
+                }
                 DriveBase.directControl(0, 0);
-                currentStep++;
                 break;
             case 3:
+                Intake.solOn();
+                currentStep++;
+                break;
+            case 4:
                 // Turn around the arm
-                // autoArmControl(0, 1);
+                autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
                 // DriveBase.resetEncoder();
-                // DriveBase.leftMotor.setInverted(false);
-                // DriveBase.rightMotor.setInverted(true);
+                DriveBase.leftMotor.setInverted(false);
+                DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[blueRight[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[blueRight[1]].getInitialPose());
                 currentStep++;
                 break;
-            case 4:
+            case 5:
                 // Run the second path of blueRight
                 DriveBase.runTraj(trajectory[blueRight[1]], timer.get());
                 if (timer.get() > trajectory[blueRight[1]].getTotalTimeSeconds()) {
@@ -309,8 +336,8 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                // DriveBase.leftMotor.setInverted(true);
-                // DriveBase.rightMotor.setInverted(false);
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);
                 DriveBase.directControl(0, 0);
         }
     }
@@ -334,13 +361,22 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // autoArmControl(3, 2);
-                // Intake.solOn();
-                currentStep++;
+                autoArmControl(2, 3);
+                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
+                    if (Arm.getEncoderToLength() > 82 && Arm.getEncoderToLength() < 87) {
+                        currentStep++;
+                    }
+                    currentStep++;
+                }
+                DriveBase.directControl(0, 0);
                 break;
             case 3:
+                Intake.solOn();
+                currentStep++;
+                break;
+            case 4:
                 // Turn around the arm
-                // autoArmControl(0, 1);
+                autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoder();
@@ -352,7 +388,7 @@ public class NewAutoEngine {
                         trajectory[redLeft[1]].getInitialPose());
                 currentStep++;
                 break;
-            case 4:
+            case 5:
                 // Run the second path of redLeft
                 DriveBase.runTraj(trajectory[redLeft[1]], timer.get());
                 if (timer.get() > trajectory[redLeft[1]].getTotalTimeSeconds()) {
@@ -360,8 +396,9 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                // DriveBase.leftMotor.setInverted(true);
-                // DriveBase.rightMotor.setInverted(false);
+                DriveBase.leftMotor.setInverted(true);
+                DriveBase.rightMotor.setInverted(false);
+                DriveBase.directControl(0, 0);
         }
     }
 
@@ -384,25 +421,34 @@ public class NewAutoEngine {
                 }
                 break;
             case 2:
-                // autoArmControl(3, 2);
-                // Intake.solOn();
+            autoArmControl(2, 3);
+            if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
+                if (Arm.getEncoderToLength() > 82 && Arm.getEncoderToLength() < 87) {
+                    currentStep++;
+                }
                 currentStep++;
-                break;
-            case 3:
+            }
+            DriveBase.directControl(0, 0);
+            break;
+        case 3:
+            Intake.solOn();
+            currentStep++;
+            break;
+            case 4:
                 // Turn around the arm
-                // autoArmControl(0, 0);
+                autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
-                DriveBase.resetEncoder();
-                DriveBase.leftMotor.setInverted(false);
-                DriveBase.rightMotor.setInverted(true);
+                // DriveBase.resetEncoder();
+                // DriveBase.leftMotor.setInverted(false);
+                // DriveBase.rightMotor.setInverted(true);
                 DriveBase.odometry.resetPosition(trajectory[redMiddle[1]].getInitialPose().getRotation(),
                         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()),
                         DriveBase.positionToDistanceMeter(DriveBase.rightMotor1.getSelectedSensorPosition()),
                         trajectory[redMiddle[1]].getInitialPose());
                 currentStep++;
                 break;
-            case 4:
+            case 5:
                 // Run the second path of redMiddle
                 DriveBase.runTraj(trajectory[redMiddle[1]], timer.get());
                 if (timer.get() > trajectory[redMiddle[1]].getTotalTimeSeconds()) {
@@ -410,8 +456,9 @@ public class NewAutoEngine {
                 }
                 break;
             default:
-                DriveBase.leftMotor.setInverted(true);
-                DriveBase.rightMotor.setInverted(false);
+                // DriveBase.leftMotor.setInverted(true);
+                // DriveBase.rightMotor.setInverted(false);
+                DriveBase.directControl(0, 0);
         }
     }
 
@@ -433,14 +480,23 @@ public class NewAutoEngine {
                     currentStep++;
                 }
                 break;
-            case 2:
-                // autoArmControl(3, 2);
-                // Intake.solOn();
-                currentStep++;
+                case 2:
+                autoArmControl(2, 3);
+                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
+                    if (Arm.getEncoderToLength() > 82 && Arm.getEncoderToLength() < 87) {
+                        currentStep++;
+                    }
+                    currentStep++;
+                }
+                DriveBase.directControl(0, 0);
                 break;
             case 3:
+                Intake.solOn();
+                currentStep++;
+                break;
+            case 4:
                 // Turn around the arm
-                // autoArmControl(0, 1);
+                autoArmControl(0, 0);
                 timer.reset();
                 timer.start();
                 DriveBase.resetEncoder();
@@ -452,7 +508,7 @@ public class NewAutoEngine {
                         trajectory[redRight[1]].getInitialPose());
                 currentStep++;
                 break;
-            case 4:
+            case 5:
                 // Run the second path of redRight
                 DriveBase.runTraj(trajectory[redRight[1]], timer.get());
                 if (timer.get() > trajectory[redRight[1]].getTotalTimeSeconds()) {
@@ -462,48 +518,50 @@ public class NewAutoEngine {
             default:
                 DriveBase.leftMotor.setInverted(true);
                 DriveBase.rightMotor.setInverted(false);// need to test
+                DriveBase.directControl(0, 0);
         }
     }
 
     // Autonomous written with timer
     public static void DoLeftRightTimer() {
-        double leftWheelVoltage = 0.5;
-        double rightWheelVoltage = 0.5;
-        if (timer.get() <= 1.5) {
-            DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
-        } else if (timer.get() > 1.5 && timer.get() <= 6) {
-            // arm and intake
-            // autoArmControl(3, 2);
-            // Intake.solOn();
-            // leftWheelVoltage = 0;
-            // rightWheelVoltage = 0;
+        double leftWheelVoltage = 0.8;
+        double rightWheelVoltage = 0.8;
+        if (timer.get() <= 3) {
+            autoArmControl(3, 2);
             DriveBase.directControl(0, 0);
-        } else if (timer.get() > 6 && timer.get() <= 10.5) {
-            // arm
-            // autoArmControl(0, 1);
-        } else if (timer.get() > 10.5 && timer.get() < 15) {
+        } else if (timer.get() > 3 && timer.get() <= 3.3) {
+            Intake.solOn();
+        }else if(timer.get()>3.3 && timer.get()<=7.3){
+            autoArmControl(5, 0);
             DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
-        }else {
+        }else if (timer.get() > 7.3 && timer.get() <= 8.5) {
+            if(DistanceSensor.getDistence()<18){
+                DriveBase.directControl(0, 0);
+                Intake.solOff();
+            }else{
+                DriveBase.directControl(-0.3, -0.3);
+            }
+        } else if (timer.get() > 8.5 && timer.get() <= 12.6) {
+           autoArmControl(2, 0);
+           DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
+        } else if(timer.get()>12.6 && timer.get()<14){
             DriveBase.directControl(0, 0);
+            autoArmControl(2, 1);
+        }else{
+            Intake.solOn();
         }
     }
 
     public static void DoMiddleTimer() {
-        double leftWheelVoltage = 0.5;
-        double rightWheelVoltage = 0.5;
-        if (timer.get() <= 1) {
-            DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
-        } else if (timer.get() > 1 && timer.get() <= 5.5) {
-            // autoArmControl(3, 2);
-            // Intake.solOn();
+        double leftWheelVoltage = 0.8;
+        double rightWheelVoltage = 0.8;
+        if (timer.get() <= 3) {
+            autoArmControl(3, 2);
             DriveBase.directControl(0, 0);
-        } else if (timer.get() > 5.5 && timer.get() <= 10) {
-            // arm
-            // autoArmControl(0, 0);
-        } else if (timer.get() > 10 && timer.get() < 14.5) {
-            DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
-        } else {
-            DriveBase.directControl(0, 0);
+        } else if (timer.get() > 3 && timer.get() <= 3.3) {
+            Intake.solOn();
+        }else if(timer.get()>3.3 && timer.get()<8.3){
+            doMiddle();
         }
     }
 
@@ -518,30 +576,36 @@ public class NewAutoEngine {
         DriveBase.putDashboard();
     }
 
-    public static int autoArmControl(int modeLine, int modeArm) {
+    public static int autoArmControl(int modeArm, int modeLine) {
         switch (modeArm) {
             case 0: // the beginning position
                 Arm.setArmSetpoint(68.5);
                 break;
             case 1: // the first level
-                Arm.setArmSetpoint(-10);
+                Arm.setArmSetpoint(-12);
                 break;
             case 2: // the second level and the third level
-                Arm.setArmSetpoint(35.5);
+                Arm.setArmSetpoint(35.7);
                 break;
+            case 4: // the beginning position of the other side of the robot
+                Arm.setArmSetpoint(111.5);
+            case 5: // the first level of the other side of the robot
+                Arm.setArmSetpoint(182);
+            case 6:// the second level of the other side of the robot
+                Arm.setArmSetpoint(140.8);
             default:
                 break;
         }
 
         switch (modeLine) {
             case 0: // the beginning position
-                Arm.setLineSetpoint(0);
+                Arm.setLineSetpoint(40);
                 break;
             case 2: // the second level
-                Arm.setLineSetpoint(33.02);
+                Arm.setLineSetpoint(84.8);
                 break;
             case 3: // the third level
-                Arm.setLineSetpoint(86.15);
+                Arm.setLineSetpoint(131);
                 break;
             default:
                 break;
@@ -552,24 +616,24 @@ public class NewAutoEngine {
         return 0;
     }
 
-    public static void doMiddle(){
+    public static void doMiddle() {
         double degree = DriveBase.getGyroDegree();
-            if(degree >= 5){
-                goChargeStation();
-            }else if(!mode){
-                DriveBase.directControl(0.4, 0.4);
-            }
+        if (degree >= 5) {
+            goChargeStation();
+        } else if (!mode) {
+            DriveBase.directControl(0.4, 0.4);
+        }
         SmartDashboard.getNumber("pitch", degree);
     }
 
-    public static void goChargeStation(){
+    public static void goChargeStation() {
         mode = true;
         gyroPID.setSetpoint(0);
         double driveDegree = DriveBase.getGyroDegree();
         double driveSpeed = -gyroPID.calculate(driveDegree);
-        if(driveDegree>=0.4){
+        if (driveDegree >= 0.4) {
             driveSpeed = 0.4;
-        }else  if(driveDegree<=-0.4){
+        } else if (driveDegree <= -0.4) {
             driveSpeed = -0.4;
         }
         DriveBase.directControl(driveSpeed, driveSpeed);
