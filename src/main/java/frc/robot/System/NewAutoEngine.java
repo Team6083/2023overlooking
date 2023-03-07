@@ -480,7 +480,7 @@ public class NewAutoEngine {
                 Arm.setLineSetpoint(84.8);
                 break;
             case 3: // the third level
-                Arm.setLineSetpoint(131);
+                Arm.setLineSetpoint(125);
                 break;
             default:
                 break;

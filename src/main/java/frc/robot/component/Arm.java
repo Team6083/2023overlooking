@@ -288,13 +288,13 @@ public class Arm {
         }
         // check if line exceed it's game limit
         double radian = Math.toRadians(getArmDegree());
-        if (setpoint > 175 * Math.abs(1 / Math.cos(radian)) - 60) {
-            setpoint = 175 * Math.abs(1 / Math.cos(getArmDegree()));
+        if (setpoint > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
+            setpoint = 170 * Math.abs(1 / Math.cos(radian))-60;
         }
         linePID.setSetpoint(setpoint);
 
         SmartDashboard.putNumber("rafdian", radian);
-        SmartDashboard.putNumber("delta_long_cos", 175 * Math.abs(1 / Math.cos(radian)) - 60);
+        SmartDashboard.putNumber("delta_long_cos", 170 * Math.abs(1 / Math.cos(radian)) - 60);
 
     }
 
