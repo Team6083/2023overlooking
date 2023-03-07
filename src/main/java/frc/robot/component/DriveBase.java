@@ -82,7 +82,7 @@ public class DriveBase {
 
         leftMotor = new MotorControllerGroup(leftMotor1, leftMotor2);
         rightMotor = new MotorControllerGroup(rightMotor1, rightMotor2);
-        rightMotor.setInverted(true);
+        leftMotor.setInverted(true);
         leftMotor1.setSensorPhase(true);
         drive = new DifferentialDrive(leftMotor, rightMotor);
 

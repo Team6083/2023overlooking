@@ -75,9 +75,6 @@ public class Robot extends TimedRobot {
     Arm.teleop();
     DriveBase.teleop();
     Intake.teleop();
-    // Arm.teleop();
-    DriveBase.teleop();
-    // Intake.teleop();
     // Light.teleop();
 
     SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));

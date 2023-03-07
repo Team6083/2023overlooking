@@ -63,6 +63,7 @@ public class Arm {
         // line motor
         lineMotor = new WPI_TalonSRX(line);
         lineMotor.setInverted(true);
+        lineMotor.setSensorPhase(true);
 
         // arm encoder
         // armEncoder = new Encoder(armEnc1Channel, armEnc2Channel); // for normal
@@ -70,7 +71,6 @@ public class Arm {
         // armEncoder.setReverseDirection(true);
 
         // encoder
-        lineMotor.setSensorPhase(false);
         lineMotor.setSelectedSensorPosition(0);
         armEncoder = armMotorLeft.getEncoder(); // for sparkmax encoder
 
@@ -152,13 +152,6 @@ public class Arm {
         SmartDashboard.putNumber("arm_setpoint", armPID.getSetpoint());
         SmartDashboard.putNumber("arm_current_angle", armCurrentAngle);
         SmartDashboard.putNumber("arm_angle_modify", armAngleModify);
-        // double limit = Math.abs(74 / 253125 * Math.pow(armCurrentAngle, 3)
-        // + 11 / 1000 *Math.pow(armCurrentAngle, 2) + 323 / 9000 * armCurrentAngle +
-        // 69);
-        // System.out.println("first part:"+74 / 253125 * Math.pow(armCurrentAngle, 3));
-        // System.out.println("second part:"+11 / 1000 *Math.pow(armCurrentAngle, 2));
-        // System.out.println("thrid: "+323 / 9000 * armCurrentAngle);
-        // SmartDashboard.putNumber("delta_long_function", limit);
 
     }
 
@@ -168,7 +161,7 @@ public class Arm {
 
         // encoder reset
         if (Robot.mainController.getStartButton()) {
-            lineMotor.setSelectedSensorPosition(40);
+            lineMotor.setSelectedSensorPosition(0);
             setLineSetpoint(40);
         }
         // adjust kLP
@@ -266,9 +259,12 @@ public class Arm {
     // do the number of turns calculate(to a particular length)
     public static double getEncoderToLength() {
         double x = lineMotor.getSelectedSensorPosition();
-        double length = 0.00473 * x - 0.0000000348 * x * x + 40;
+        double cal1 = 0.00473 * x;
+        double cal2 = 0.0000000348 * x * x;
+        double length = cal1-cal2+40;
         SmartDashboard.putNumber("line_encoder", lineMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("line_length", length);
+        SmartDashboard.putNumber("X", x);
         return length;
     }
 
