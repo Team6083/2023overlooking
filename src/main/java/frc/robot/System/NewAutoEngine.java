@@ -399,29 +399,30 @@ public class NewAutoEngine {
     public static void DoLeftRightTimer() {
         double leftWheelVoltage = 0.8;
         double rightWheelVoltage = 0.8;
-        if (timer.get() <= 3) {
+        if (timer.get() <= 4) {
             autoArmControl(2, 3);
             DriveBase.directControl(0, 0);
-        } else if (timer.get() > 3 && timer.get() <= 3.3) {
-            Intake.solOn();
-        } else if (timer.get() > 3.3 && timer.get() <= 7.3) {
-            autoArmControl(5, 0);
-            DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
-        } else if (timer.get() > 7.3 && timer.get() <= 8.5) {
-            if (DistanceSensor.getDistence() < 18) {
-                DriveBase.directControl(0, 0);
-                Intake.solOff();
-            } else {
-                DriveBase.directControl(-0.3, -0.3);
-            }
-        } else if (timer.get() > 8.5 && timer.get() <= 12.6) {
+        } else if (timer.get() > 4 && timer.get() <= 7) {
+            // Intake.solOn();
             autoArmControl(2, 0);
-            DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
-        } else if (timer.get() > 12.6 && timer.get() < 14) {
+        } else if (timer.get() > 7 && timer.get() <= 8.5) {
+            autoArmControl(5, 0);
+            //DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
+        } else if (timer.get() > 8.5 && timer.get() <= 9) {
+            // if (DistanceSensor.getDistence() < 21) {
+            //     DriveBase.directControl(0, 0);
+            //     Intake.solOff();
+            // } else {
+            //     DriveBase.directControl(-0.3, -0.3);
+            // }
+        } else if (timer.get() > 9 && timer.get() <= 13.1) {
+            autoArmControl(2, 0);
+            //DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
+        } else if (timer.get() > 13.1 && timer.get() < 14.5) {
             DriveBase.directControl(0, 0);
             autoArmControl(2, 1);
         } else {
-            Intake.solOn();
+            // Intake.solOn();
         }
         
     }
@@ -454,7 +455,7 @@ public class NewAutoEngine {
                 Arm.setArmSetpoint(68.5);
                 break;
             case 1: // the first level
-                Arm.setArmSetpoint(-12);
+                Arm.setArmSetpoint(-10);
                 break;
             case 2: // the second level and the third level
                 Arm.setArmSetpoint(35.7);
@@ -463,7 +464,7 @@ public class NewAutoEngine {
                 Arm.setArmSetpoint(111.5);
                 break;
             case 5: // the first level of the other side of the robot
-                Arm.setArmSetpoint(182);
+                Arm.setArmSetpoint(160);
                 break;
             case 6:// the second level of the other side of the robot
                 Arm.setArmSetpoint(140.8);
@@ -477,10 +478,10 @@ public class NewAutoEngine {
                 Arm.setLineSetpoint(40);
                 break;
             case 2: // the second level
-                Arm.setLineSetpoint(84.8);
+                Arm.setLineSetpoint(89.8);
                 break;
             case 3: // the third level
-                Arm.setLineSetpoint(125);
+                Arm.setLineSetpoint(130);
                 break;
             default:
                 break;
