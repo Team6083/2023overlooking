@@ -48,6 +48,7 @@ public class Arm {
     private static final double armVoltLimit = 4;
     private static final double armAngleMin = -15;
     private static final double armAngleMax = 185;
+    private static double[][] armAngleSetpoints = {{28.38, 35.2, 68.5}, {101.5, 130, 151}};
     // line value
     private static final double modifiedLineVoltLimit = 3;
     private static final double lineLenghtMax = 140.0;
@@ -113,30 +114,18 @@ public class Arm {
         // rotate arm
         boolean armInManual = (Robot.mainController.getAButton());
         double armAngleModify = 0;
-        if (Robot.viceController.getBackButton()) {
-            if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
-                setArmSetpoint(140.8);
-            } else if (Robot.viceController.getPOV() == 270) {
-                setArmSetpoint(111.5);
-            } else if (Robot.viceController.getBButton()) {
-                setArmSetpoint(151.62);
-            } else {
-                armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
-                        Robot.mainController.getRightTriggerAxis()) * -0.3;
-                setArmSetpoint(armPID.getSetpoint() + armAngleModify);
-            }
+        int backButtonPressed = Robot.viceController.getBackButton() ? 1 : 0;
+        
+        if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
+            setArmSetpoint(armAngleSetpoints[backButtonPressed][0]);
+        } else if (Robot.viceController.getPOV() == 270) {
+            setArmSetpoint(armAngleSetpoints[backButtonPressed][1]);
+        } else if (Robot.viceController.getBButton()) {
+            setArmSetpoint(armAngleSetpoints[backButtonPressed][2]);
         } else {
-            if (Robot.viceController.getRightBumper() || Robot.viceController.getLeftBumper()) {
-                setArmSetpoint(35.2);
-            } else if (Robot.viceController.getPOV() == 270) {
-                setArmSetpoint(68.5);
-            } else if (Robot.viceController.getBButton()) {
-                setArmSetpoint(28.38);
-            } else {
-                armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
-                        Robot.mainController.getRightTriggerAxis()) * -0.3;
-                setArmSetpoint(armPID.getSetpoint() + armAngleModify);
-            }
+            armAngleModify = (Robot.mainController.getLeftTriggerAxis() -
+                    Robot.mainController.getRightTriggerAxis()) * -0.3;
+            setArmSetpoint(armPID.getSetpoint() + armAngleModify);
         }
 
         if (armInManual) {
