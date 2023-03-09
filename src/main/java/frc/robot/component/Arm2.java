@@ -72,9 +72,9 @@ public class Arm2 {
         // armEncoder.setReverseDirection(true);
 
         // encoder
+        armEncoder = armMotorLeft.getEncoder(); // for sparkmax encoder 
         lineMotor.setSelectedSensorPosition(0);
-        armEncoder = armMotorLeft.getEncoder(); // for sparkmax encoder
-
+        
         // arm pid
         armPID = new PIDController(kAP, kAI, kAD);
         setArmSetpoint(68.5);
