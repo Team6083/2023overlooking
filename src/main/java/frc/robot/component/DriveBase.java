@@ -71,8 +71,11 @@ public class DriveBase {
     private static double leftMotorSpeedInput;
     private static double rightMotorSpeedInput;
 
-    private static double leftWheelSpeed;
-    private static double rightWheelSpeed;
+    private static double goalLeftWheelSpeed;
+    private static double goalRightWheelSpeed;
+
+    private static double leftPos;
+    private static double rightPos;
 
     public static void init() {
         leftMotor1 = new WPI_TalonSRX(leftMotorID1);
@@ -106,9 +109,9 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        double speedOutputRatio = (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) ? 1 : 0.8;
-        leftMotorSpeedInput = Robot.mainController.getLeftY() * speedOutputRatio;
-        rightMotorSpeedInput = Robot.mainController.getRightY() * speedOutputRatio;
+        double outputRatio = (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) ? 1 : 0.8;
+        leftMotorSpeedInput = Robot.mainController.getLeftY() * outputRatio;
+        rightMotorSpeedInput = Robot.mainController.getRightY() * outputRatio;
 
         drive.tankDrive(leftMotorSpeedInput, rightMotorSpeedInput);
         putDashboard();
@@ -126,28 +129,21 @@ public class DriveBase {
 
         var currentPose = odometry.getPoseMeters();
 
-        var chaspeed = ramseteController.calculate(currentPose, goal);
+        var goalChaspeed = ramseteController.calculate(currentPose, goal);
 
         // Convert chassis speed to wheel speed
-        var wheelSpeeds = kinematics.toWheelSpeeds(chaspeed); // Left and right speed
-        leftWheelSpeed = wheelSpeeds.leftMetersPerSecond; // Catch speed from wheelSpeed(with ctrl + left mice)
-        rightWheelSpeed = wheelSpeeds.rightMetersPerSecond;
+        var goalWheelSpeeds = kinematics.toWheelSpeeds(goalChaspeed); // Left and right speed
+        goalLeftWheelSpeed = goalWheelSpeeds.leftMetersPerSecond; // Catch speed from wheelSpeed(with ctrl + left mice)
+        goalRightWheelSpeed = goalWheelSpeeds.rightMetersPerSecond;
 
-        SmartDashboard.putNumber("leftWheelSpeed", leftWheelSpeed);
-        SmartDashboard.putNumber("rightWheelSpeed", rightWheelSpeed);
+        double currLeftSpeed = positionToDistanceMeter(leftMotor1.getSelectedSensorVelocity());
+        double currRightSpeed = positionToDistanceMeter(rightMotor1.getSelectedSensorVelocity());
 
-        leftPID.setSetpoint(leftWheelSpeed);
-        rightPID.setSetpoint(rightWheelSpeed);
+        leftPID.setSetpoint(goalLeftWheelSpeed);
+        rightPID.setSetpoint(goalRightWheelSpeed);
 
-        // To make the number of the encoder become the motor's volt
-        leftMotorVolt = leftPID.calculate(
-                positionToDistanceMeter(leftMotor1.getSelectedSensorVelocity()),
-                leftMotorSpeedInput)
-                + feedforward.calculate(leftWheelSpeed);
-        rightMotorVolt = rightPID.calculate(
-                positionToDistanceMeter(rightMotor1.getSelectedSensorVelocity()),
-                rightMotorSpeedInput)
-                + feedforward.calculate(rightWheelSpeed);
+        leftMotorVolt = leftPID.calculate(currLeftSpeed) + feedforward.calculate(goalLeftWheelSpeed);
+        rightMotorVolt = rightPID.calculate(currRightSpeed) + feedforward.calculate(goalRightWheelSpeed);
 
         leftMotor.setVoltage(leftMotorVolt);
         rightMotor.setVoltage(rightMotorVolt);
@@ -164,17 +160,11 @@ public class DriveBase {
 
     public static void updateODO() {
         var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+        leftPos = positionToDistanceMeter(leftMotor1.getSelectedSensorPosition());
+        rightPos = positionToDistanceMeter(rightMotor1.getSelectedSensorPosition());
 
-        var leftPos = positionToDistanceMeter(leftMotor1.getSelectedSensorPosition());
-        odometry.update(gyroAngle, leftPos,
-                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()));
+        odometry.update(gyroAngle, leftPos, rightPos);
         field.setRobotPose(odometry.getPoseMeters());
-
-        SmartDashboard.putNumber("x", odometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("y", odometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("heading", odometry.getPoseMeters().getRotation().getDegrees());
-
-        SmartDashboard.putNumber("leftPos", leftPos);
 
         // number on Dashboard can be adjusted
         kP = SmartDashboard.getNumber("kP", kP);
@@ -188,8 +178,11 @@ public class DriveBase {
 
     // To set the position and rotation of the robot
     public static void setODOPose(Pose2d pose) {
-        odometry.resetPosition(pose.getRotation(), positionToDistanceMeter(leftMotor1.getSelectedSensorPosition()),
-                positionToDistanceMeter(rightMotor1.getSelectedSensorPosition()), pose);
+        Rotation2d rotation = pose.getRotation();
+        leftPos = positionToDistanceMeter(leftMotor1.getSelectedSensorPosition());
+        rightPos = positionToDistanceMeter(rightMotor1.getSelectedSensorPosition());
+        
+        odometry.resetPosition(rotation, leftPos, rightPos, pose);
         field.setRobotPose(odometry.getPoseMeters());
     }
 
@@ -200,8 +193,14 @@ public class DriveBase {
         SmartDashboard.putNumber("gyro", gyro.getAngle());
         SmartDashboard.putNumber("leftController_speed", leftMotorSpeedInput);
         SmartDashboard.putNumber("rightController_speed", rightMotorSpeedInput);
-        SmartDashboard.putNumber("left_wheel_speed", leftWheelSpeed);
-        SmartDashboard.putNumber("right_wheel_speed", rightWheelSpeed);
+        SmartDashboard.putNumber("goal_left_wheel_speed", goalLeftWheelSpeed);
+        SmartDashboard.putNumber("goal_right_wheel_speed", goalRightWheelSpeed);
+        SmartDashboard.putNumber("left_pos", leftPos);
+        SmartDashboard.putNumber("right_pos", rightPos);
+
+        SmartDashboard.putNumber("x", odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("y", odometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("heading", odometry.getPoseMeters().getRotation().getDegrees());
     }
 
     // Calculate the distance(meter)
@@ -231,10 +230,4 @@ public class DriveBase {
     public static double getGyroDegree() {
         return gyro.getPitch();
     }
-
-    // public static void driveControl(){
-    // double x = Robot.mainController.getLeftX();
-    // double y = Robot.mainController.getLeftY();
-    // directControl(0.8*(y+x), 0.8*(y-x));
-    // }
 }
