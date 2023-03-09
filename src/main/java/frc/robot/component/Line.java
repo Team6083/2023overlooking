@@ -15,19 +15,23 @@ public class Line {
     private static double kLD = 0.0;
     protected static PIDController linePID;
 
+    private static double lineLengthOffset;
+
     // constants for line motor
     private static final double modifiedLineVoltLimit = 3;
     private static final double maxLineLengthLimit = 140;
     private static final double minLineLengthLimit = 40;
 
-    public Line(double lineInitSensorPosition, double linePIDInitSetPoint) {
+    public Line(double lineInitLength) {
         lineMotor = new WPI_TalonSRX(lineId);
         lineMotor.setInverted(true);
         lineMotor.setSensorPhase(true);
-        lineMotor.setSelectedSensorPosition(lineInitSensorPosition);
+        resetEncoder();
 
         linePID = new PIDController(kLP, kLI, kLD);
-        linePID.setSetpoint(linePIDInitSetPoint);
+        linePID.setSetpoint(lineInitLength);
+
+        lineLengthOffset = lineInitLength;
     }
 
     public void manualControlLoop(double manualControlSpeed) {
@@ -48,24 +52,32 @@ public class Line {
     }
 
     public void setPIDSetpoint(double setpoint) {
-        if (setpoint < minLineLengthLimit) {
+        final double currentSetpoint = linePID.getSetpoint();
+        if (isPhyLimitExceed(currentSetpoint) != 0) {
+            return;
+        }
+        if (isPhyLimitExceed(currentSetpoint) == -1) {
             setpoint = minLineLengthLimit;
-        } else if (setpoint > maxLineLengthLimit) {
+        } else if (isPhyLimitExceed(currentSetpoint) == 1) {
             setpoint = maxLineLengthLimit;
         }
         linePID.setSetpoint(setpoint);
     }
 
-    public void resetEncoderPosAndSetpoint() {
+    public void resetEncoder() {
+        lineLengthOffset = 0;
         lineMotor.setSelectedSensorPosition(0);
-        linePID.setSetpoint(40);
     }
 
     public double getLineLength() {
         double x = lineMotor.getSelectedSensorPosition();
         double cal1 = 0.00473 * x;
         double cal2 = 0.0000000348 * x * x;
-        double length = cal1 - cal2 + 40;
-        return length;
+        double length = cal1 - cal2;
+        return length + lineLengthOffset;
+    }
+
+    private int isPhyLimitExceed(double angle) {
+        return angle < minLineLengthLimit ? -1 : (angle > maxLineLengthLimit ? 1 : 0);
     }
 }
