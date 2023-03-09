@@ -3,44 +3,39 @@ package frc.robot.component;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class Arm {
-    protected Joint arm;
+    protected Joint joint;
     protected Line line;
 
     public Arm() {
-        arm = new Joint(68.5);
+        joint = new Joint(68.5);
         line = new Line(40);
     }
 
     public void teleop(XboxController mainController, XboxController viceController) {
         // arm encoder reset
         if (mainController.getBackButton()) {
-            arm.resetEncoder();
+            joint.resetEncoder();
         }
 
         int backButtonPressed = viceController.getBackButton() ? 1 : 0;
-        if (viceController.getLeftBumper() || viceController.getRightBumper()) {
-            if (viceController.getRightBumper() || viceController.getLeftBumper()) {
-                arm.setSetpoint(arm.armAngleSetpoints[backButtonPressed][0]);
-            } else if (viceController.getPOV() == 270) {
-                arm.setSetpoint(arm.armAngleSetpoints[backButtonPressed][0]);
-            } else if (viceController.getBButton()) {
-                arm.setSetpoint(arm.armAngleSetpoints[backButtonPressed][0]);
-            } else if (viceController.getYButton()) {
-                arm.setSetpoint(arm.armAngleSetpoints[backButtonPressed][0]);
-            } else {
-                double armAngleModify = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis())
-                        * -0.3;
-                arm.setSetpoint(arm.getSetpoint() + armAngleModify);
-            }
+        if (viceController.getRightBumper() || viceController.getLeftBumper()) {
+            joint.setSetpoint(joint.armAngleSetpoints[backButtonPressed][0]);
+        } else if (viceController.getPOV() == 270) {
+            joint.setSetpoint(joint.armAngleSetpoints[backButtonPressed][2]);
+        } else if (viceController.getBButton()) {
+            joint.setSetpoint(joint.armAngleSetpoints[backButtonPressed][1]);
+        } else {
+            double armAngleModify = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis())
+                    * -0.3;
+            joint.setSetpoint(joint.getSetpoint() + armAngleModify);
         }
         boolean armInManual = (mainController.getAButton());
         if (armInManual) {
             double rotatePower = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis()) * -0.15;
-            arm.armInManualControlLoop(rotatePower);
+            joint.armInManualControlLoop(rotatePower);
         } else {
-            arm.pidControlLoop();
+            joint.pidControlLoop();
         }
-
 
         // line encoder reset
         if (mainController.getStartButton()) {
@@ -67,21 +62,22 @@ public class Arm {
         if (lineMotorCurrent > lineMotorCurrentLimit) {
             line.stopMotor();
             if (lineInManual) {
-            if (mainController.getPOV() == 0) {
-                line.manualControlLoop(0.3);
-            } else if (mainController.getPOV() == 180) {
-                line.manualControlLoop(-0.3);
+                if (mainController.getPOV() == 0) {
+                    line.manualControlLoop(0.3);
+                } else if (mainController.getPOV() == 180) {
+                    line.manualControlLoop(-0.3);
+                } else {
+                    line.manualControlLoop(0);
+                }
             } else {
-                line.manualControlLoop(0);
+                line.PIDControlLoop();
             }
-        } else {
-            line.PIDControlLoop();
         }
-    }
-    double radian = Math.toRadians(arm.getAngleDegree());
+        double radian = Math.toRadians(joint.getAngleDegree());
         if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
-            line.setPIDSetpoint( 170 * Math.abs(1 / Math.cos(radian))-60); 
+            line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
         }
-        line.setPIDSetpoint( 170 * Math.abs(1 / Math.cos(radian))-60);
-        
-}}
+        line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
+
+    }
+}
