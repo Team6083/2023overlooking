@@ -65,7 +65,7 @@ public class Arm {
         final double lineMotorCurrentLimit = 10;
         double lineMotorCurrent = line.getLineLength();
         if (lineMotorCurrent > lineMotorCurrentLimit) {
-            line.lineMotor.stopMotor();
+            line.stopMotor();
             if (lineInManual) {
             if (mainController.getPOV() == 0) {
                 line.manualControlLoop(0.3);

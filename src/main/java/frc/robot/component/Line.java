@@ -69,6 +69,10 @@ public class Line {
         lineMotor.setSelectedSensorPosition(0);
     }
 
+    public void stopMotor() {
+        lineMotor.stopMotor();
+    }
+
     public double getLineLength() {
         double x = lineMotor.getSelectedSensorPosition();
         double cal1 = 0.00473 * x;
