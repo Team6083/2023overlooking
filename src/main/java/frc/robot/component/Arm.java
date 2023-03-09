@@ -15,15 +15,16 @@ public class Arm {
         // arm encoder reset
         if (mainController.getBackButton()) {
             joint.resetEncoder();
+            joint.resetSetpoint();
         }
 
         int backButtonPressed = viceController.getBackButton() ? 1 : 0;
         if (viceController.getRightBumper() || viceController.getLeftBumper()) {
-            joint.setSetpoint(joint.armAngleSetpoints[backButtonPressed][0]);
+            joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][0]);
         } else if (viceController.getPOV() == 270) {
-            joint.setSetpoint(joint.armAngleSetpoints[backButtonPressed][2]);
+            joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][2]);
         } else if (viceController.getBButton()) {
-            joint.setSetpoint(joint.armAngleSetpoints[backButtonPressed][1]);
+            joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][1]);
         } else {
             double armAngleModify = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis())
                     * -0.3;
@@ -40,6 +41,7 @@ public class Arm {
         // line encoder reset
         if (mainController.getStartButton()) {
             line.resetEncoder();
+            line.resetSetPoint();
         }
 
         double lineLengthModify = 0.0;

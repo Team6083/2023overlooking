@@ -56,9 +56,9 @@ public class Line {
         if (isPhyLimitExceed(currentSetpoint) != 0) {
             return;
         }
-        if (isPhyLimitExceed(currentSetpoint) == -1) {
+        if (isPhyLimitExceed(setpoint) == -1) {
             setpoint = minLineLengthLimit;
-        } else if (isPhyLimitExceed(currentSetpoint) == 1) {
+        } else if (isPhyLimitExceed(setpoint) == 1) {
             setpoint = maxLineLengthLimit;
         }
         linePID.setSetpoint(setpoint);
@@ -67,6 +67,10 @@ public class Line {
     public void resetEncoder() {
         lineLengthOffset = 0;
         lineMotor.setSelectedSensorPosition(0);
+    }
+
+    public void resetSetPoint() {
+        linePID.setSetpoint(40);
     }
 
     public void stopMotor() {

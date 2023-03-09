@@ -32,7 +32,7 @@ public class Joint {
     private final double armVoltLimit = 4;
     private final double armAngleMin = -15;
     private final double armAngleMax = 185;
-    double[][] armAngleSetpoints = {{35.6, 28.38, 68.5}, {130, 151, 101.5}};
+    public static final double[][] armAngleSetpoints = {{35.6, 28.38, 68.5}, {130, 151, 101.5}};
 
     public Joint(double armInitAngleDegree) {
         armMotorLeft = new CANSparkMax(armLeftCANId, MotorType.kBrushless);
@@ -82,9 +82,9 @@ public class Joint {
             return;
         }
 
-        if (isPhyLimitExceed(currentSetpoint) == -1) {
+        if (isPhyLimitExceed(setpoint) == -1) {
             setpoint = armAngleMin;
-        } else if (isPhyLimitExceed(currentSetpoint) == 1) {
+        } else if (isPhyLimitExceed(setpoint) == 1) {
             setpoint = armAngleMax;
         }
 
@@ -118,6 +118,10 @@ public class Joint {
 
     private void resetRevEncoder() {
         revEncoder.reset();
+    }
+
+    public void resetSetpoint(){
+        armPID.setSetpoint(0);
     }
 
     private int isPhyLimitExceed(double angle) {
