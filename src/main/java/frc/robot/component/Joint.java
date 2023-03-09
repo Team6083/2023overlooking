@@ -1,10 +1,7 @@
 package frc.robot.component;
 
-import javax.swing.text.AbstractDocument.LeafElement;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAnalogSensor;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -35,6 +32,7 @@ public class Joint {
     private final double armVoltLimit = 4;
     private final double armAngleMin = -15;
     private final double armAngleMax = 185;
+    double[][] armAngleSetpoints = {{35.6, 28.38, 68.5}, {130, 151, 101.5}};
 
     public Joint(double armInitAngleDegree) {
         armMotorLeft = new CANSparkMax(armLeftCANId, MotorType.kBrushless);
@@ -72,13 +70,13 @@ public class Joint {
     }
 
     // PID get setpoint
-    public double getSetPoint() {
+    public double getSetpoint() {
         return armPID.getSetpoint();
     }
 
     // PID set setpoint
     public void setSetpoint(double setpoint) {
-        final var currentSetpoint = getSetPoint();
+        final var currentSetpoint = getSetpoint();
         if (isPhyLimitExceed(currentSetpoint) != 0) {
             // if current setpoint exceed physical limit, don't do anything.
             return;
@@ -95,7 +93,8 @@ public class Joint {
 
     // encoder get angle
     public double getAngleDegree() {
-        return getSparkMaxAngleDegree();
+        return getSparkMaxAngleDegree(); // change between getSparkMaxAngleDegree and getRevEncoderAngleDegree. Depend
+                                         // on which encoder you use.
     }
 
     private double getSparkMaxAngleDegree() {
