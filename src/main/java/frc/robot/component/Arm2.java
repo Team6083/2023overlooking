@@ -48,7 +48,7 @@ public class Arm2 {
     private static final double armVoltLimit = 4;
     private static final double armAngleMin = -15;
     private static final double armAngleMax = 185;
-    private static double[][] armAngleSetpoints = {{28.38, 35.2, 68.5}, {101.5, 130, 151}};
+    private static double[][] armAngleSetpoints = {{35.6, 28.38, 68.5}, {130, 151, 101.5}};
     // line value
     private static final double modifiedLineVoltLimit = 3;
     private static final double lineLenghtMax = 140.0;

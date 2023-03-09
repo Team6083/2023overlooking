@@ -64,6 +64,33 @@ public class Joint {
     public void pidControlLoop() {
         var armVolt = armPID.calculate(getAngleDegree());
 
+        double modifiedArmVolt = armVolt;
+        if (Math.abs(modifiedArmVolt) > armVoltLimit) {
+            modifiedArmVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
+        }
+        armMotor.setVoltage(modifiedArmVolt);
+    }
+
+    // PID get setpoint
+    public double getSetPoint() {
+        return armPID.getSetpoint();
+    }
+
+    // PID set setpoint
+    public void setSetpoint(double setpoint) {
+        final var currentSetpoint = getSetPoint();
+        if (isPhyLimitExceed(currentSetpoint) != 0) {
+            // if current setpoint exceed physical limit, don't do anything.
+            return;
+        }
+
+        if (isPhyLimitExceed(currentSetpoint) == -1) {
+            setpoint = armAngleMin;
+        } else if (isPhyLimitExceed(currentSetpoint) == 1) {
+            setpoint = armAngleMax;
+        }
+
+        armPID.setSetpoint(setpoint);
     }
 
     // encoder get angle
@@ -74,8 +101,9 @@ public class Joint {
     private double getSparkMaxAngleDegree() {
         return (sparkMaxEncoder.getPosition() * 360 / armEncoderGearing) + angleDegreeOffset;
     }
-    private double getRevEncoderAngleDegree(){
-        return (revEncoder.get()*360/armEncoderPulse)+angleDegreeOffset;
+
+    private double getRevEncoderAngleDegree() {
+        return (revEncoder.get() * 360 / armEncoderPulse) + angleDegreeOffset;
     }
 
     // reset encoder
@@ -85,11 +113,15 @@ public class Joint {
         resetRevEncoder();
     }
 
-    public void resetSparkMaxEncoder() {
+    private void resetSparkMaxEncoder() {
         sparkMaxEncoder.setPosition(0);
     }
 
-    public void resetRevEncoder() {
+    private void resetRevEncoder() {
         revEncoder.reset();
+    }
+
+    private int isPhyLimitExceed(double angle) {
+        return angle < armAngleMin ? -1 : (angle > armAngleMax ? 1 : 0);
     }
 }
