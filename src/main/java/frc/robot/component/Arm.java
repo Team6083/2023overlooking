@@ -8,7 +8,7 @@ public class Arm {
 
     public Arm() {
         arm = new Joint(68.5);
-        line = new Line(0, 0);
+        line = new Line(40);
     }
 
     public void teleop(XboxController mainController, XboxController viceController) {
@@ -41,9 +41,47 @@ public class Arm {
             arm.pidControlLoop();
         }
 
+
         // line encoder reset
-        if(mainController.getStartButton()){
+        if (mainController.getStartButton()) {
             line.resetEncoder();
         }
+
+        double lineLengthModify = 0.0;
+        if (viceController.getLeftBumper()) {
+            line.setPIDSetpoint(84.6);
+        } else if (viceController.getRightBumper()) {
+            line.setPIDSetpoint(131);
+        } else if (viceController.getBButton()) {
+            line.setPIDSetpoint(98.14);
+        } else if (mainController.getPOV() == 0) {
+            lineLengthModify = 0.3;
+            line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
+        } else if (mainController.getPOV() == 180) {
+            lineLengthModify = -0.4;
+            line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
+        }
+        boolean lineInManual = (mainController.getXButton());
+        final double lineMotorCurrentLimit = 10;
+        double lineMotorCurrent = line.getLineLength();
+        if (lineMotorCurrent > lineMotorCurrentLimit) {
+            line.lineMotor.stopMotor();
+            if (lineInManual) {
+            if (mainController.getPOV() == 0) {
+                line.manualControlLoop(0.3);
+            } else if (mainController.getPOV() == 180) {
+                line.manualControlLoop(-0.3);
+            } else {
+                line.manualControlLoop(0);
+            }
+        } else {
+            line.PIDControlLoop();
+        }
     }
-}
+    double radian = Math.toRadians(arm.getAngleDegree());
+        if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
+            line.setPIDSetpoint( 170 * Math.abs(1 / Math.cos(radian))-60); 
+        }
+        line.setPIDSetpoint( 170 * Math.abs(1 / Math.cos(radian))-60);
+        
+}}
