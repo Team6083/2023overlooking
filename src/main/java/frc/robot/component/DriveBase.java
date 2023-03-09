@@ -68,8 +68,8 @@ public class DriveBase {
     private static double leftMotorVolt;
     private static double rightMotorVolt;
 
-    private static double leftMotorController;
-    private static double rightMotorController;
+    private static double leftMotorSpeedInput;
+    private static double rightMotorSpeedInput;
 
     private static double leftWheelSpeed;
     private static double rightWheelSpeed;
@@ -106,15 +106,11 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        leftMotorController = Robot.mainController.getLeftY() * 0.8;
-        rightMotorController = Robot.mainController.getRightY() * 0.8;
+        double speedOutputRatio = (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) ? 1 : 0.8;
+        leftMotorSpeedInput = Robot.mainController.getLeftY() * speedOutputRatio;
+        rightMotorSpeedInput = Robot.mainController.getRightY() * speedOutputRatio;
 
-        if (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) {
-            leftMotorController = Robot.mainController.getLeftY();
-            rightMotorController = Robot.mainController.getRightY();
-        }
-
-        drive.tankDrive(leftMotorController, rightMotorController);
+        drive.tankDrive(leftMotorSpeedInput, rightMotorSpeedInput);
         putDashboard();
     }
 
@@ -146,11 +142,11 @@ public class DriveBase {
         // To make the number of the encoder become the motor's volt
         leftMotorVolt = leftPID.calculate(
                 positionToDistanceMeter(leftMotor1.getSelectedSensorVelocity()),
-                leftMotorController)
+                leftMotorSpeedInput)
                 + feedforward.calculate(leftWheelSpeed);
         rightMotorVolt = rightPID.calculate(
                 positionToDistanceMeter(rightMotor1.getSelectedSensorVelocity()),
-                rightMotorController)
+                rightMotorSpeedInput)
                 + feedforward.calculate(rightWheelSpeed);
 
         leftMotor.setVoltage(leftMotorVolt);
@@ -202,8 +198,8 @@ public class DriveBase {
         SmartDashboard.putNumber("leftEncoder", leftMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("rightEncoder", rightMotor1.getSelectedSensorPosition());
         SmartDashboard.putNumber("gyro", gyro.getAngle());
-        SmartDashboard.putNumber("leftController_speed", leftMotorController);
-        SmartDashboard.putNumber("rightController_speed", rightMotorController);
+        SmartDashboard.putNumber("leftController_speed", leftMotorSpeedInput);
+        SmartDashboard.putNumber("rightController_speed", rightMotorSpeedInput);
         SmartDashboard.putNumber("left_wheel_speed", leftWheelSpeed);
         SmartDashboard.putNumber("right_wheel_speed", rightWheelSpeed);
     }
@@ -213,7 +209,6 @@ public class DriveBase {
         double sensorRate = position / encoderPulse;
         double wheelRate = sensorRate * 0.5;
 
-        ;
         double positionMeter = 2 * Math.PI * Units.inchesToMeters(6) * wheelRate;
         return positionMeter;
     }
