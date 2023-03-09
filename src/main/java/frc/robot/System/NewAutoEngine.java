@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.component.Arm;
+import frc.robot.component.Arm2;
 import frc.robot.component.DistanceSensor;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
@@ -161,8 +161,8 @@ public class NewAutoEngine {
         switch (currentStep) {
             case 0:
                 autoArmControl(2, 3);
-                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
-                    if (Arm.getEncoderToLength() > 129. && Arm.getEncoderToLength() < 133) {
+                if (Arm2.getArmDegree() > 35.2 && Arm2.getArmDegree() < 36.2) {
+                    if (Arm2.getEncoderToLength() > 129. && Arm2.getEncoderToLength() < 133) {
                         currentStep++;
                     }
                 }
@@ -202,8 +202,8 @@ public class NewAutoEngine {
         switch (currentStep) {
             case 0:
                 autoArmControl(2, 3);
-                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
-                    if (Arm.getEncoderToLength() > 129 && Arm.getEncoderToLength() < 133) {
+                if (Arm2.getArmDegree() > 35.2 && Arm2.getArmDegree() < 36.2) {
+                    if (Arm2.getEncoderToLength() > 129 && Arm2.getEncoderToLength() < 133) {
                         currentStep++;
                     }
                 }
@@ -241,8 +241,8 @@ public class NewAutoEngine {
         switch (currentStep) {
             case 0:
                 autoArmControl(2, 3);
-                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
-                    if (Arm.getEncoderToLength() > 129 && Arm.getEncoderToLength() < 133) {
+                if (Arm2.getArmDegree() > 35.2 && Arm2.getArmDegree() < 36.2) {
+                    if (Arm2.getEncoderToLength() > 129 && Arm2.getEncoderToLength() < 133) {
                         currentStep++;
                     }
                 }
@@ -281,8 +281,8 @@ public class NewAutoEngine {
         switch (currentStep) {
             case 0:
                 autoArmControl(2, 3);
-                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
-                    if (Arm.getEncoderToLength() > 129 && Arm.getEncoderToLength() < 133) {
+                if (Arm2.getArmDegree() > 35.2 && Arm2.getArmDegree() < 36.2) {
+                    if (Arm2.getEncoderToLength() > 129 && Arm2.getEncoderToLength() < 133) {
                         currentStep++;
                     }
                 }
@@ -321,8 +321,8 @@ public class NewAutoEngine {
         switch (currentStep) {
             case 0:
                 autoArmControl(2, 3);
-                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
-                    if (Arm.getEncoderToLength() > 129 && Arm.getEncoderToLength() < 133) {
+                if (Arm2.getArmDegree() > 35.2 && Arm2.getArmDegree() < 36.2) {
+                    if (Arm2.getEncoderToLength() > 129 && Arm2.getEncoderToLength() < 133) {
                         currentStep++;
                     }
                 }
@@ -359,8 +359,8 @@ public class NewAutoEngine {
         switch (currentStep) {
             case 0:
                 autoArmControl(2, 3);
-                if (Arm.getArmDegree() > 35.2 && Arm.getArmDegree() < 36.2) {
-                    if (Arm.getEncoderToLength() > 82 && Arm.getEncoderToLength() < 87) {
+                if (Arm2.getArmDegree() > 35.2 && Arm2.getArmDegree() < 36.2) {
+                    if (Arm2.getEncoderToLength() > 82 && Arm2.getEncoderToLength() < 87) {
                         currentStep++;
                     }
                 }
@@ -452,22 +452,22 @@ public class NewAutoEngine {
     public static int autoArmControl(int modeArm, int modeLine) {
         switch (modeArm) {
             case 0: // the beginning position
-                Arm.setArmSetpoint(68.5);
+                Arm2.setArmSetpoint(68.5);
                 break;
             case 1: // the first level
-                Arm.setArmSetpoint(-10);
+                Arm2.setArmSetpoint(-10);
                 break;
             case 2: // the second level and the third level
-                Arm.setArmSetpoint(35.7);
+                Arm2.setArmSetpoint(35.7);
                 break;
             case 4: // the beginning position of the other side of the robot
-                Arm.setArmSetpoint(111.5);
+                Arm2.setArmSetpoint(111.5);
                 break;
             case 5: // the first level of the other side of the robot
-                Arm.setArmSetpoint(160);
+                Arm2.setArmSetpoint(160);
                 break;
             case 6:// the second level of the other side of the robot
-                Arm.setArmSetpoint(140.8);
+                Arm2.setArmSetpoint(140.8);
                 break;
             default:
                 break;
@@ -475,20 +475,20 @@ public class NewAutoEngine {
 
         switch (modeLine) {
             case 0: // the beginning position
-                Arm.setLineSetpoint(40);
+                Arm2.setLineSetpoint(40);
                 break;
             case 2: // the second level
-                Arm.setLineSetpoint(89.8);
+                Arm2.setLineSetpoint(89.8);
                 break;
             case 3: // the third level
-                Arm.setLineSetpoint(130);
+                Arm2.setLineSetpoint(130);
                 break;
             default:
                 break;
         }
 
-        Arm.armControlLoop();
-        Arm.lineControlLoop();
+        Arm2.armControlLoop();
+        Arm2.lineControlLoop();
         return 0;
     }
 

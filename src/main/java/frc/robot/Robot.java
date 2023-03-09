@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.System.NewAutoEngine;
-import frc.robot.component.Arm;
+import frc.robot.component.Arm2;
 import frc.robot.component.Camera;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
     viceController = new XboxController(1);
     DriveBase.init();
     Intake.init();
-    Arm.init();
+    Arm2.init();
     Camera.init();
     // Light.init();
     // NewAutoEngine.init();
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Arm.teleop();
+    Arm2.teleop();
     DriveBase.teleop();
     Intake.teleop();
     // Light.teleop();
