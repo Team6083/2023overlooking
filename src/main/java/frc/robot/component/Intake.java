@@ -15,6 +15,7 @@ public class Intake {
         com = new Compressor(PneumaticsModuleType.CTREPCM);
         sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
         com.enableDigital();
+        solOff();
     }
 
     public static void teleop() {
