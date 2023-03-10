@@ -28,7 +28,9 @@ public class Arm {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][2]);
         } else if (viceController.getBButton()) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][1]);
-        } else {
+        } else if(viceController.getPOV() == 90){
+            joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][3]);
+        }else {
             double armAngleModify = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis())
                     * -0.3;
             joint.setSetpoint(joint.getSetpoint() + armAngleModify);

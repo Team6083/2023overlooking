@@ -41,10 +41,14 @@ public class Light {
 
     }
 
+    public static void disabledInit() {
+        setLight(true, true, true);
+    }
+
     public static void free() {
         SmartDashboard.putNumber("timer", time.get());
         if (time.get() > 0.25) {
-            int freeMode = (int) (Math.random() * 3); 
+            int freeMode = (int) (Math.random() * 3);
             SmartDashboard.putNumber("freemode", freeMode);
             switch (freeMode) {
                 case 0:

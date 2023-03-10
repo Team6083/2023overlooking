@@ -23,10 +23,8 @@ public class Intake {
         }
         if (solForward) {
             sol.set(Value.kForward);
-        } else if (!solForward) {
-            sol.set(Value.kReverse);
         } else {
-            sol.set(Value.kOff);
+            sol.set(Value.kReverse);
         }
     }
 
