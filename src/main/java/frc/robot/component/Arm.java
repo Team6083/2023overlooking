@@ -85,11 +85,11 @@ public class Arm {
                 line.PIDControlLoop();
             }
         }
-        double radian = Math.toRadians(joint.getAngleDegree());
-        if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
-        line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
-        }
-        line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
+        // double radian = Math.toRadians(joint.getAngleDegree());
+        // if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
+        // line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
+        // }
+        // line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
 
     }
 
@@ -118,7 +118,7 @@ public class Arm {
     }
 
     public void putDashboard(){
-        SmartDashboard.putData(line.linePID);
+        SmartDashboard.putData("Line",line.linePID);
         SmartDashboard.putData(joint.armPID);
         SmartDashboard.putNumber("angle", getAngleDegree());
         SmartDashboard.putNumber("length", getLength());

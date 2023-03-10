@@ -11,7 +11,7 @@ public class Line {
     private static WPI_TalonSRX lineMotor;
 
     // PID controller for line motor
-    private static double kLP = 0.35;
+    private static double kLP = 1.2;
     private static double kLI = 0.0;
     private static double kLD = 0.0;
     protected PIDController linePID;
@@ -46,6 +46,8 @@ public class Line {
             lineVolt = modifiedLineVoltLimit * (lineVolt > 0 ? 1 : -1);
         }
         lineMotor.setVoltage(lineVolt);
+        
+        SmartDashboard.putNumber("linevol", lineVolt);
     }
 
     public double getPIDSetpoint() {
