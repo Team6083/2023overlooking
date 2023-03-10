@@ -429,14 +429,14 @@ public class NewAutoEngine {
     }
 
     public static void DoMiddleTimer() {
-        if (timer.get() <= 3) {
+        if (timer.get() <= 5) {
             autoArmControl(2, 3);
             DriveBase.directControl(0, 0);
-        } else if (timer.get() > 3 && timer.get() <= 3.3) {
+        } else if (timer.get() > 5 && timer.get() <= 15) {
             Intake.solOn();
-        } else if (timer.get() > 3.3 && timer.get() < 8.3) {
-            doMiddle();
-        }
+         } //else if (timer.get() > 3.3 && timer.get() < 8.3) {
+        //     doMiddle();
+        // }
     }
 
     public static void DoGoBackTimer() {
