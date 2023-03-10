@@ -14,7 +14,9 @@ public class DistanceSensor {
     }
 
     public static void teleop() {
+        boolean correct = distSens.GetRange() * 2.54>15 && distSens.GetRange() * 2.54<19;
         SmartDashboard.putNumber("dis", distSens.GetRange() * 2.54);
+        SmartDashboard.putBoolean("disCorrect", correct);
     }
 
     public static double getDistence(){

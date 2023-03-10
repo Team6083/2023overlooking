@@ -24,7 +24,7 @@ public class Joint {
     private Encoder revEncoder;
     private double angleDegreeOffset;
 
-    private PIDController armPID;
+    protected PIDController armPID;
     private double kP = 0.3;
 
     private final double armEncoderPulse = 2048;
@@ -98,6 +98,7 @@ public class Joint {
     }
 
     private double getSparkMaxAngleDegree() {
+        SmartDashboard.putNumber("jointEncoderPos", sparkMaxEncoder.getPosition());
         return (sparkMaxEncoder.getPosition() * 360 / armEncoderGearing) + angleDegreeOffset;
     }
 
@@ -127,4 +128,6 @@ public class Joint {
     private int isPhyLimitExceed(double angle) {
         return angle < armAngleMin ? -1 : (angle > armAngleMax ? 1 : 0);
     }
+
+
 }

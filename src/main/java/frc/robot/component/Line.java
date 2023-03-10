@@ -3,6 +3,7 @@ package frc.robot.component;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Line {
     // line motor
@@ -13,7 +14,7 @@ public class Line {
     private static double kLP = 0.35;
     private static double kLI = 0.0;
     private static double kLD = 0.0;
-    protected static PIDController linePID;
+    protected PIDController linePID;
 
     private static double lineLengthOffset;
 
@@ -79,6 +80,7 @@ public class Line {
 
     public double getLineLength() {
         double x = lineMotor.getSelectedSensorPosition();
+        SmartDashboard.putNumber("lineEncoderPos", x);
         double cal1 = 0.00473 * x;
         double cal2 = 0.0000000348 * x * x;
         double length = cal1 - cal2;
