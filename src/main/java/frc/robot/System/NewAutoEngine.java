@@ -434,7 +434,9 @@ public class NewAutoEngine {
             DriveBase.directControl(0, 0);
         } else if (timer.get() > 5 && timer.get() <= 5.3) {
             Intake.solOn();
-         } else if (timer.get() <= 7) {
+         } else if (timer.get() > 5.3 && timer.get() <= 9) {
+            autoArmControl(0, 0);
+        }else {
             doMiddle();
         }
     }
@@ -445,7 +447,7 @@ public class NewAutoEngine {
         if (timer.get() <= 4) {
             autoArmControl(2, 1);
             DriveBase.directControl(0, 0);
-        }else if (timer.get() >4 && timer.get()<= 8) {
+        }else if (timer.get() >4 && timer.get()<= 6) {
             DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else {
             DriveBase.directControl(0, 0);
