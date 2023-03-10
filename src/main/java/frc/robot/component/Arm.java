@@ -12,6 +12,9 @@ public class Arm {
     public Arm() {
         joint = new Joint(68.5);
         line = new Line(40);
+        
+        SmartDashboard.putData("LinePID",line.linePID);
+        SmartDashboard.putData("ArmPID", joint.armPID);
     }
 
     public void teleop(XboxController mainController, XboxController viceController) {
@@ -118,8 +121,6 @@ public class Arm {
     }
 
     public void putDashboard(){
-        SmartDashboard.putData("Line",line.linePID);
-        SmartDashboard.putData(joint.armPID);
         SmartDashboard.putNumber("angle", getAngleDegree());
         SmartDashboard.putNumber("length", getLength());
     }
