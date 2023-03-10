@@ -109,7 +109,7 @@ public class DriveBase {
     // Normal drivebase
     public static void teleop() {
 
-        double outputRatio = (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) ? 1 : 0.8;
+        double outputRatio = (Robot.mainController.getLeftBumper() || Robot.mainController.getRightBumper()) ? 1 : 0.9;
         leftMotorSpeedInput = Robot.mainController.getLeftY() * outputRatio;
         rightMotorSpeedInput = Robot.mainController.getRightY() * outputRatio;
 
