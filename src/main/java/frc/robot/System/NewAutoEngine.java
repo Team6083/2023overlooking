@@ -462,7 +462,7 @@ public class NewAutoEngine {
                 Robot.arm.setAngleSetPoint(-10);
                 break;
             case 2: // the second level and the third level
-                Robot.arm.setAngleSetPoint(35.7);
+                Robot.arm.setAngleSetPoint(36.7);
                 break;
             case 4: // the beginning position of the other side of the robot
                 Robot.arm.setAngleSetPoint(111.5);
@@ -482,7 +482,7 @@ public class NewAutoEngine {
                 Robot.arm.setLineSetPoint(40);
                 break;
             case 1: // the second level
-                Robot.arm.setLineSetPoint(89.8);
+                Robot.arm.setLineSetPoint(92);
                 break;
             case 2: // the third level
                 Robot.arm.setLineSetPoint(130);
