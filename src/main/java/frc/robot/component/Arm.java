@@ -1,5 +1,6 @@
 package frc.robot.component;
 
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -56,7 +57,10 @@ public class Arm {
             line.setPIDSetpoint(131);
         } else if (viceController.getBButton()) {
             line.setPIDSetpoint(98.14);
-        } else if (mainController.getPOV() == 0) {
+        }else if(viceController.getPOV()==270||viceController.getPOV()==90){
+            line.setPIDSetpoint(40);
+        }
+         else if (mainController.getPOV() == 0) {
             lineLengthModify = 0.3;
             line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
         } else if (mainController.getPOV() == 180) {
@@ -81,11 +85,11 @@ public class Arm {
                 line.PIDControlLoop();
             }
         }
-        // double radian = Math.toRadians(joint.getAngleDegree());
-        // if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
-        // line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
-        // }
-        // line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
+        double radian = Math.toRadians(joint.getAngleDegree());
+        if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
+        line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
+        }
+        line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
 
     }
 
