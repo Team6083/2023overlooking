@@ -53,9 +53,9 @@ public class NewAutoEngine {
     public static String autoSelected;
 
     private static PIDController gyroPID;
-    private static double kP = 0.4;
+    private static double kP = 0.42;
     private static double kI = 0;
-    private static double kD = -0.05;
+    private static double kD = 0.03;
     private static boolean mode = false;
 
     public static void init() {
@@ -105,8 +105,8 @@ public class NewAutoEngine {
         SmartDashboard.putNumber("auto_Timer", timer.get());
         SmartDashboard.putNumber("current_Step", currentStep);
 
-        SmartDashboard.putNumber("path_length",
-                DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()));
+        // SmartDashboard.putNumber("path_length",
+        //         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()));
 
         switch (autoSelected) {
             case DoNothing:
@@ -161,7 +161,7 @@ public class NewAutoEngine {
     public static void DoBlueLeft() {
         switch (currentStep) {
             case 0:
-                autoArmControl(2, 3);
+                autoArmControl(2, 1);
                 if (Robot.arm.getAngleDegree() > 35.2 && Robot.arm.getAngleDegree() < 36.2) {
                     if (Robot.arm.getLength() > 129. && Robot.arm.getLength() < 133) {
                         currentStep++;
@@ -202,7 +202,7 @@ public class NewAutoEngine {
     public static void DoBlueMiddle() {
         switch (currentStep) {
             case 0:
-                autoArmControl(2, 3);
+                autoArmControl(2, 1);
                 if (Robot.arm.getAngleDegree() > 35.2 && Robot.arm.getAngleDegree() < 36.2) {
                     if (Robot.arm.getLength() > 129 && Robot.arm.getLength() < 133) {
                         currentStep++;
@@ -241,7 +241,7 @@ public class NewAutoEngine {
     public static void DoBlueRight() {
         switch (currentStep) {
             case 0:
-                autoArmControl(2, 3);
+                autoArmControl(2, 1);
                 if (Robot.arm.getAngleDegree() > 35.2 && Robot.arm.getAngleDegree() < 36.2) {
                     if (Robot.arm.getLength() > 129 && Robot.arm.getLength() < 133) {
                         currentStep++;
@@ -281,7 +281,7 @@ public class NewAutoEngine {
     public static void DoRedLeft() {
         switch (currentStep) {
             case 0:
-                autoArmControl(2, 3);
+                autoArmControl(2, 1);
                 if (Robot.arm.getAngleDegree() > 35.2 && Robot.arm.getAngleDegree() < 36.2) {
                     if (Robot.arm.getLength() > 129 && Robot.arm.getLength() < 133) {
                         currentStep++;
@@ -321,7 +321,7 @@ public class NewAutoEngine {
     public static void DoRedMiddle() {
         switch (currentStep) {
             case 0:
-                autoArmControl(2, 3);
+                autoArmControl(2, 1);
                 if (Robot.arm.getAngleDegree() > 35.2 && Robot.arm.getAngleDegree() < 36.2) {
                     if (Robot.arm.getLength() > 129 && Robot.arm.getLength() < 133) {
                         currentStep++;
@@ -359,7 +359,7 @@ public class NewAutoEngine {
     public static void DoRedRight() {
         switch (currentStep) {
             case 0:
-                autoArmControl(2, 3);
+                autoArmControl(2, 1);
                 if (Robot.arm.getAngleDegree() > 35.2 && Robot.arm.getAngleDegree() < 36.2) {
                     if (Robot.arm.getLength() > 82 && Robot.arm.getLength() < 87) {
                         currentStep++;
@@ -401,7 +401,7 @@ public class NewAutoEngine {
         double leftWheelVoltage = 0.8;
         double rightWheelVoltage = 0.8;
         if (timer.get() <= 4) {
-            autoArmControl(2, 3);
+            autoArmControl(2, 1);
             DriveBase.directControl(0, 0);
         } else if (timer.get() > 4 && timer.get() <= 7) {
             // Intake.solOn();
@@ -410,39 +410,42 @@ public class NewAutoEngine {
             autoArmControl(5, 0);
             //DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
         } else if (timer.get() > 8.5 && timer.get() <= 9) {
-            // if (DistanceSensor.getDistence() < 21) {
-            //     DriveBase.directControl(0, 0);
-            //     Intake.solOff();
-            // } else {
-            //     DriveBase.directControl(-0.3, -0.3);
-            // }
+            if (DistanceSensor.getDistence() < 19) {
+                DriveBase.directControl(0, 0);
+                Intake.solOff();
+            } else {
+                DriveBase.directControl(-0.3, -0.3);
+            }
         } else if (timer.get() > 9 && timer.get() <= 13.1) {
             autoArmControl(2, 0);
-            //DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
+            DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
         } else if (timer.get() > 13.1 && timer.get() < 14.5) {
             DriveBase.directControl(0, 0);
             autoArmControl(2, 1);
         } else {
-            // Intake.solOn();
+            Intake.solOn();
         }
         
     }
 
     public static void DoMiddleTimer() {
         if (timer.get() <= 5) {
-            autoArmControl(2, 3);
+            autoArmControl(2, 1);
             DriveBase.directControl(0, 0);
-        } else if (timer.get() > 5 && timer.get() <= 15) {
+        } else if (timer.get() > 5 && timer.get() <= 5.3) {
             Intake.solOn();
-         } //else if (timer.get() > 3.3 && timer.get() < 8.3) {
-        //     doMiddle();
-        // }
+         } else if (timer.get() <= 7) {
+            doMiddle();
+        }
     }
 
     public static void DoGoBackTimer() {
         double leftWheelVoltage = 0.8;
         double rightWheelVoltage = 0.8;
-        if (timer.get() <= 1.3) {
+        if (timer.get() <= 4) {
+            autoArmControl(2, 1);
+            DriveBase.directControl(0, 0);
+        }else if (timer.get() >4 && timer.get()<= 8) {
             DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else {
             DriveBase.directControl(0, 0);
@@ -478,10 +481,10 @@ public class NewAutoEngine {
             case 0: // the beginning position
                 Robot.arm.setLineSetPoint(40);
                 break;
-            case 2: // the second level
+            case 1: // the second level
                 Robot.arm.setLineSetPoint(89.8);
                 break;
-            case 3: // the third level
+            case 2: // the third level
                 Robot.arm.setLineSetPoint(130);
                 break;
             default:
@@ -494,10 +497,13 @@ public class NewAutoEngine {
 
     public static void doMiddle() {
         double degree = DriveBase.getGyroDegree();
-        if (degree >= 5) {
+        if (degree >= 10) {
             goChargeStation();
+            if(degree>=-0.1 && degree<=0.1){
+                DriveBase.directControl(0, 0);
+            }
         } else if (!mode) {
-            DriveBase.directControl(0.4, 0.4);
+            DriveBase.directControl(0.6, 0.6);
         }
         SmartDashboard.getNumber("pitch", degree);
     }
@@ -507,10 +513,10 @@ public class NewAutoEngine {
         gyroPID.setSetpoint(0);
         double driveDegree = DriveBase.getGyroDegree();
         double driveSpeed = -gyroPID.calculate(driveDegree);
-        if (driveDegree >= 0.4) {
-            driveSpeed = 0.4;
-        } else if (driveDegree <= -0.4) {
-            driveSpeed = -0.4;
+        if (driveDegree >= 0.6) {
+            driveSpeed = 0.6;
+        } else if (driveDegree <= -0.6) {
+            driveSpeed = -0.6;
         }
         DriveBase.directControl(driveSpeed, driveSpeed);
     }
