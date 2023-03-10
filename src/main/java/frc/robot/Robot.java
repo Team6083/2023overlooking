@@ -10,11 +10,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.System.NewAutoEngine;
-import frc.robot.component.Arm2;
+import frc.robot.component.Arm;
 import frc.robot.component.Camera;
+import frc.robot.component.DistanceSensor;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
+import frc.robot.component.Joint;
 import frc.robot.component.Light;
+import frc.robot.component.Line;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,6 +35,8 @@ public class Robot extends TimedRobot {
 
   public static PowerDistribution pd;
 
+  public static Arm arm;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -46,10 +51,12 @@ public class Robot extends TimedRobot {
     viceController = new XboxController(1);
     DriveBase.init();
     Intake.init();
-    Arm2.init();
     Camera.init();
-    // Light.init();
-    // NewAutoEngine.init();
+    Light.init();
+
+    arm = new Arm();
+    DistanceSensor.init();
+    NewAutoEngine.init();
   }
 
   @Override
@@ -58,12 +65,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // NewAutoEngine.start();
+    NewAutoEngine.start();
   }
 
   @Override
   public void autonomousPeriodic() {
-    // NewAutoEngine.loop();
+    NewAutoEngine.loop();
   }
 
   @Override
@@ -72,11 +79,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Arm2.teleop();
     DriveBase.teleop();
     Intake.teleop();
-    // Light.teleop();
-
+    Light.teleop();
+    arm.teleop(mainController, viceController);
+    DistanceSensor.teleop();
     SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
   }
 

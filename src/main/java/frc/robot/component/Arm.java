@@ -1,6 +1,8 @@
 package frc.robot.component;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 
 public class Arm {
     protected Joint joint;
@@ -13,6 +15,7 @@ public class Arm {
 
     public void teleop(XboxController mainController, XboxController viceController) {
         // arm encoder reset
+        putDashboard();
         if (mainController.getBackButton()) {
             joint.resetEncoder();
             joint.resetSetpoint();
@@ -60,9 +63,10 @@ public class Arm {
         }
         boolean lineInManual = (mainController.getXButton());
         final double lineMotorCurrentLimit = 10;
-        double lineMotorCurrent = line.getLineLength();
+        double lineMotorCurrent = Robot.pd.getCurrent(0);
         if (lineMotorCurrent > lineMotorCurrentLimit) {
             line.stopMotor();
+        } else {
             if (lineInManual) {
                 if (mainController.getPOV() == 0) {
                     line.manualControlLoop(0.3);
@@ -75,11 +79,42 @@ public class Arm {
                 line.PIDControlLoop();
             }
         }
-        double radian = Math.toRadians(joint.getAngleDegree());
-        if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
-            line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
-        }
-        line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
+        // double radian = Math.toRadians(joint.getAngleDegree());
+        // if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
+        // line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
+        // }
+        // line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
 
+    }
+
+    public double getAngleDegree() {
+        return joint.getAngleDegree();
+    }
+
+    public double getLength() {
+        return line.getLineLength();
+    }
+
+    public void setAngleSetPoint(double angleSetPoint) {
+        joint.setSetpoint(angleSetPoint);
+        return;
+    }
+
+    public void setLineSetPoint(double lineSetPoint) {
+        line.setPIDSetpoint(lineSetPoint);
+        return;
+    }
+
+    public void autoArmLoop(){
+        putDashboard();
+        joint.pidControlLoop();
+        line.PIDControlLoop();
+    }
+
+    public void putDashboard(){
+        SmartDashboard.putData(line.linePID);
+        SmartDashboard.putData(joint.armPID);
+        SmartDashboard.putNumber("angle", getAngleDegree());
+        SmartDashboard.putNumber("length", getLength());
     }
 }
