@@ -24,7 +24,7 @@ public class Arm {
         int backButtonPressed = viceController.getBackButton() ? 1 : 0;
         if (viceController.getRightBumper() || viceController.getLeftBumper()) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][0]);
-        } else if (viceController.getPOV() == 270) {
+        } else if (mainController.getPOV() == 90) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][2]);
         } else if (viceController.getBButton()) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][1]);
@@ -56,7 +56,7 @@ public class Arm {
             line.setPIDSetpoint(131);
         } else if (viceController.getBButton()) {
             line.setPIDSetpoint(98.14);
-        } else if (viceController.getPOV() == 270 || viceController.getPOV() == 90) {
+        } else if (mainController.getPOV() == 90 || viceController.getPOV() == 90) {
             line.setPIDSetpoint(40);
         } else if (mainController.getPOV() == 0) {
             lineLengthModify = 0.4;

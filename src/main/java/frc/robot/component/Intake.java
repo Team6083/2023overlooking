@@ -13,8 +13,7 @@ public class Intake {
 
     public static void init() {
         com = new Compressor(PneumaticsModuleType.CTREPCM);
-        sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
-        com.enableDigital();
+        sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);com.enableDigital();
         solOff();
     }
 

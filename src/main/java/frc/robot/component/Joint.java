@@ -32,7 +32,7 @@ public class Joint {
     private final double armVoltLimit = 4;
     private final double armAngleMin = -20;
     private final double armAngleMax =195;
-    public static final double[][] armAngleSetpoints = {{35.6, 28.38, 68.5, -10}, {130, 151, 101.5, 180}};
+    public static final double[][] armAngleSetpoints = {{35.6, 28.38, 90, -10}, {130, 151, 90, 180}};
 
     public Joint(double armInitAngleDegree) {
         armMotorLeft = new CANSparkMax(armLeftCANId, MotorType.kBrushless);

@@ -153,7 +153,8 @@ public class NewAutoEngine {
         chooser.addOption("redRight", RedRight);
 
         chooser.addOption("sideTimer", SideTimer);
-        chooser.addOption("middleTimer", MiddleTimer);
+        chooser.addOption(
+                "middleTimer", MiddleTimer);
         chooser.addOption("goBack", GoBackTimer);
         SmartDashboard.putData(chooser);
     }
@@ -444,13 +445,18 @@ public class NewAutoEngine {
     public static void DoGoBackTimer() {
         double leftWheelVoltage = 0.8;
         double rightWheelVoltage = 0.8;
-        if (timer.get() <= 4) {
+        if (timer.get() < 3) {
             autoArmControl(2, 1);
-            DriveBase.directControl(0, 0);
-        } else if (timer.get() > 4 && timer.get() <= 5.5) {
+            // DriveBase.directControl(0, 0);
+        } else if (timer.get() >= 3 && timer.get() < 6.4) {
+            Intake.solOn();
+        } else if (timer.get() > 6.4 && timer.get() <= 8.4) {
+            autoArmControl(0, 0);
+        } else if (timer.get() > 8.4 && timer.get() <= 10) {
             DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else {
             DriveBase.directControl(0, 0);
+
         }
         DriveBase.putDashboard();
     }
