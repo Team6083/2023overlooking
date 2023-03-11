@@ -46,7 +46,7 @@ public class Arm {
         // line encoder reset
         if (mainController.getStartButton()) {
             line.resetEncoder();
-            line.resetSetPoint();
+            line.resetSetpoint();
         }
 
         double lineLengthModify = 0.0;

@@ -15,7 +15,6 @@ import frc.robot.Robot;
 import frc.robot.component.DistanceSensor;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
-import frc.robot.component.Joint;
 
 public class NewAutoEngine {
 
@@ -443,8 +442,8 @@ public class NewAutoEngine {
     }
 
     public static void DoGoBackTimer() {
-        double leftWheelVoltage = 0.8;
-        double rightWheelVoltage = 0.8;
+        double leftWheelPower = 0.8;
+        double rightWheelPower = 0.8;
         if (timer.get() < 3) {
             autoArmControl(2, 1);
             // DriveBase.directControl(0, 0);
@@ -453,7 +452,7 @@ public class NewAutoEngine {
         } else if (timer.get() > 6.4 && timer.get() <= 8.4) {
             autoArmControl(0, 0);
         } else if (timer.get() > 8.4 && timer.get() <= 10) {
-            DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
+            DriveBase.directControl(leftWheelPower, rightWheelPower);
         } else {
             DriveBase.directControl(0, 0);
 

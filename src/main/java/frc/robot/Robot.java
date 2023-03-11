@@ -15,9 +15,7 @@ import frc.robot.component.Camera;
 import frc.robot.component.DistanceSensor;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
-import frc.robot.component.Joint;
 import frc.robot.component.Light;
-import frc.robot.component.Line;
 
 /**
  * The VM is configured to automatically run this class, and to call the

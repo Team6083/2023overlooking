@@ -77,7 +77,7 @@ public class Line {
         lineMotor.setSelectedSensorPosition(0);
     }
 
-    public void resetSetPoint() {
+    public void resetSetpoint() {
         linePID.setSetpoint(40);
     }
 
@@ -87,7 +87,6 @@ public class Line {
 
     public double getLineLength() {
         double x = lineMotor.getSelectedSensorPosition();
-        SmartDashboard.putNumber("lineEncoderPos", x);
         double cal1 = 0.00473 * x;
         double cal2 = 0.0000000348 * x * x;
         double length = cal1 - cal2;

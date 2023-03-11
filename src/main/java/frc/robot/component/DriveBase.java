@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.System.NewAutoEngine;
 
 public class DriveBase {
 
@@ -62,8 +61,6 @@ public class DriveBase {
 
     // Set the pulse of the encoder
     private static final double encoderPulse = 4096;
-
-    private static final double gearRatio = 7.31;
 
     private static double leftMotorVolt;
     private static double rightMotorVolt;
@@ -181,7 +178,7 @@ public class DriveBase {
         Rotation2d rotation = pose.getRotation();
         leftPos = positionToDistanceMeter(leftMotor1.getSelectedSensorPosition());
         rightPos = positionToDistanceMeter(rightMotor1.getSelectedSensorPosition());
-        
+
         odometry.resetPosition(rotation, leftPos, rightPos, pose);
         field.setRobotPose(odometry.getPoseMeters());
     }
