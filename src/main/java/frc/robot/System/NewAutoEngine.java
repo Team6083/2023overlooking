@@ -106,7 +106,7 @@ public class NewAutoEngine {
         SmartDashboard.putNumber("current_Step", currentStep);
 
         // SmartDashboard.putNumber("path_length",
-        //         DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()));
+        // DriveBase.positionToDistanceMeter(DriveBase.leftMotor1.getSelectedSensorPosition()));
 
         switch (autoSelected) {
             case DoNothing:
@@ -408,7 +408,7 @@ public class NewAutoEngine {
             autoArmControl(2, 0);
         } else if (timer.get() > 7 && timer.get() <= 8.5) {
             autoArmControl(5, 0);
-            //DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
+            // DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
         } else if (timer.get() > 8.5 && timer.get() <= 9) {
             if (DistanceSensor.getDistence() < 19) {
                 DriveBase.directControl(0, 0);
@@ -425,7 +425,7 @@ public class NewAutoEngine {
         } else {
             Intake.solOn();
         }
-        
+
     }
 
     public static void DoMiddleTimer() {
@@ -434,7 +434,9 @@ public class NewAutoEngine {
             DriveBase.directControl(0, 0);
         } else if (timer.get() > 5 && timer.get() <= 5.3) {
             Intake.solOn();
-         } else if (timer.get() <= 7) {
+        } else if (timer.get() > 5.3 && timer.get() <= 9) {
+            autoArmControl(0, 0);
+        } else {
             doMiddle();
         }
     }
@@ -445,7 +447,7 @@ public class NewAutoEngine {
         if (timer.get() <= 4) {
             autoArmControl(2, 1);
             DriveBase.directControl(0, 0);
-        }else if (timer.get() >4 && timer.get()<= 5.5) {
+        } else if (timer.get() > 4 && timer.get() <= 5.5) {
             DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else {
             DriveBase.directControl(0, 0);
@@ -499,7 +501,7 @@ public class NewAutoEngine {
         double degree = DriveBase.getGyroDegree();
         if (degree >= 10) {
             goChargeStation();
-            if(degree>=-0.1 && degree<=0.1){
+            if (degree >= -0.1 && degree <= 0.1) {
                 DriveBase.directControl(0, 0);
             }
         } else if (!mode) {
