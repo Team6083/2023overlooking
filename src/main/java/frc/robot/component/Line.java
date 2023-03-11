@@ -19,7 +19,8 @@ public class Line {
     private static double lineLengthOffset;
 
     // constants for line motor
-    private static final double modifiedLineVoltLimit = 3;
+    private static final double modifiedLineVoltPLimit = 3;
+    private static final double modifiedLineVoltNLimit = -5;
     private static final double maxLineLengthLimit = 140;
     private static final double minLineLengthLimit = 40;
 
@@ -42,8 +43,10 @@ public class Line {
 
     public void PIDControlLoop() {
         double lineVolt = linePID.calculate(getLineLength());
-        if (Math.abs(lineVolt) > modifiedLineVoltLimit) {
-            lineVolt = modifiedLineVoltLimit * (lineVolt > 0 ? 1 : -1);
+        if (lineVolt>modifiedLineVoltPLimit){
+            lineVolt = modifiedLineVoltPLimit;
+        }else if(lineVolt<modifiedLineVoltNLimit){
+            lineVolt = modifiedLineVoltNLimit;
         }
         lineMotor.setVoltage(lineVolt);
         

@@ -36,7 +36,7 @@ public class Arm {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][3]);
         }else {
             double armAngleModify = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis())
-                    * -0.3;
+                    * -0.7;
             joint.setSetpoint(joint.getSetpoint() + armAngleModify);
         }
         boolean armInManual = (mainController.getAButton());
@@ -64,10 +64,10 @@ public class Arm {
             line.setPIDSetpoint(40);
         }
          else if (mainController.getPOV() == 0) {
-            lineLengthModify = 0.3;
+            lineLengthModify = 0.4;
             line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
         } else if (mainController.getPOV() == 180) {
-            lineLengthModify = -0.4;
+            lineLengthModify = -0.5;
             line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
         }
         boolean lineInManual = (mainController.getXButton());

@@ -30,8 +30,8 @@ public class Joint {
     private final double armEncoderPulse = 2048;
     private final double armEncoderGearing = 198;
     private final double armVoltLimit = 4;
-    private final double armAngleMin = -15;
-    private final double armAngleMax = 185;
+    private final double armAngleMin = -20;
+    private final double armAngleMax =195;
     public static final double[][] armAngleSetpoints = {{35.6, 28.38, 68.5, -10}, {130, 151, 101.5, 180}};
 
     public Joint(double armInitAngleDegree) {
@@ -128,6 +128,4 @@ public class Joint {
     private int isPhyLimitExceed(double angle) {
         return angle < armAngleMin ? -1 : (angle > armAngleMax ? 1 : 0);
     }
-
-
 }

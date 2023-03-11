@@ -445,7 +445,7 @@ public class NewAutoEngine {
         if (timer.get() <= 4) {
             autoArmControl(2, 1);
             DriveBase.directControl(0, 0);
-        }else if (timer.get() >4 && timer.get()<= 8) {
+        }else if (timer.get() >4 && timer.get()<= 5.5) {
             DriveBase.directControl(leftWheelVoltage, rightWheelVoltage);
         } else {
             DriveBase.directControl(0, 0);
