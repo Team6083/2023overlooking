@@ -87,8 +87,8 @@ public class Arm2 {
         // put dashboard
         SmartDashboard.putNumber("arm_kP", kAP);
         SmartDashboard.putNumber("line_kP", kLP);
-        SmartDashboard.putData(lineMotor);
-        SmartDashboard.putData(linePID);
+        SmartDashboard.putData("line_motor", lineMotor);
+        SmartDashboard.putData("line_PID", linePID);
     }
 
     public static void teleop() {

@@ -1,6 +1,5 @@
 package frc.robot.component;
 
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -12,9 +11,6 @@ public class Arm {
     public Arm() {
         joint = new Joint(68.5);
         line = new Line(40);
-        
-        SmartDashboard.putData("LinePID",line.linePID);
-        SmartDashboard.putData("ArmPID", joint.armPID);
     }
 
     public void teleop(XboxController mainController, XboxController viceController) {
@@ -32,9 +28,9 @@ public class Arm {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][2]);
         } else if (viceController.getBButton()) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][1]);
-        } else if(viceController.getPOV() == 90){
+        } else if (viceController.getPOV() == 90) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][3]);
-        }else {
+        } else {
             double armAngleModify = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis())
                     * -0.7;
             joint.setSetpoint(joint.getSetpoint() + armAngleModify);
@@ -60,10 +56,9 @@ public class Arm {
             line.setPIDSetpoint(131);
         } else if (viceController.getBButton()) {
             line.setPIDSetpoint(98.14);
-        }else if(viceController.getPOV()==270||viceController.getPOV()==90){
+        } else if (viceController.getPOV() == 270 || viceController.getPOV() == 90) {
             line.setPIDSetpoint(40);
-        }
-         else if (mainController.getPOV() == 0) {
+        } else if (mainController.getPOV() == 0) {
             lineLengthModify = 0.4;
             line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
         } else if (mainController.getPOV() == 180) {
@@ -114,14 +109,14 @@ public class Arm {
         return;
     }
 
-    public void autoArmLoop(){
+    public void autoArmLoop() {
         putDashboard();
         joint.pidControlLoop();
         line.PIDControlLoop();
     }
 
-    public void putDashboard(){
-        SmartDashboard.putNumber("angle", getAngleDegree());
-        SmartDashboard.putNumber("length", getLength());
+    public void putDashboard() {
+        SmartDashboard.putNumber("arm_angle", getAngleDegree());
+        SmartDashboard.putNumber("line_length", getLength());
     }
 }

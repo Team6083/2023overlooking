@@ -24,7 +24,7 @@ public class Joint {
     private Encoder revEncoder;
     private double angleDegreeOffset;
 
-    protected PIDController armPID;
+    private PIDController armPID;
     private double kP = 0.3;
 
     private final double armEncoderPulse = 2048;
@@ -49,8 +49,8 @@ public class Joint {
         armPID = new PIDController(kP, 0, 0);
         armPID.setSetpoint(armInitAngleDegree);
 
-        SmartDashboard.putData(armPID);
-        SmartDashboard.putData(armMotor);
+        SmartDashboard.putData("arm_PID", armPID);
+        SmartDashboard.putData("arm_motor", armMotor);
     }
 
     // control loops
@@ -67,6 +67,8 @@ public class Joint {
             modifiedArmVolt = armVoltLimit * (armVolt > 0 ? 1 : -1);
         }
         armMotor.setVoltage(modifiedArmVolt);
+
+        SmartDashboard.putNumber("arm_volt", modifiedArmVolt);
     }
 
     // PID get setpoint

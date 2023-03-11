@@ -34,6 +34,8 @@ public class Line {
         linePID.setSetpoint(lineInitLength);
 
         lineLengthOffset = lineInitLength;
+        SmartDashboard.putData("line_PID", linePID);
+        SmartDashboard.putData("line_motor", lineMotor);
     }
 
     public void manualControlLoop(double manualControlSpeed) {
@@ -43,14 +45,14 @@ public class Line {
 
     public void PIDControlLoop() {
         double lineVolt = linePID.calculate(getLineLength());
-        if (lineVolt>modifiedLineVoltPLimit){
+        if (lineVolt > modifiedLineVoltPLimit) {
             lineVolt = modifiedLineVoltPLimit;
-        }else if(lineVolt<modifiedLineVoltNLimit){
+        } else if (lineVolt < modifiedLineVoltNLimit) {
             lineVolt = modifiedLineVoltNLimit;
         }
         lineMotor.setVoltage(lineVolt);
-        
-        SmartDashboard.putNumber("linevol", lineVolt);
+
+        SmartDashboard.putNumber("line_volt", lineVolt);
     }
 
     public double getPIDSetpoint() {
