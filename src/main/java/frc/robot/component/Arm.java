@@ -8,6 +8,14 @@ public class Arm {
     protected Joint joint;
     protected Line line;
 
+    public static final double firstStageToJoint = 50;
+
+    public static final double extendLimit = 80; // rule: 122
+    public static final double jointToFrameDist = 40;
+
+    public static final double heightLimit = 150; // rule: 198
+    public static final double jointHeight = 40; // dist from joint to floor
+
     public Arm() {
         joint = new Joint(68.5);
         line = new Line(40);
@@ -35,13 +43,6 @@ public class Arm {
                     * -0.7;
             joint.setSetpoint(joint.getSetpoint() + armAngleModify);
         }
-        boolean armInManual = (mainController.getAButton());
-        if (armInManual) {
-            double rotatePower = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis()) * -0.15;
-            joint.armInManualControlLoop(rotatePower);
-        } else {
-            joint.pidControlLoop();
-        }
 
         // line encoder reset
         if (mainController.getStartButton()) {
@@ -65,6 +66,25 @@ public class Arm {
             lineLengthModify = -0.5;
             line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
         }
+
+        // limit line length by joint angle
+        double jointAngleRadian = Math.toRadians(joint.getAngleDegree());
+        final double lineLengthLimit = getLineMaxLengthByJointAngle(jointAngleRadian);
+        if (lineLengthLimit > 0 && line.getPIDSetpoint() > lineLengthLimit) {
+            line.setPIDSetpoint(lineLengthLimit);
+        }
+
+        SmartDashboard.putNumber("line_length_limit", lineLengthLimit);
+
+        // Joint and Line control loop
+        boolean jointInManual = (mainController.getAButton());
+        if (jointInManual) {
+            double rotatePower = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis()) * -0.15;
+            joint.armInManualControlLoop(rotatePower);
+        } else {
+            joint.pidControlLoop();
+        }
+
         boolean lineInManual = (mainController.getXButton());
         final double lineMotorCurrentLimit = 10;
         double lineMotorCurrent = Robot.pd.getCurrent(0);
@@ -80,15 +100,9 @@ public class Arm {
                     line.manualControlLoop(0);
                 }
             } else {
-                line.PIDControlLoop();
+                line.pidControlLoop();
             }
         }
-        // double radian = Math.toRadians(joint.getAngleDegree());
-        // if (line.getPIDSetpoint() > 170 * Math.abs(1 / Math.cos(radian)) - 60) {
-        // line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
-        // }
-        // line.setPIDSetpoint(170 * Math.abs(1 / Math.cos(radian)) - 60);
-
     }
 
     public double getAngleDegree() {
@@ -112,11 +126,22 @@ public class Arm {
     public void autoArmLoop() {
         putDashboard();
         joint.pidControlLoop();
-        line.PIDControlLoop();
+        line.pidControlLoop();
     }
 
     public void putDashboard() {
         SmartDashboard.putNumber("arm_angle", getAngleDegree());
         SmartDashboard.putNumber("line_length", getLength());
+    }
+
+    public double getLineMaxLengthByJointAngle(double jointAngleRadian) {
+        double angle = jointAngleRadian;
+
+        double maxProj = jointToFrameDist + extendLimit;
+        double maxLenByExtendLimit = (maxProj / Math.abs(Math.cos(angle))) - firstStageToJoint;
+
+        double maxLenByHeightLimit = ((heightLimit - jointHeight) / Math.abs(Math.sin(angle))) - firstStageToJoint;
+
+        return Math.min(maxLenByExtendLimit, maxLenByHeightLimit);
     }
 }
