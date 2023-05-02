@@ -52,10 +52,9 @@ public class NewAutoEngine {
     public static String autoSelected;
 
     private static PIDController gyroPID;
-    private static double kP = 0.42;
+    private static double kP = 0.02;
     private static double kI = 0;
-    private static double kD = 0.03;
-    private static boolean mode = false;
+    private static double kD = 0.005;
 
     public static void init() {
 
@@ -432,11 +431,13 @@ public class NewAutoEngine {
         if (timer.get() <= 5) {
             autoArmControl(2, 1);
             DriveBase.directControl(0, 0);
-        } else if (timer.get() > 5 && timer.get() <= 5.3) {
+        } else if (timer.get() > 5 && timer.get() <= 6) {
             Intake.solOn();
-        } else if (timer.get() > 5.3 && timer.get() <= 9) {
+        } else if (timer.get() > 6 && timer.get() <= 9) {
             autoArmControl(0, 0);
-        } else {
+        } else if (timer.get()>9&&timer.get()<=9.3){
+            DriveBase.directControl(0.7, 0.7);
+        }else {
             doMiddle();
         }
     }
@@ -504,26 +505,23 @@ public class NewAutoEngine {
 
     public static void doMiddle() {
         double degree = DriveBase.getGyroDegree();
-        if (degree >= 10) {
+        if (degree >= 3|| degree<=-3) {
             goChargeStation();
-            if (degree >= -0.1 && degree <= 0.1) {
-                DriveBase.directControl(0, 0);
-            }
-        } else if (!mode) {
-            DriveBase.directControl(0.6, 0.6);
+        } else {
+            DriveBase.directControl(0, 0.0);
         }
         SmartDashboard.getNumber("pitch", degree);
     }
 
     public static void goChargeStation() {
-        mode = true;
+
         gyroPID.setSetpoint(0);
         double driveDegree = DriveBase.getGyroDegree();
         double driveSpeed = -gyroPID.calculate(driveDegree);
-        if (driveDegree >= 0.6) {
-            driveSpeed = 0.6;
-        } else if (driveDegree <= -0.6) {
-            driveSpeed = -0.6;
+        if (driveDegree >= 0.5) {
+            driveSpeed = 0.5;
+        } else if (driveDegree <= -0.5) {
+            driveSpeed = -0.5;
         }
         DriveBase.directControl(driveSpeed, driveSpeed);
     }
