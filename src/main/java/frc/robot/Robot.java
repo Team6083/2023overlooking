@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.System.NewAutoEngine;
 import frc.robot.component.Arm;
 import frc.robot.component.Camera;
-import frc.robot.component.DistanceSensor;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
 import frc.robot.component.Light;
@@ -53,7 +52,6 @@ public class Robot extends TimedRobot {
     Light.init();
 
     arm = new Arm();
-    DistanceSensor.init();
     NewAutoEngine.init();
   }
 
@@ -81,7 +79,6 @@ public class Robot extends TimedRobot {
     Intake.teleop();
     Light.teleop();
     arm.teleop(mainController, viceController);
-    DistanceSensor.teleop();
     SmartDashboard.putNumber("pdp_0_current", pd.getCurrent(0));
   }
 

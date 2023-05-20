@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.component.DistanceSensor;
 import frc.robot.component.DriveBase;
 import frc.robot.component.Intake;
 
@@ -409,12 +408,8 @@ public class NewAutoEngine {
             autoArmControl(5, 0);
             // DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
         } else if (timer.get() > 8.5 && timer.get() <= 9) {
-            if (DistanceSensor.getDistence() < 19) {
                 DriveBase.directControl(0, 0);
                 Intake.solOff();
-            } else {
-                DriveBase.directControl(-0.3, -0.3);
-            }
         } else if (timer.get() > 9 && timer.get() <= 13.1) {
             autoArmControl(2, 0);
             DriveBase.directControl(-leftWheelVoltage, -rightWheelVoltage);
