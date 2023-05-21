@@ -10,6 +10,7 @@ public class Intake {
     private static Compressor com;
     private static DoubleSolenoid sol;
     private static boolean solForward = false;
+    private static boolean compre = true;
 
     public static void init() {
         com = new Compressor(PneumaticsModuleType.CTREPCM);
@@ -19,6 +20,9 @@ public class Intake {
     }
 
     public static void teleop() {
+        if(Robot.mainController.getAButtonPressed()){
+            compre = !compre;
+        }
         if (Robot.mainController.getYButtonPressed()) {
             solForward = !solForward;
         }
@@ -26,6 +30,11 @@ public class Intake {
             sol.set(Value.kForward);
         } else {
             sol.set(Value.kReverse);
+        }
+        if(compre){
+            com.enableDigital();
+        }else{
+            com.disable();
         }
     }
 
