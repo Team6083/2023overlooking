@@ -430,7 +430,7 @@ public class NewAutoEngine {
             Intake.solOn();
         } else if (timer.get() > 6 && timer.get() <= 9) {
             autoArmControl(0, 0);
-        } else if (timer.get()>9&&timer.get()<=9.3){
+        } else if (timer.get()>9&&timer.get()<=10){
             DriveBase.directControl(0.7, 0.7);
         }else {
             doMiddle();
