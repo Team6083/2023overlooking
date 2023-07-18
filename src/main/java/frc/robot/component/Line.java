@@ -21,7 +21,7 @@ public class Line {
     // constants for line motor
     private static final double modifiedLineVoltPLimit = 3;
     private static final double modifiedLineVoltNLimit = -5;
-    private static final double maxLineLengthLimit = 120;
+    private static final double maxLineLengthLimit = 90;
     private static final double minLineLengthLimit = 40;
 
     public Line(double lineInitLength) {

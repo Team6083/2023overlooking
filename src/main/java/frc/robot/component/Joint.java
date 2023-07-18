@@ -30,8 +30,8 @@ public class Joint {
     private final double armEncoderPulse = 2048;
     private final double armEncoderGearing = 198;
     private final double armVoltLimit = 4;
-    private final double armAngleMin = -20;
-    private final double armAngleMax = 195;
+    private final double armAngleMin = 0;
+    private final double armAngleMax = 180;
     public static final double[][] armAngleSetpoints = { { 35.6, 28.38, 90, -10 }, { 130, 151, 90, 180 } };
 
     public Joint(double armInitAngleDegree) {
