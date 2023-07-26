@@ -10,7 +10,7 @@ public class Arm {
 
     public static final double firstStageToJoint = 50;
 
-    public static final double extendLimit = 80; // rule: 122
+    public static final double extendLimit = 120; // rule: 122
     public static final double jointToFrameDist = 40;
 
     public static final double heightLimit = 150; // rule: 198
