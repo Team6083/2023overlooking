@@ -15,8 +15,6 @@ public class Arm {
 
     public static final double heightLimit = 150; // rule: 198
     public static final double jointHeight = 40; // dist from joint to floor
-    public static double x = Math.cos(Math.toRadians(68.5)) * 40;
-    public static double y = Math.sin(Math.toRadians(68.5)) * 40;
 
     public Arm() {
         joint = new Joint(68.5);
@@ -33,18 +31,38 @@ public class Arm {
 
         boolean inPolar = mainController.getBButton();
         int backButtonPressed = viceController.getBackButton() ? 1 : 0;
+
+        double newJointSetpoint = joint.getSetpoint();
+        double newLineSetpoint = line.getPIDSetpoint();
+
+        if (inPolar) { // Control using polar coordinate.
+            newJointSetpoint += (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis()) * -0.7;
+            if (mainController.getPOV() == 0) {
+                newLineSetpoint += 0.4;
+            } else if (mainController.getPOV() == 180) {
+                newLineSetpoint += -0.5;
+            }
+        } else { // Control using Cartesian coordinate.
+            var currCord = polarToCartes(newJointSetpoint, newLineSetpoint);
+
+            if (mainController.getPOV() != -1) {
+                double newX = currCord[0] + Math.cos(Math.toRadians(mainController.getPOV())) * 10;
+                double newY = currCord[1] + Math.sin(Math.toRadians(mainController.getPOV())) * 10;
+
+                var tmp = cartesToPolar(newX, newY);
+                newLineSetpoint = tmp[0];
+                newJointSetpoint = tmp[1];
+            }
+        }
+
         if (viceController.getRightBumper() || viceController.getLeftBumper()) {
-            joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][0]);
+            newJointSetpoint = Joint.armAngleSetpoints[backButtonPressed][0];
         } else if (viceController.getPOV() == 270) {
-            joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][2]);
+            newJointSetpoint = Joint.armAngleSetpoints[backButtonPressed][2];
         } else if (viceController.getBButton()) {
-            joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][1]);
+            newJointSetpoint = Joint.armAngleSetpoints[backButtonPressed][1];
         } else if (viceController.getPOV() == 90) {
-            joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][3]);
-        } else if (inPolar) {
-            double armAngleModify = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis())
-                    * -0.7;
-            joint.setSetpoint(joint.getSetpoint() + armAngleModify);
+            newJointSetpoint = Joint.armAngleSetpoints[backButtonPressed][3];
         }
 
         // line encoder reset
@@ -53,37 +71,18 @@ public class Arm {
             line.resetSetpoint();
         }
 
-        double lineLengthModify = 0.0;
-        double xModify = 0.0;
-        double yModify = 0.0;
         if (viceController.getLeftBumper()) {
-            line.setPIDSetpoint(84.6);
+            newLineSetpoint = 84.6;
         } else if (viceController.getRightBumper()) {
-            line.setPIDSetpoint(131);
+            newLineSetpoint = 131;
         } else if (viceController.getBButton()) {
-            line.setPIDSetpoint(98.14);
+            newLineSetpoint = 98.14;
         } else if (viceController.getPOV() == 270 || viceController.getPOV() == 90) {
-            line.setPIDSetpoint(40);
-        } else if (mainController.getPOV() == 0) {
-            lineLengthModify = 0.4;
-            yModify = 0.5;
-        } else if (mainController.getPOV() == 180) {
-            lineLengthModify = -0.5;
-            yModify = -0.5;
-        }
-        if (mainController.getPOV() == 90) {
-            xModify = 0.5;
-        } else if (mainController.getPOV() == 270) {
-            xModify = -0.5;
+            newLineSetpoint = 40;
         }
 
-        if (inPolar) {
-            line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
-        } else {
-            double tmp[] = cartesToPolar(x + xModify, y + yModify);
-            line.setPIDSetpoint(tmp[0]);
-            joint.setSetpoint(tmp[1]);
-        }
+        joint.setSetpoint(newJointSetpoint);
+        line.setPIDSetpoint(newLineSetpoint);
 
         // limit line length by joint angle
         double jointAngleRadian = Math.toRadians(joint.getAngleDegree());
@@ -169,7 +168,17 @@ public class Arm {
     public double[] cartesToPolar(double x, double y) {
         double lineLength = Math.sqrt(x * x + y * y);
         double angle = Math.acos(x / lineLength);
-        double tmp[] = { lineLength, angle };
+        double tmp[] = { lineLength, Math.toDegrees(angle) };
+        return tmp;
+    }
+
+    /**
+     * Transform polar coord. to Cartesian coord.
+     */
+    public double[] polarToCartes(double lineLength, double angleDegree) {
+        double x = Math.cos(Math.toRadians(angleDegree)) * lineLength;
+        double y = Math.sin(Math.toRadians(angleDegree)) * lineLength;
+        double tmp[] = { x, y };
         return tmp;
     }
 }
