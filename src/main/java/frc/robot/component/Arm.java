@@ -13,10 +13,14 @@ public class Arm {
     public static final double extendLimit = 120; // rule: 122
     public static final double jointToFrameDist = 40;
 
-    public static final double heightLimit = 150; // rule: 198
+    public static final double heightLimit = 155; // rule: 198
     public static final double jointHeight = 40; // dist from joint to floor
+
+    //cartes controller use in cartes controller branch, not use in main branch
+    /*
     public static double x = Math.cos(Math.toRadians(68.5)) * 40;
-    public static double y = Math.sin(Math.toRadians(68.5)) * 40;
+    public static double y = Math.sin(Math.toRadians(68.5)) * 40+jointHeight;
+    */
 
     public Arm() {
         joint = new Joint(68.5);
@@ -31,17 +35,19 @@ public class Arm {
             joint.resetSetpoint();
         }
 
-        boolean inPolar = mainController.getBButton();
+        //cartes controller use in cartes controller branch, not use in main branch
+        // boolean inPolar = mainController.getBButton();
+
         int backButtonPressed = viceController.getBackButton() ? 1 : 0;
         if (viceController.getRightBumper() || viceController.getLeftBumper()) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][0]);
-        } else if (viceController.getPOV() == 270) {
+        } else if (mainController.getPOV() == 90) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][2]);
         } else if (viceController.getBButton()) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][1]);
         } else if (viceController.getPOV() == 90) {
             joint.setSetpoint(Joint.armAngleSetpoints[backButtonPressed][3]);
-        } else if (inPolar) {
+        } else{
             double armAngleModify = (mainController.getLeftTriggerAxis() - mainController.getRightTriggerAxis())
                     * -0.7;
             joint.setSetpoint(joint.getSetpoint() + armAngleModify);
@@ -54,29 +60,37 @@ public class Arm {
         }
 
         double lineLengthModify = 0.0;
+
+        //cartes controller use in cartes controller branch, not use in main branch
+        /* 
         double xModify = 0.0;
         double yModify = 0.0;
+        */
+
         if (viceController.getLeftBumper()) {
             line.setPIDSetpoint(84.6);
         } else if (viceController.getRightBumper()) {
             line.setPIDSetpoint(131);
         } else if (viceController.getBButton()) {
             line.setPIDSetpoint(98.14);
-        } else if (viceController.getPOV() == 270 || viceController.getPOV() == 90) {
+        } else if (mainController.getPOV() == 90 || viceController.getPOV() == 90) {
             line.setPIDSetpoint(40);
         } else if (mainController.getPOV() == 0) {
             lineLengthModify = 0.4;
-            yModify = 0.5;
+            // yModify = 0.5;
         } else if (mainController.getPOV() == 180) {
             lineLengthModify = -0.5;
-            yModify = -0.5;
+            // yModify = -0.5;
         }
+
+        //cartes controller use in cartes controller branch, not use in main branch
+        /* 
         if (mainController.getPOV() == 90) {
             xModify = 0.5;
         } else if (mainController.getPOV() == 270) {
             xModify = -0.5;
         }
-
+        
         if (inPolar) {
             line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
         } else {
@@ -84,6 +98,9 @@ public class Arm {
             line.setPIDSetpoint(tmp[0]);
             joint.setSetpoint(tmp[1]);
         }
+        */
+
+        line.setPIDSetpoint(line.getPIDSetpoint() + lineLengthModify);
 
         // limit line length by joint angle
         double jointAngleRadian = Math.toRadians(joint.getAngleDegree());
