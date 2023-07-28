@@ -16,7 +16,7 @@ public class Arm {
     public static final double heightLimit = 150; // rule: 198
     public static final double jointHeight = 40; // dist from joint to floor
     public static double x = Math.cos(Math.toRadians(68.5)) * 40;
-    public static double y = Math.sin(Math.toRadians(68.5)) * 40;
+    public static double y = Math.sin(Math.toRadians(68.5)) * 40+jointHeight;
 
     public Arm() {
         joint = new Joint(68.5);
