@@ -184,6 +184,8 @@ public class Arm {
      * Transform Cartesian coord. to polar coord.
      */
     public double[] cartesToPolar(double x, double y) {
+        x = Math.min(x, extendLimit);
+        y = Math.min(y, heightLimit);
         double lineLength = Math.sqrt(x * x + y * y);
         double angle = Math.acos(x / lineLength);
         double tmp[] = { lineLength, angle };
