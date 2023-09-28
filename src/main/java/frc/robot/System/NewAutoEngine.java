@@ -72,9 +72,6 @@ public class NewAutoEngine {
                         ex.getStackTrace());
             }
 
-            var trajInitialPose = trajectory[i].getInitialPose();
-
-            DriveBase.setODOPose(trajInitialPose);
         }
     }
 
@@ -519,5 +516,10 @@ public class NewAutoEngine {
             driveSpeed = -0.5;
         }
         DriveBase.directControl(driveSpeed, driveSpeed);
+    }
+
+    public static void setDriveODOpose(int trajectorynum){
+        var trajInitialPose = trajectory[trajectorynum].getInitialPose();
+        DriveBase.setODOPose(trajInitialPose);
     }
 }
